@@ -10,7 +10,7 @@ cd learn-claude
 claude                 # open Claude Code in this directory
 /study 1.1             # walks you through Lesson 1.1 — Agentic Loops
 /exercise 1.1          # copies the starter to ~/learn-claude-work/1.1/
-/verify 1.1            # grades your work against the rubric
+/verify 1.1            # grades your work against the rubric, results in ~/learn-claude-work/1.1/results
 ```
 
 ## Prerequisites
