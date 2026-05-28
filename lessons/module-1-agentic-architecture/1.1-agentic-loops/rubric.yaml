@@ -1,0 +1,24 @@
+task_statement: "1.1 Design and implement agentic loops for autonomous task execution"
+exam_guide_reference: "Domain 1, Task Statement 1.1"
+criteria:
+  - id: stop_reason_tool_use
+    description: "Loop continues when stop_reason is 'tool_use'"
+    weight: 25
+    check: code_review
+  - id: stop_reason_end_turn
+    description: "Loop terminates when stop_reason is 'end_turn'"
+    weight: 25
+    check: code_review
+  - id: tool_results_appended
+    description: "Tool results are appended to conversation history between iterations"
+    weight: 20
+    check: code_review
+  - id: no_text_content_termination
+    description: "Does NOT inspect assistant text content as a termination signal"
+    weight: 15
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_agentic_loop.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_agentic_loop.py -v"
