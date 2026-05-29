@@ -54,3 +54,9 @@ pytest -v
 The tests mock the Anthropic client — you do not need an `ANTHROPIC_API_KEY` to run them, and you will not burn API credits. If you want to also run your loop against the real API after the tests pass, set `ANTHROPIC_API_KEY` and write a short `if __name__ == "__main__":` block at the bottom of `agentic_loop.py`.
 
 When you're ready (or stuck), run `/verify 1.1` and I'll grade you.
+
+## References
+
+- Lesson: `lesson.md` (in this directory) — read it first if you haven't.
+- [Agent SDK — How the agent loop works](https://code.claude.com/docs/en/agent-sdk/agent-loop) — the loop lifecycle, `stop_reason`, and `max_turns` (the SDK's version of your `safety_cap`).
+- [Messages API — tool use](https://platform.claude.com/docs/en/build-with-claude/tool-use) — the exact `tool_use` / `tool_result` block shapes you'll construct.

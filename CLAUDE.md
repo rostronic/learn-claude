@@ -6,18 +6,23 @@ This file governs every lesson, exercise, and rubric in this repo. If you're aut
 
 Learn Claude is a study platform for the **Claude Certified Architect — Foundations (CCA-F)** exam. Our audience is working engineers preparing for that specific cert. Every piece of content here exists to help someone pass that exam.
 
-## The source-of-truth rule
+## Scope authority vs. teaching sources
 
-The official **CCA-F Exam Guide** (PDF linked from the README) is the *only* source of truth for what we teach. Every lesson and every rubric criterion must trace back to a specific task statement in the guide — and the lesson must cite it by ID (`1.1`, `2.3`, etc.) and exact title in the opening line.
+Two kinds of source, two distinct jobs. Don't conflate them.
 
-If you're unsure what the guide says about a topic, **read the guide.** Don't invent. Don't paraphrase from memory. Don't pull in adjacent material from Anthropic blog posts or third-party tutorials unless it directly supports a task statement that's already in scope.
+- **Scope authority — the CCA-F Exam Guide** (PDF linked from the README). It is the *only* authority on **what's testable**: the task-statement spine, the anti-patterns candidates are expected to avoid, and which scenarios matter. Every lesson and every rubric criterion must trace back to a specific task statement in the guide, and the lesson must cite it by ID (`1.1`, `2.3`, etc.) and exact title. If you're unsure what's in scope, **read the guide** — don't invent, don't paraphrase from memory, don't pull a topic in just because it's interesting.
+- **Teaching reference — the official Anthropic / Claude docs** (`docs.claude.com`, `code.claude.com`, `platform.claude.com`). These are the canonical reference for **how the thing actually works**. Use them to teach with depth and accuracy: cite them inline where you make a claim, and list them in the lesson's `references:` frontmatter so the reader can go deeper and so tooling can surface and lint them.
+
+The exam guide decides *what* we teach; the official docs help us teach it *well*. **Third-party blogs, videos, and tutorials remain off-limits** — they dilute the source of truth and date badly. If a claim isn't supported by the exam guide (for scope) or an official doc (for mechanics), it doesn't go in a lesson.
 
 ## Tone
 
-- **Concise.** Lessons cap at ~800 words. Depth comes from the exercise, not the prose.
-- **Anti-pattern first.** Show the wrong way the exam will test, then the right way. Engineers learn faster from "don't do X because Y" than from a green-field tutorial.
-- **No fluff.** No motivational openers, no "in this lesson we will…", no closing recaps. Get in, teach, get out.
-- **Treat the reader as a working engineer.** They know what a function is. They've used an API. Skip the basics and respect their time.
+Lessons are **readable learning resources**, not cram sheets. A learner should be able to sit down, read a lesson end-to-end, and actually understand the topic — while still walking away exam-ready.
+
+- **Readable, not padded.** Teach the topic properly, with enough context and worked detail to genuinely learn it. Brief orientation ("what this is, where it fits") is welcome. What's not welcome is filler — no "in this lesson we will…", no marketing, no closing recap that repeats what you just said.
+- **Anti-patterns are a required section, not the spine.** Every lesson must call out the wrong approaches the exam tempts you with (and *why* they fail), but they're one part of a lesson that teaches the topic positively — not the organizing principle. (See the section structure in `.claude/rules/lesson-authoring.md`.)
+- **Treat the reader as a working engineer.** They know what a function is and have used an API. Skip the fundamentals; spend the words on what's actually specific to Claude and to the exam.
+- **Cite as you teach.** Back claims with inline links to the official docs (see "Scope authority vs. teaching sources"). A reader should be able to follow any assertion to its source.
 
 ## The "Anthropic way" rule
 

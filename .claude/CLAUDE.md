@@ -34,3 +34,5 @@ All commands live in [.claude/commands/](commands/). Each is a single markdown f
 ## Where user work lives
 
 Exercises copy their `starter/` directory to `~/learn-claude-work/<lesson-id>/` so the user can edit freely without dirtying this repo. `/verify` reads from there. Don't change this path without updating all three commands and the lesson `exercise.md` instructions in lockstep.
+
+`/study` also seeds `~/learn-claude-work/<lesson-id>/` — but **non-destructively**: it copies the starter only when the dir is empty, so re-running `/study` to review a lesson never clobbers in-progress work. The division of labor: `/study` ensures a workspace exists so the learner can experiment while reading; `/exercise` is the explicit "set up / reset my workspace" step and prompts before overwriting existing work.
