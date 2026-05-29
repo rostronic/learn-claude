@@ -1,0 +1,24 @@
+task_statement: "1.3 Configure subagent invocation, context passing, and spawning"
+exam_guide_reference: "Domain 1, Task Statement 1.3"
+criteria:
+  - id: spawn_permission_gate
+    description: "Raises PermissionError unless 'Task' or 'Agent' is present in allowed_tools (both names accepted)"
+    weight: 20
+    check: code_review
+  - id: agent_definition_lookup
+    description: "Looks up the AgentDefinition in registry (raising KeyError if missing) and carries its system prompt and tools restriction into the result"
+    weight: 20
+    check: code_review
+  - id: explicit_context_passing
+    description: "Embeds every prior_findings entry into the composed prompt, preserving each finding's source/attribution metadata"
+    weight: 25
+    check: code_review
+  - id: no_implicit_context_inheritance
+    description: "Does NOT rely on implicit context inheritance or shared memory, and does NOT drop attribution by flattening findings to bare content — all needed context is explicitly composed into the prompt"
+    weight: 20
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_subagent_config.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_subagent_config.py -v"

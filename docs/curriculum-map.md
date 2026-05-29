@@ -4,7 +4,7 @@ Every Learn Claude lesson maps 1:1 to a task statement in the official **Claude 
 
 The **Primary docs** column lists the canonical official Anthropic/Claude documentation each lesson teaches from (its `references:` frontmatter holds the full list). The exam guide remains the scope authority for *what's* testable; these docs are the teaching reference for *how it works*. `—` means the lesson isn't authored yet, so its doc mapping is TBD (filled in when the lesson is built).
 
-**Status:** 2 of 37 lessons complete (1.1, 1.2). The rest are scaffolded as planned and will land in Phase 5 of the build.
+**Status:** 3 of 37 lessons complete (1.1, 1.2, 1.3). The rest are scaffolded as planned and will land in Phase 5 of the build.
 
 | Lesson ID | Domain | Task Statement | Title | Primary docs | Status |
 |---|---|---|---|---|---|
@@ -16,7 +16,7 @@ The **Primary docs** column lists the canonical official Anthropic/Claude docume
 |---|---|---|---|---|---|
 | 1.1 | 1 | 1.1 | Design and implement agentic loops for autonomous task execution | [Agent SDK — How the agent loop works](https://code.claude.com/docs/en/agent-sdk/agent-loop) | **complete** |
 | 1.2 | 1 | 1.2 | Orchestrate multi-agent systems with coordinator-subagent patterns | [Agent SDK — Subagents](https://code.claude.com/docs/en/agent-sdk/subagents) | **complete** |
-| 1.3 | 1 | 1.3 | Configure subagent invocation, context passing, and spawning | — | planned |
+| 1.3 | 1 | 1.3 | Configure subagent invocation, context passing, and spawning | [Agent SDK — Subagents](https://code.claude.com/docs/en/agent-sdk/subagents) | **complete** |
 | 1.4 | 1 | 1.4 | Implement multi-step workflows with enforcement and handoff patterns | — | planned |
 | 1.5 | 1 | 1.5 | Apply Agent SDK hooks for tool call interception and data normalization | — | planned |
 | 1.6 | 1 | 1.6 | Design task decomposition strategies for complex workflows | — | planned |
