@@ -1,0 +1,24 @@
+task_statement: "1.2 Orchestrate multi-agent systems with coordinator-subagent patterns"
+exam_guide_reference: "Domain 1, Task Statement 1.2"
+criteria:
+  - id: loop_terminates_on_end_turn
+    description: "Coordinator loops on stop_reason, continuing on 'tool_use' and returning the final response on 'end_turn'"
+    weight: 20
+    check: code_review
+  - id: dynamic_subagent_dispatch
+    description: "For each tool_use block, spawn_subagent is called with block.name and block.input['task']; subagents invoked are the ones the model requests, not a hardcoded sequence"
+    weight: 25
+    check: code_review
+  - id: results_routed_through_coordinator
+    description: "Subagent results are wrapped in tool_result blocks (with matching tool_use_id) and appended to the coordinator's conversation between iterations"
+    weight: 20
+    check: code_review
+  - id: isolated_subagent_context
+    description: "Does NOT pass the coordinator's conversation history (or parent state) into spawn_subagent — the subagent receives only the composed task string"
+    weight: 20
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_coordinator.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_coordinator.py -v"

@@ -21,7 +21,7 @@ claude                 # open Claude Code in this directory
 
 ## Status
 
-**Phase 1 of 5.** One lesson is fully built (1.1 — Agentic Loops) as the template. The remaining 36 lessons are scaffolded in [docs/curriculum-map.md](docs/curriculum-map.md) and will be built out in subsequent phases:
+**Phase 1 of 5.** Two lessons are fully built (1.1 — Agentic Loops, 1.2 — Coordinator-Subagent Orchestration) as templates. The remaining 35 lessons are scaffolded in [docs/curriculum-map.md](docs/curriculum-map.md) and will be built out in subsequent phases:
 
 - **Phase 1** (current) — Skeleton repo, slash commands, one lesson end-to-end
 - **Phase 2** — Verifier subagent + grading MCP server (automated rubric checks)
