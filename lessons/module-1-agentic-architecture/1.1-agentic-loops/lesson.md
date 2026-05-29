@@ -15,6 +15,10 @@ references:
     url: "https://platform.claude.com/docs/en/build-with-claude/tool-use"
     type: official_docs
     covers: "Raw tool_use / tool_result message shapes and stop_reason values"
+  - title: "Handle tool calls"
+    url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls"
+    type: official_docs
+    covers: "tool_result block shape and the ordering rule (tool_result before text)"
   - title: "CCA-F Exam Guide — Domain 1, Task Statement 1.1"
     url: "https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F8lsy243ftffjjy1cx9lm3o2bw%2Fpublic%2F1773274827%2FClaude+Certified+Architect+%E2%80%93+Foundations+Certification+Exam+Guide.pdf"
     type: exam_guide
@@ -117,7 +121,7 @@ def run_agent_loop(client, messages, tools, tool_handler, safety_cap=25):
 
 Walking through it:
 
-- **The assistant turn is appended before we process tools.** The Messages API requires the conversation to alternate correctly: the `tool_result` blocks you send next must follow the assistant turn that contained the matching `tool_use` blocks. Append the assistant `response.content` first, then the `user` tool-result message.
+- **The assistant turn is appended before we process tools.** The Messages API requires the conversation to alternate correctly: the `tool_result` blocks you send next must follow the assistant turn that contained the matching `tool_use` blocks. Append the assistant `response.content` first, then the `user` tool-result message. One more ordering rule to respect: within that user message, the `tool_result` blocks must come **first** — "any text must come AFTER all tool results," or the API returns a 400 ([Handle tool calls](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls)). The loop above is safe because it appends only `tool_result` blocks.
 - **Each `tool_result` carries the `tool_use_id`** of the call it answers, so the model can line results up with requests. The `content` is whatever your handler returned for that tool.
 - **`return` happens on `end_turn`.** That's the loop's real exit. Everything else is plumbing.
 - **`safety_cap` is a guard, not the logic.** If the loop somehow never sees `end_turn` in 25 turns, we raise rather than spin forever — exactly what the SDK's `max_turns` does. But the *intended* way to leave the loop is the `end_turn` return.
@@ -136,7 +140,7 @@ One more practical pitfall: **forgetting to append the assistant turn before the
 
 ## Exam focus
 
-This task statement is the backbone of every question about agent reliability, so it shows up across multiple CCA-F scenarios:
+This task statement is the backbone of every question about agent reliability, so it shows up across multiple CCA-F scenarios (the scenario list below is drawn from the exam guide's scenario descriptions):
 
 - **Scenario 1 (Customer Support Resolution Agent)** — the agent has to know when it has finished investigating before it responds to the customer.
 - **Scenario 3 (Multi-Agent Research System)** — the coordinator's loop is what drives every subagent invocation; if the loop logic is wrong, the whole system is.
@@ -149,4 +153,5 @@ Expect distractors that "feel right": confidence thresholds, text-pattern checks
 - [Agent SDK — How the agent loop works](https://code.claude.com/docs/en/agent-sdk/agent-loop) — the loop lifecycle, turns, tool execution, `stop_reason`, and `max_turns`/budget caps. The single best reference for this lesson.
 - [How Claude Code works — the agentic loop](https://code.claude.com/docs/en/how-claude-code-works) — the same loop, described conceptually (not SDK-specific).
 - [Messages API — tool use](https://platform.claude.com/docs/en/build-with-claude/tool-use) — the raw `tool_use` / `tool_result` block shapes and the full set of `stop_reason` values you branch on when you build the loop by hand.
+- [Handle tool calls](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls) — the `tool_result` block shape and the ordering rule (tool_result blocks first, text after) that otherwise causes a 400.
 - **CCA-F Exam Guide, Domain 1, Task Statement 1.1** — the scope authority for what's testable here, including the three anti-patterns above (linked from the README).

@@ -3,18 +3,22 @@ exam_guide_reference: "Domain 1, Task Statement 1.1"
 criteria:
   - id: stop_reason_tool_use
     description: "Loop continues when stop_reason is 'tool_use'"
-    weight: 25
+    weight: 20
     check: code_review
   - id: stop_reason_end_turn
     description: "Loop terminates when stop_reason is 'end_turn'"
-    weight: 25
+    weight: 20
     check: code_review
   - id: tool_results_appended
     description: "Tool results are appended to conversation history between iterations"
-    weight: 20
+    weight: 15
     check: code_review
   - id: no_text_content_termination
     description: "Does NOT inspect assistant text content as a termination signal"
+    weight: 15
+    check: anti_pattern
+  - id: no_iteration_cap_termination
+    description: "Does NOT use the iteration counter / safety cap as the primary termination signal (the loop must exit on stop_reason == 'end_turn', not on reaching the cap)"
     weight: 15
     check: anti_pattern
   - id: tests_pass
