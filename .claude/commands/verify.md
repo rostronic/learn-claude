@@ -1,60 +1,35 @@
 Grade the user's Learn Claude exercise against the lesson rubric.
 
-The user invoked `/verify $ARGUMENTS`. Treat `$ARGUMENTS` as a lesson ID in dotted form. If empty, ask which lesson and stop.
+The user invoked `/verify $ARGUMENTS`. Treat `$ARGUMENTS` as a lesson ID in dotted form (`module.lesson`, e.g. `3.1`). If empty, ask which lesson and stop.
 
-> **Phase 1 note:** Verification in Phase 1 is manual — you (Claude) read the rubric and the user's code and make the call. This is inconsistent across sessions, which is exactly why Phase 2 replaces it with a dedicated `verifier` subagent backed by a grading MCP server. Mention this at the end of your report so the user knows the score has a margin of error.
+> **Phase 2:** grading is now done by the dedicated `verifier` subagent (backed by the grading MCP server, with a Bash fallback) — you no longer grade inline. Your job here is to dispatch to it, persist its report, and suggest a next step.
 
 ## Steps
 
-1. **Find the rubric and user's work.**
-   - Use Glob to locate `lessons/**/$ARGUMENTS-*/rubric.yaml`. If missing, stop and tell the user the lesson isn't built yet.
-   - Check that `~/learn-claude-work/$ARGUMENTS/` exists. If not, tell the user to run `/exercise $ARGUMENTS` first and stop.
+1. **Sanity-check the chapter exists.** Use Glob to confirm `lessons/**/$ARGUMENTS-*/rubric.yaml` exists. If missing, stop and tell the user the lesson isn't built yet (point them at `docs/curriculum-map.md`).
 
-2. **Read the rubric.** Use Read on the `rubric.yaml`. Note the `task_statement`, the list of criteria, and for each: `id`, `description`, `weight`, `check`, and (if present) `command`.
+2. **Delegate grading to the `verifier` subagent.** Spawn the `verifier` subagent (via the Agent tool, `subagent_type: verifier`) with the chapter id `$ARGUMENTS` as its input. It will:
+   - load the rubric (`lessons/**/$ARGUMENTS-*/rubric.yaml`),
+   - confirm the learner's work exists at `~/learn-claude-work/$ARGUMENTS/` (if not, it tells the user to run `/exercise $ARGUMENTS`),
+   - dispatch each criterion on its `check` (`bash_execution` → run its `command` in the work dir; `code_review` / `anti_pattern` → read the source),
+   - and return a weighted `N/100` Markdown report.
 
-3. **Read the user's work.** Use Read on every code file in `~/learn-claude-work/$ARGUMENTS/`. You need full source visibility to grade `code_review` and `anti_pattern` criteria.
+   Do **not** re-grade or second-guess the verifier — its returned report is authoritative. Take its Markdown report verbatim as the result.
 
-4. **Run tests once, up front.** Use Bash:
-   ```bash
-   cd ~/learn-claude-work/$ARGUMENTS && pytest -v
-   ```
-   Capture full output — you'll cite it for any `bash_execution` criterion whose `command` matches a pytest invocation. If `pytest` isn't installed, tell the user to `pip install -r requirements.txt` first.
+3. **Show the report to the user.** Print the verifier's report to chat as-is.
 
-5. **Grade each criterion.** Walk the rubric in order. For each:
-   - **`code_review`** — read the user's source and decide whether the assertion in `description` holds. Pass/fail + one sentence of rationale citing the specific line or function.
-   - **`anti_pattern`** — read the user's source looking for the forbidden pattern. Fail if present. Pass otherwise. One sentence of rationale, naming the pattern.
-   - **`bash_execution`** — pass iff the criterion's `command` exited 0 in step 4. If it's a pytest command and some tests failed, fail this criterion and cite which tests.
-
-6. **Calculate the weighted score.** Sum the `weight` of every passing criterion. Report as `N/100`.
-
-7. **Report.** Format:
-
-   ```
-   Lesson $ARGUMENTS — <task statement title>
-   Score: N/100
-
-   ✓ <criterion id> (weight) — <one-sentence rationale>
-   ✗ <criterion id> (weight) — <one-sentence rationale>
-   ...
-
-   Phase 1 note: this score is from manual grading. Phase 2 will replace `/verify`
-   with a verifier subagent for consistency. Re-run after fixing failures.
-   ```
-
-   For failed criteria, point the user at the specific file and line where the fix needs to land — don't just restate the rubric.
-
-8. **Log the report to disk.** Persist the same report you printed to chat so the user has a history of attempts:
+4. **Log the report to disk.** Persist the same report so the user has a history of attempts:
 
    ```bash
    mkdir -p ~/learn-claude-work/$ARGUMENTS/results
    ```
 
-   Then use the Write tool to create `~/learn-claude-work/$ARGUMENTS/results/<UTC-timestamp>.md`, where the timestamp is ISO-8601 with `:` replaced by `-` for filesystem-safety (e.g. `2026-05-28T14-32-07Z.md`). The file's content is the full report from step 7. Mention the path in your reply so the user can find it.
+   Then use the Write tool to create `~/learn-claude-work/$ARGUMENTS/results/<UTC-timestamp>.md`, where the timestamp is ISO-8601 with `:` replaced by `-` for filesystem-safety (e.g. `2026-05-28T14-32-07Z.md`). Get the timestamp with `date -u +%Y-%m-%dT%H-%M-%SZ`. The file's content is the verifier's full report. Mention the path in your reply so the user can find it.
 
    The `results/` directory lives in the user's home tree, outside the repo, so it never gets committed.
 
-9. **Suggest a next step.** If they passed (≥80, say), congratulate them and point at the next lesson in `docs/curriculum-map.md`. If they failed, suggest re-reading the relevant section of `lesson.md` and iterating.
+5. **Suggest a next step.** If they passed (≥80), congratulate them and point at the next lesson in `docs/curriculum-map.md`. If they failed, point them at the report's Fixes section and suggest re-reading the relevant part of `lesson.md` before iterating with `/verify $ARGUMENTS` again.
 
 ## Tone
 
-Be a fair grader. The exam itself is unforgiving — the rubric reflects that. Don't give partial credit on `anti_pattern` criteria (it's binary: present or not present). Don't sugarcoat a fail. But also: cite *why* in a way the user can act on.
+Be a fair messenger. The verifier is the unforgiving grader; you relay its verdict honestly and make the next step obvious. Don't soften a fail, and don't inflate a pass — the score is the verifier's, not yours.

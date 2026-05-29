@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "learn-claude-grading": {
+      "command": "python3",
+      "args": ["infra/grading-mcp/server.py"],
+      "env": {}
+    }
+  }
+}

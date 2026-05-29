@@ -7,11 +7,14 @@ An open-source, Claude Code-native platform for **learning to build with Claude*
 ```bash
 git clone <this-repo> learn-claude
 cd learn-claude
-claude                 # open Claude Code in this directory
+pip install -r infra/grading-mcp/requirements.txt   # one-time: deps for the grading server
+claude                 # open Claude Code (approve the "learn-claude-grading" MCP server when prompted)
 /study 3.1             # walks you through chapter 3.1 — Agentic loops
 /exercise 3.1          # copies the starter to ~/learn-claude-work/3.1/
 /verify 3.1            # grades your work against the rubric, results in ~/learn-claude-work/3.1/results
 ```
+
+The repo ships a project [`.mcp.json`](.mcp.json) that registers the **grading MCP server** (`infra/grading-mcp/`). Claude Code offers to start it when you open the repo, so it's running by the time you reach `/verify`; `/verify` grades through it (and falls back to running the checks directly if you decline). See [infra/grading-mcp/README.md](infra/grading-mcp/README.md) for details.
 
 Studying for a specific certification? Run the course in that exam's order instead of course order:
 

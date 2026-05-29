@@ -8,9 +8,9 @@ This repo is being built in phases. Know which phase you're in before adding any
 
 | Phase | What gets built | Status |
 |---|---|---|
-| **1** | Skeleton: `/study`, `/exercise`, `/verify` (manual), first lessons end-to-end, curriculum map | **current** |
-| **2** | Verifier subagent + grading MCP server — automated rubric checks replacing the manual `/verify` | planned |
-| **3** | Examiner subagent + question bank + `/practice` (single Q) and `/mock-exam` (full timed run) | planned |
+| **1** | Skeleton: `/study`, `/exercise`, `/verify` (manual), first lessons end-to-end, curriculum map | done |
+| **2** | Verifier subagent + grading MCP server — automated rubric checks replacing the manual `/verify` | done |
+| **3** | Examiner subagent + question bank + `/practice` (single Q) and `/mock-exam` (full timed run) | **current** |
 | **4** | Coach subagent as hub-and-spoke coordinator over verifier + examiner + progress-tracking MCP server | planned |
 | **5** | Authoring commands (`/new-lesson`, `/new-question`) + full content build-out for all 37 lessons | planned |
 
@@ -36,9 +36,11 @@ Rule of thumb: if an end user would `pip install` and run it as part of an exerc
 
 ## `/verify` in Phase 1 vs. Phase 2
 
-**Phase 1 (now):** `/verify` is a manual placeholder. Claude reads the rubric, reads the user's work in `~/learn-claude-work/<id>/`, runs `pytest`, and grades each criterion by inspection. This works but is inconsistent across sessions.
+**Phase 1 (historical):** `/verify` was a manual placeholder — Claude read the rubric and the user's work inline and graded each criterion by inspection. This worked but was inconsistent across sessions.
 
-**Phase 2:** `/verify` will delegate to a dedicated `verifier` subagent backed by a grading MCP server. The rubric schema is designed to support this — `check: code_review | anti_pattern | bash_execution` is what the verifier will dispatch on. Keep that schema stable through Phase 1 so Phase 2 has no migration to do.
+**Phase 2 (now — implemented):** `/verify` delegates to the dedicated [`verifier` subagent](agents/verifier.md). The command itself just sanity-checks the chapter exists, spawns the verifier (`subagent_type: verifier`) with the chapter id, then logs the returned report to `~/learn-claude-work/<chapter>/results/<UTC-timestamp>.md` and suggests a next step. It does not grade inline. The verifier dispatches each criterion on its `check` (`code_review | anti_pattern | bash_execution`) and returns a weighted `N/100` report; it never edits the learner's code.
+
+`bash_execution` criteria run their `command` in the learner's work dir through the **grading MCP server** (`infra/grading-mcp/`) when its tools are registered this session, and fall back to the **Bash tool** otherwise — the grade is identical either way. The rubric schema (`chapter` + `criteria[].{id,description,weight,check,command}`) is the stable contract between the rubric authors and the verifier; don't change it without updating both.
 
 ## Where user work lives
 
