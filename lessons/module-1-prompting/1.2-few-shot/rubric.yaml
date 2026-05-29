@@ -1,0 +1,23 @@
+chapter: "1.2"
+criteria:
+  - id: requires_minimum_examples
+    description: "Raises ValueError when fewer than 2 examples are provided"
+    weight: 20
+    check: code_review
+  - id: structured_example_tags
+    description: "Wraps each example in <example> tags inside a single <examples> block, after the instruction, including each example's input and output"
+    weight: 25
+    check: code_review
+  - id: includes_all_example_content
+    description: "Every example's input and output text appears in the returned prompt"
+    weight: 20
+    check: code_review
+  - id: rejects_single_class_examples
+    description: "Does NOT accept single-class example sets — raises ValueError when labels are present and all identical (examples must be diverse/contrasting)"
+    weight: 20
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_few_shot.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_few_shot.py -v"

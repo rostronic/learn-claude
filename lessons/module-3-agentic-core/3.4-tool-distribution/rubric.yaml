@@ -1,0 +1,23 @@
+chapter: "3.4"
+criteria:
+  - id: rejects_unknown_role
+    description: "build_agent_toolset raises KeyError when the role is not present in role_tools"
+    weight: 20
+    check: code_review
+  - id: caps_tool_count
+    description: "Raises ValueError when the role's tool list exceeds max_tools (too many tools degrades selection reliability)"
+    weight: 25
+    check: code_review
+  - id: tool_choice_constructors
+    description: "tool_choice_any returns {\"type\": \"any\"} and tool_choice_force(name) returns {\"type\": \"tool\", \"name\": name}"
+    weight: 20
+    check: code_review
+  - id: no_over_provisioning
+    description: "Does NOT over-provision an agent — returns a scoped copy of exactly the role's tools, never the full registry or tools beyond the cap"
+    weight: 20
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_tool_distribution.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_tool_distribution.py -v"

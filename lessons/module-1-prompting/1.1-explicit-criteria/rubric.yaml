@@ -1,0 +1,23 @@
+chapter: "1.1"
+criteria:
+  - id: requires_explicit_criteria
+    description: "Raises ValueError when report, skip, or severity is empty (won't build a prompt without explicit criteria for both what to flag and what to skip)"
+    weight: 25
+    check: code_review
+  - id: includes_all_categories_and_severity
+    description: "The returned prompt contains every report category, every skip category, and each severity level with its definition"
+    weight: 25
+    check: code_review
+  - id: flags_by_criteria_not_confidence
+    description: "The prompt instructs the model to flag only issues that clearly meet a listed REPORT category, rather than filtering by confidence"
+    weight: 20
+    check: code_review
+  - id: no_vague_confidence_instructions
+    description: "Does NOT substitute vague, confidence-based instructions ('be conservative', 'high-confidence only', 'use your judgment') for explicit categorical criteria"
+    weight: 15
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_prompt_builder.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_prompt_builder.py -v"
