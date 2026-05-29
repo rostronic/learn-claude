@@ -60,7 +60,7 @@ No hard word cap. Instead, target each **section** as a **5–10 minute read** �
 
 - All code examples are **runnable Python** using the `anthropic` SDK (`pip install anthropic`).
 - Show real API shapes: `client.messages.create(...)`, `response.stop_reason`, `content[0].input`, etc. Don't invent method names.
-- Use `claude-sonnet-4-6` or `claude-opus-4-7` as the model in examples — the latest stable IDs as of this repo's writing. Don't reference retired models.
+- Use `claude-sonnet-4-6` or `claude-opus-4-8` as the model in examples — the latest stable IDs as of this repo's writing. Don't reference retired models.
 - If you show a tool schema, show the real Claude tool-use schema shape: `{"name": ..., "description": ..., "input_schema": {...}}`.
 
 ## What not to do
