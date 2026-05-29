@@ -1,7 +1,9 @@
 ---
-lesson_id: "1.3"
-task_statement: "1.3 Configure subagent invocation, context passing, and spawning"
-exam_guide_reference: "Domain 1, Task Statement 1.3"
+chapter: "3.3"
+slug: "subagent-invocation"
+title: "Subagent invocation and context passing"
+module: "module-3-agentic-core"
+sequence: 10
 references:
   - title: "Agent SDK — Subagents in the SDK"
     url: "https://code.claude.com/docs/en/agent-sdk/subagents"
@@ -11,17 +13,13 @@ references:
     url: "https://code.claude.com/docs/en/agent-sdk/sessions"
     type: official_docs
     covers: "Fork-based session management for exploring divergent approaches from a shared baseline"
-  - title: "CCA-F Exam Guide — Domain 1, Task Statement 1.3"
-    url: "https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F8lsy243ftffjjy1cx9lm3o2bw%2Fpublic%2F1773274827%2FClaude+Certified+Architect+%E2%80%93+Foundations+Certification+Exam+Guide.pdf"
-    type: exam_guide
-    covers: "Scope authority; Task tool + allowedTools, explicit context passing, AgentDefinition, fork sessions, parallel spawning"
 ---
 
-# Task Statement 1.3: Configure subagent invocation, context passing, and spawning
+# Subagent invocation and context passing
 
 ## Overview
 
-Lesson 1.2 gave you the *pattern* — hub-and-spoke, isolated subagent context. This lesson is the *wiring*: how a coordinator actually spawns a subagent, what you must hand it (because it inherits nothing), how you configure each subagent type, and how you branch exploration without losing your baseline. Get these mechanics wrong and the elegant pattern from 1.2 silently fails — the coordinator can't delegate, or the subagent works from an empty context and produces confident nonsense.
+The previous chapter (3.2, Coordinator and subagent orchestration) gave you the *pattern* — hub-and-spoke, isolated subagent context. This lesson is the *wiring*: how a coordinator actually spawns a subagent, what you must hand it (because it inherits nothing), how you configure each subagent type, and how you branch exploration without losing your baseline. Get these mechanics wrong and that elegant pattern silently fails — the coordinator can't delegate, or the subagent works from an empty context and produces confident nonsense.
 
 The exam tests several mechanics here. Four are central — the **spawning tool** and the permission it requires, **explicit context passing** (subagents don't share memory), **`AgentDefinition`** configuration, and **fork-based sessions** for divergent exploration — plus two supporting skills: spawning subagents **in parallel** and writing **goal-driven coordinator prompts**. None of them is hard individually; the failures come from assuming the framework does something for you that it doesn't.
 
@@ -145,4 +143,9 @@ This is the most mechanical task statement in Domain 1, and it powers **Scenario
 
 - [Agent SDK — Subagents in the SDK](https://code.claude.com/docs/en/agent-sdk/subagents) — the Agent/Task tool and `allowed_tools` requirement, the `AgentDefinition` fields, the "what subagents inherit" table, parallel invocation, and the Task→Agent rename note. Primary reference.
 - [Agent SDK — Work with sessions](https://code.claude.com/docs/en/agent-sdk/sessions) — `resume` vs `fork`, and how forking branches a conversation from a shared baseline while leaving the original untouched.
-- **CCA-F Exam Guide, Domain 1, Task Statement 1.3** — the scope authority: Task tool + `allowedTools`, explicit context passing, `AgentDefinition`, fork-based sessions, and parallel spawning (linked from the README).
+
+## Exam coverage
+
+- **CCAF** — Domain 1 (Agentic Architecture & Orchestration), Task Statement 1.3: Configure subagent invocation, context passing, and spawning.
+
+The authoritative exam → lesson map for the whole project is [`docs/exam-mapping.md`](../../../docs/exam-mapping.md).

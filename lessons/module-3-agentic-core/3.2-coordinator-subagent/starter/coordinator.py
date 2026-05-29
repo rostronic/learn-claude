@@ -1,4 +1,4 @@
-"""Starter skeleton for Learn Claude Lesson 1.2 — Coordinator-Subagent Orchestration.
+"""Starter skeleton for Learn Claude chapter 3.2 — Coordinator-Subagent Orchestration.
 
 Implement run_coordinator below. See exercise.md for the full spec.
 """

@@ -1,4 +1,4 @@
-# Task Statement 1.1: Design and implement agentic loops for autonomous task execution
+# Agentic loops — exercise
 
 ## What you're building
 
@@ -46,14 +46,14 @@ These two anti-patterns are graded directly by the rubric (`check: anti_pattern`
 ## How to run it
 
 ```bash
-cd ~/learn-claude-work/1.1
+cd ~/learn-claude-work/3.1
 pip install -r requirements.txt          # use a venv if you like
 pytest -v
 ```
 
 The tests mock the Anthropic client — you do not need an `ANTHROPIC_API_KEY` to run them, and you will not burn API credits. If you want to also run your loop against the real API after the tests pass, set `ANTHROPIC_API_KEY` and write a short `if __name__ == "__main__":` block at the bottom of `agentic_loop.py`.
 
-When you're ready (or stuck), run `/verify 1.1` and I'll grade you.
+When you're ready (or stuck), run `/verify 3.1` and I'll grade you.
 
 ## References
 

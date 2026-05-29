@@ -1,4 +1,4 @@
-"""Starter skeleton for Learn Claude Lesson 1.3 — Subagent invocation & context passing.
+"""Starter skeleton for Learn Claude chapter 3.3 — Subagent invocation & context passing.
 
 Implement build_subagent_invocation below. See exercise.md for the full spec.
 """

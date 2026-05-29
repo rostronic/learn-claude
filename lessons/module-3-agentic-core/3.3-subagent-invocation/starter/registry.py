@@ -1,4 +1,4 @@
-"""Subagent registry (AgentDefinitions) and accepted spawn-tool names for Lesson 1.3.
+"""Subagent registry (AgentDefinitions) and accepted spawn-tool names for chapter 3.3.
 
 Each registry entry is an AgentDefinition-shaped dict: a `description` (when to use it),
 a `prompt` (the subagent's own system prompt), and an optional `tools` list (allowed

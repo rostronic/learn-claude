@@ -1,6 +1,6 @@
 # Learn Claude
 
-An open-source, Claude Code-native study platform for the **Claude Certified Architect — Foundations (CCA-F)** certification exam. Clone the repo, open Claude Code, type `/study 1.1`, and start working through lessons that map 1:1 to the official CCA-F task statements. Each lesson ends in a hands-on coding exercise, graded against a rubric drawn straight from the exam guide.
+An open-source, Claude Code-native platform for **learning to build with Claude** — and for preparing for Anthropic's certification exams. Clone the repo, open Claude Code, type `/study 3.1`, and work through a dependency-ordered learning path of hands-on lessons. Lessons are exam-agnostic; an exam overlay maps each exam's task statements to the chapters that cover them (the first being the **Claude Certified Architect — Foundations**, CCAF — see [docs/exam-mapping.md](docs/exam-mapping.md)). Each lesson ends in a coding exercise graded against a rubric.
 
 ## Quick start
 
@@ -8,9 +8,15 @@ An open-source, Claude Code-native study platform for the **Claude Certified Arc
 git clone <this-repo> learn-claude
 cd learn-claude
 claude                 # open Claude Code in this directory
-/study 1.1             # walks you through Lesson 1.1 — Agentic Loops
-/exercise 1.1          # copies the starter to ~/learn-claude-work/1.1/
-/verify 1.1            # grades your work against the rubric, results in ~/learn-claude-work/1.1/results
+/study 3.1             # walks you through chapter 3.1 — Agentic loops
+/exercise 3.1          # copies the starter to ~/learn-claude-work/3.1/
+/verify 3.1            # grades your work against the rubric, results in ~/learn-claude-work/3.1/results
+```
+
+Studying for a specific certification? Run the course in that exam's order instead of course order:
+
+```bash
+/exam CCAF             # lists CCAF's task statements in exam order, walks the built chapters
 ```
 
 ## Prerequisites
@@ -21,7 +27,7 @@ claude                 # open Claude Code in this directory
 
 ## Status
 
-**Phase 1 of 5.** Three lessons are fully built (1.1 — Agentic Loops, 1.2 — Coordinator-Subagent Orchestration, 1.3 — Subagent Invocation & Context Passing) as templates. The remaining 34 lessons are scaffolded in [docs/curriculum-map.md](docs/curriculum-map.md) and will be built out in subsequent phases:
+**Phase 1 of 5.** Seven chapters are fully built — Module 1 (1.1 Prompting with explicit criteria, 1.2 Few-shot prompting, 1.3 Structured output) and Module 3 (3.1 Agentic loops, 3.2 Coordinator and subagent orchestration, 3.3 Subagent invocation and context passing, 3.4 Distributing tools across agents & tool choice). The full 37-chapter learning path is mapped in [docs/curriculum-map.md](docs/curriculum-map.md) (with exam coverage in [docs/exam-mapping.md](docs/exam-mapping.md)); the rest will be built out in subsequent phases:
 
 - **Phase 1** (current) — Skeleton repo, slash commands, one lesson end-to-end
 - **Phase 2** — Verifier subagent + grading MCP server (automated rubric checks)

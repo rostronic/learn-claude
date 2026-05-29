@@ -1,5 +1,4 @@
-task_statement: "1.2 Orchestrate multi-agent systems with coordinator-subagent patterns"
-exam_guide_reference: "Domain 1, Task Statement 1.2"
+chapter: "3.2"
 criteria:
   - id: loop_terminates_on_end_turn
     description: "Coordinator loops on stop_reason, continuing on 'tool_use' and returning the final response on 'end_turn'"

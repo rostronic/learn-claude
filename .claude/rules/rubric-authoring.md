@@ -9,8 +9,7 @@ These rules load whenever you edit a `rubric.yaml` under `lessons/`. They build 
 ## Schema
 
 ```yaml
-task_statement: "<exact ID and title from the CCA-F exam guide>"
-exam_guide_reference: "Domain <N>, Task Statement <X.Y>"
+chapter: "<module.lesson — matches the lesson directory and lesson.md, e.g. 3.1>"
 criteria:
   - id: <snake_case_unique_id>
     description: "<a specific, checkable assertion about the user's code>"
@@ -21,8 +20,7 @@ criteria:
 
 ## Field rules
 
-- **`task_statement`** — verbatim from the exam guide, ID and full title. Same string as the opening header of the matching `lesson.md`.
-- **`exam_guide_reference`** — domain number and task statement ID. Lets the verifier and the user trace a failing criterion back to the source.
+- **`chapter`** — the lesson's course id (`module.lesson`, e.g. `3.1`); matches the lesson directory and `lesson.md`. Exam alignment is **not** stored in the rubric — it lives in `docs/exam-mapping.md`.
 - **`criteria[].id`** — `snake_case`. Stable identifier; the Phase 2 verifier and Phase 4 progress tracker will key off these, so don't rename them once published.
 - **`criteria[].description`** — must be **specific enough that a verifier can check it by reading the user's code** (or by reading `pytest` output, for `bash_execution`). See "Specificity" below.
 - **`criteria[].weight`** — integer percentage. **Weights across all criteria must sum to exactly 100.**

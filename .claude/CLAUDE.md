@@ -8,7 +8,7 @@ This repo is being built in phases. Know which phase you're in before adding any
 
 | Phase | What gets built | Status |
 |---|---|---|
-| **1** | Skeleton: `/study`, `/exercise`, `/verify` (manual), one lesson (1.1) end-to-end, curriculum map | **current** |
+| **1** | Skeleton: `/study`, `/exercise`, `/verify` (manual), first lessons end-to-end, curriculum map | **current** |
 | **2** | Verifier subagent + grading MCP server — automated rubric checks replacing the manual `/verify` | planned |
 | **3** | Examiner subagent + question bank + `/practice` (single Q) and `/mock-exam` (full timed run) | planned |
 | **4** | Coach subagent as hub-and-spoke coordinator over verifier + examiner + progress-tracking MCP server | planned |
@@ -20,10 +20,19 @@ Each phase reinforces a CCA-F domain that the platform itself teaches — see [d
 
 All commands live in [.claude/commands/](commands/). Each is a single markdown file (`<name>.md`) whose body is the prompt Claude Code expands when the user types `/<name>`.
 
-- **Commands take an optional argument.** The convention across this repo is a **lesson ID** in dotted form: `1.1`, `2.3`, `4.6`. Inside the command body, reference it as `$ARGUMENTS`.
-- **Locate lessons by glob:** `lessons/**/<id>-*/`. Lesson directories are named `<id>-<slug>` (e.g. `1.1-agentic-loops`) so the ID prefix is the durable key.
+- **Commands take an optional argument.** The convention across this repo is a **chapter id** in `module.lesson` form: `3.1`, `5.2`, `7.10` — the learning-path course order, **not** an exam's numbering. Inside the command body, reference it as `$ARGUMENTS`.
+- **Locate lessons by glob:** `lessons/**/<chapter>-*/`. Lesson directories are named `<chapter>-<slug>` (e.g. `3.1-agentic-loops`) so the chapter prefix is the lookup key. (Chapters are renumbered if the learning path is reordered; exam alignment lives in `docs/exam-mapping.md`.)
 - **Be conversational, not mechanical.** A command should *use* the file it finds, not dump it. `/study` walks the user through the lesson; it doesn't `cat` it.
 - **Always end by suggesting the next step.** `/study` → `/exercise`. `/exercise` → `/verify`. `/verify` → next lesson or remediation.
+
+## Infrastructure vs. coursework (load-bearing)
+
+This repo is two things at once: **coursework** an end user studies, and the **infrastructure** that delivers and grades it. Keep them physically separate so a learner browsing the repo sees lessons, not plumbing — and so infra can change without touching content.
+
+- **Coursework (learner-facing):** `lessons/` (the chapters), `docs/curriculum-map.md` + `docs/exam-mapping.md` (what to study and in what order), and the learner commands `/study`, `/exercise`, `/verify`, `/exam`.
+- **Infrastructure (not coursework):** authoring/QA agents (`.claude/agents/` — e.g. `lesson-auditor`, `curriculum-auditor`), authoring rules (`.claude/rules/`), and any **build/grading services or scripts**. Grading/verification services (the Phase 2 grading MCP server and anything like it) live in a top-level **`infra/`** directory — **never under `lessons/`**. A lesson's `starter/` contains only what the learner runs; graders and servers do not ship inside a chapter.
+
+Rule of thumb: if an end user would `pip install` and run it as part of an exercise, it's coursework and belongs in that chapter's `starter/`. If it exists to *operate the platform* (grade, audit, build, serve), it's infrastructure and belongs in `infra/` or `.claude/`, outside `lessons/`.
 
 ## `/verify` in Phase 1 vs. Phase 2
 

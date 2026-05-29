@@ -1,83 +1,90 @@
 # Curriculum map
 
-Every Learn Claude lesson maps 1:1 to a task statement in the official **Claude Certified Architect — Foundations (CCA-F) Exam Guide** (Version 0.1, Feb 10 2025). This file is the source of truth for what's been built and what's still planned.
+Learn Claude is organized as a **learning path**: a dependency-ordered sequence where each chapter builds on the ones before it. Chapters are numbered `module.lesson` purely by **course order** — the numbers are the learning sequence, not an exam's numbering. Address a chapter by its number (e.g. `/study 3.1`).
 
-The **Primary docs** column lists the canonical official Anthropic/Claude documentation each lesson teaches from (its `references:` frontmatter holds the full list). The exam guide remains the scope authority for *what's* testable; these docs are the teaching reference for *how it works*. `—` means the lesson isn't authored yet, so its doc mapping is TBD (filled in when the lesson is built).
+Lessons are **exam-agnostic**. Which chapter covers which exam's task statements (and in what exam order) lives in **[`exam-mapping.md`](exam-mapping.md)** — the single source of truth for exam coverage — and is restated in each lesson's "Exam coverage" footer. Today the only exam mapped is **CCAF** (Claude Certified Architect — Foundations).
 
-**Status:** 3 of 37 lessons complete (1.1, 1.2, 1.3). The rest are scaffolded as planned and will land in Phase 5 of the build.
+To study the path **in an exam's order** instead of course order, run `/exam <CODE>` (e.g. `/exam CCAF`): it reads the mapping, lists that exam's task statements in exam order, and walks you through the built chapters one at a time.
 
-| Lesson ID | Domain | Task Statement | Title | Primary docs | Status |
-|---|---|---|---|---|---|
-| 0.1 | Foundations | — | Foundations: the four technologies on the exam (Claude API, Agent SDK, Claude Code, MCP) | — | planned |
+**Status:** 7 of 37 chapters built (1.1, 1.2, 1.3, 3.1, 3.2, 3.3, 3.4). The rest are planned.
 
-## Domain 1 — Agentic Architecture & Orchestration (27%)
+## Module 0 — Foundations
 
-| Lesson ID | Domain | Task Statement | Title | Primary docs | Status |
-|---|---|---|---|---|---|
-| 1.1 | 1 | 1.1 | Design and implement agentic loops for autonomous task execution | [Agent SDK — How the agent loop works](https://code.claude.com/docs/en/agent-sdk/agent-loop) | **complete** |
-| 1.2 | 1 | 1.2 | Orchestrate multi-agent systems with coordinator-subagent patterns | [Agent SDK — Subagents](https://code.claude.com/docs/en/agent-sdk/subagents) | **complete** |
-| 1.3 | 1 | 1.3 | Configure subagent invocation, context passing, and spawning | [Agent SDK — Subagents](https://code.claude.com/docs/en/agent-sdk/subagents) | **complete** |
-| 1.4 | 1 | 1.4 | Implement multi-step workflows with enforcement and handoff patterns | — | planned |
-| 1.5 | 1 | 1.5 | Apply Agent SDK hooks for tool call interception and data normalization | — | planned |
-| 1.6 | 1 | 1.6 | Design task decomposition strategies for complex workflows | — | planned |
-| 1.7 | 1 | 1.7 | Manage session state, resumption, and forking | — | planned |
+| Chapter | Title | Status |
+|---|---|---|
+| 0.1 | Foundations: the four technologies (Claude API, Agent SDK, Claude Code, MCP) | planned |
 
-## Domain 2 — Tool Design & MCP Integration (18%)
+## Module 1 — Prompting & structured output
 
-| Lesson ID | Domain | Task Statement | Title | Primary docs | Status |
-|---|---|---|---|---|---|
-| 2.1 | 2 | 2.1 | Design effective tool interfaces with clear descriptions and boundaries | — | planned |
-| 2.2 | 2 | 2.2 | Implement structured error responses for MCP tools | — | planned |
-| 2.3 | 2 | 2.3 | Distribute tools appropriately across agents and configure tool choice | — | planned |
-| 2.4 | 2 | 2.4 | Integrate MCP servers into Claude Code and agent workflows | — | planned |
-| 2.5 | 2 | 2.5 | Select and apply built-in tools (Read, Write, Edit, Bash, Grep, Glob) effectively | — | planned |
+| Chapter | Title | Status |
+|---|---|---|
+| 1.1 | Prompting with explicit criteria | **built** |
+| 1.2 | Few-shot prompting | **built** |
+| 1.3 | Structured output with tool use & JSON schemas | **built** |
 
-## Domain 3 — Claude Code Configuration & Workflows (20%)
+## Module 2 — Tools
 
-| Lesson ID | Domain | Task Statement | Title | Primary docs | Status |
-|---|---|---|---|---|---|
-| 3.1 | 3 | 3.1 | Configure CLAUDE.md files with appropriate hierarchy, scoping, and modular organization | — | planned |
-| 3.2 | 3 | 3.2 | Create and configure custom slash commands and skills | — | planned |
-| 3.3 | 3 | 3.3 | Apply path-specific rules for conditional convention loading | — | planned |
-| 3.4 | 3 | 3.4 | Determine when to use plan mode vs direct execution | — | planned |
-| 3.5 | 3 | 3.5 | Apply iterative refinement techniques for progressive improvement | — | planned |
-| 3.6 | 3 | 3.6 | Integrate Claude Code into CI/CD pipelines | — | planned |
+| Chapter | Title | Status |
+|---|---|---|
+| 2.1 | Built-in tools (Read, Write, Edit, Bash, Grep, Glob) | planned |
+| 2.2 | Designing tool interfaces | planned |
+| 2.3 | Structured error responses for tools | planned |
 
-## Domain 4 — Prompt Engineering & Structured Output (20%)
+## Module 3 — Agentic core
 
-| Lesson ID | Domain | Task Statement | Title | Primary docs | Status |
-|---|---|---|---|---|---|
-| 4.1 | 4 | 4.1 | Design prompts with explicit criteria to improve precision and reduce false positives | — | planned |
-| 4.2 | 4 | 4.2 | Apply few-shot prompting to improve output consistency and quality | — | planned |
-| 4.3 | 4 | 4.3 | Enforce structured output using tool use and JSON schemas | — | planned |
-| 4.4 | 4 | 4.4 | Implement validation, retry, and feedback loops for extraction quality | — | planned |
-| 4.5 | 4 | 4.5 | Design efficient batch processing strategies | — | planned |
-| 4.6 | 4 | 4.6 | Design multi-instance and multi-pass review architectures | — | planned |
+| Chapter | Title | Status |
+|---|---|---|
+| 3.1 | Agentic loops | **built** |
+| 3.2 | Coordinator and subagent orchestration | **built** |
+| 3.3 | Subagent invocation and context passing | **built** |
+| 3.4 | Distributing tools across agents & tool choice | **built** |
 
-## Domain 5 — Context Management & Reliability (15%)
+## Module 4 — Workflows & state
 
-| Lesson ID | Domain | Task Statement | Title | Primary docs | Status |
-|---|---|---|---|---|---|
-| 5.1 | 5 | 5.1 | Manage conversation context to preserve critical information across long interactions | — | planned |
-| 5.2 | 5 | 5.2 | Design effective escalation and ambiguity resolution patterns | — | planned |
-| 5.3 | 5 | 5.3 | Implement error propagation strategies across multi-agent systems | — | planned |
-| 5.4 | 5 | 5.4 | Manage context effectively in large codebase exploration | — | planned |
-| 5.5 | 5 | 5.5 | Design human review workflows and confidence calibration | — | planned |
-| 5.6 | 5 | 5.6 | Preserve information provenance and handle uncertainty in multi-source synthesis | — | planned |
+| Chapter | Title | Status |
+|---|---|---|
+| 4.1 | Multi-step workflows with enforcement & handoff | planned |
+| 4.2 | Agent SDK hooks for tool interception & normalization | planned |
+| 4.3 | Task decomposition strategies | planned |
+| 4.4 | Session state, resumption, and forking | planned |
 
-## Module 6 — Scenario deep dives (apply everything)
+## Module 5 — Claude Code & MCP integration
 
-One lesson per official CCA-F exam scenario. These tie multiple task statements together under a realistic production context.
+| Chapter | Title | Status |
+|---|---|---|
+| 5.1 | CLAUDE.md hierarchy, scoping & modular organization | planned |
+| 5.2 | Path-specific rules for conditional conventions | planned |
+| 5.3 | Custom slash commands and skills | planned |
+| 5.4 | Plan mode vs direct execution | planned |
+| 5.5 | Integrating MCP servers | planned |
+| 5.6 | Iterative refinement techniques | planned |
+| 5.7 | Claude Code in CI/CD pipelines | planned |
+| 5.8 | Capstone — Developer Productivity with Claude | planned |
 
-| Lesson ID | Domain | Task Statement | Title | Primary docs | Status |
-|---|---|---|---|---|---|
-| 6.1 | Scenario | — | Scenario 1 deep dive: Customer Support Resolution Agent | — | planned |
-| 6.2 | Scenario | — | Scenario 2 deep dive: Code Generation with Claude Code | — | planned |
-| 6.3 | Scenario | — | Scenario 3 deep dive: Multi-Agent Research System | — | planned |
-| 6.4 | Scenario | — | Scenario 4 deep dive: Developer Productivity with Claude | — | planned |
-| 6.5 | Scenario | — | Scenario 5 deep dive: Claude Code for Continuous Integration | — | planned |
-| 6.6 | Scenario | — | Scenario 6 deep dive: Structured Data Extraction | — | planned |
+## Module 6 — Extraction & quality loops
+
+| Chapter | Title | Status |
+|---|---|---|
+| 6.1 | Validation, retry & feedback loops for extraction | planned |
+| 6.2 | Batch processing strategies | planned |
+| 6.3 | Multi-instance & multi-pass review architectures | planned |
+| 6.4 | Capstone — Claude Code for Continuous Integration | planned |
+
+## Module 7 — Context & reliability
+
+| Chapter | Title | Status |
+|---|---|---|
+| 7.1 | Managing conversation context across long interactions | planned |
+| 7.2 | Context in large codebase exploration | planned |
+| 7.3 | Escalation & ambiguity resolution | planned |
+| 7.4 | Error propagation across multi-agent systems | planned |
+| 7.5 | Human review workflows & confidence calibration | planned |
+| 7.6 | Information provenance & uncertainty in synthesis | planned |
+| 7.7 | Capstone — Customer Support Resolution Agent | planned |
+| 7.8 | Capstone — Multi-Agent Research System | planned |
+| 7.9 | Capstone — Code Generation with Claude Code | planned |
+| 7.10 | Capstone — Structured Data Extraction | planned |
 
 ---
 
-**Totals:** 1 Foundations + 30 task-statement lessons + 6 Scenario deep dives = **37 lessons.**
+**Totals:** 37 chapters across 8 modules. The 4 capstones (5.8, 6.4, 7.7–7.10) are the CCAF exam scenarios, placed after their prerequisite material. For the exam-order view of all this, see [`exam-mapping.md`](exam-mapping.md).

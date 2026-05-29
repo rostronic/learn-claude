@@ -1,7 +1,9 @@
 ---
-lesson_id: "1.2"
-task_statement: "1.2 Orchestrate multi-agent systems with coordinator-subagent patterns"
-exam_guide_reference: "Domain 1, Task Statement 1.2"
+chapter: "3.2"
+slug: "coordinator-subagent"
+title: "Coordinator and subagent orchestration"
+module: "module-3-agentic-core"
+sequence: 9
 references:
   - title: "Agent SDK — Subagents in the SDK"
     url: "https://code.claude.com/docs/en/agent-sdk/subagents"
@@ -11,13 +13,9 @@ references:
     url: "https://code.claude.com/docs/en/agent-sdk/agent-loop"
     type: official_docs
     covers: "The loop the coordinator runs; subagents keep their work out of the parent's context"
-  - title: "CCA-F Exam Guide — Domain 1, Task Statement 1.2"
-    url: "https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F8lsy243ftffjjy1cx9lm3o2bw%2Fpublic%2F1773274827%2FClaude+Certified+Architect+%E2%80%93+Foundations+Certification+Exam+Guide.pdf"
-    type: exam_guide
-    covers: "Scope authority; hub-and-spoke, context isolation, dynamic selection, decomposition risks"
 ---
 
-# Task Statement 1.2: Orchestrate multi-agent systems with coordinator-subagent patterns
+# Coordinator and subagent orchestration
 
 ## Overview
 
@@ -25,7 +23,7 @@ A single agent with one context window can only hold so much before it starts to
 
 There are two reasons this pattern wins, and both are about *context*. First, each subagent "runs in its own fresh conversation. Intermediate tool calls and results stay inside the subagent; only its final message returns to the parent" ([Agent SDK — subagents](https://code.claude.com/docs/en/agent-sdk/subagents)). A research subagent can read forty files and the coordinator only ever sees the three-sentence summary — the forty files never enter the coordinator's context. Second, because the coordinator owns all routing, you get one place for observability, error handling, and control.
 
-This task statement builds directly on 1.1. A coordinator *is* an agentic loop — the same `stop_reason` loop from the last lesson — except its "tools" are subagents. When the coordinator decides it needs a researcher, it emits a tool call; you spawn the subagent, return its result, and the loop continues until the coordinator produces its synthesis. Keep that mental model: **orchestration is an agentic loop whose tools are other agents.**
+This builds directly on the previous chapter (3.1, Agentic loops). A coordinator *is* an agentic loop — the same `stop_reason` loop — except its "tools" are subagents. When the coordinator decides it needs a researcher, it emits a tool call; you spawn the subagent, return its result, and the loop continues until the coordinator produces its synthesis. Keep that mental model: **orchestration is an agentic loop whose tools are other agents.**
 
 ## How it works
 
@@ -54,17 +52,17 @@ options = ClaudeAgentOptions(
 )
 ```
 
-The coordinator invokes these through the built-in **Agent tool** — which is why `"Agent"` must be in `allowed_tools` for delegation to auto-approve. (Task Statement 1.3 goes deeper on the invocation mechanics; here we care about the *pattern*.)
+The coordinator invokes these through the built-in **Agent tool** — which is why `"Agent"` must be in `allowed_tools` for delegation to auto-approve. (The next chapter, 3.3, goes deeper on the invocation mechanics; here we care about the *pattern*.)
 
 ### Subagents start with a blank slate
 
-This is the single most-tested fact in 1.2: **subagents do not inherit the coordinator's conversation history.** A subagent's context "starts fresh (no parent conversation)… The only channel from parent to subagent is the Agent tool's prompt string, so include any file paths, error messages, or decisions the subagent needs directly in that prompt" ([Agent SDK — what subagents inherit](https://code.claude.com/docs/en/agent-sdk/subagents#what-subagents-inherit)). A subagent *does* get its own system prompt and the project `CLAUDE.md`; it does **not** get the parent's history, the parent's system prompt, or another subagent's results unless you put them in the prompt.
+This is the single most-tested fact here: **subagents do not inherit the coordinator's conversation history.** A subagent's context "starts fresh (no parent conversation)… The only channel from parent to subagent is the Agent tool's prompt string, so include any file paths, error messages, or decisions the subagent needs directly in that prompt" ([Agent SDK — what subagents inherit](https://code.claude.com/docs/en/agent-sdk/subagents#what-subagents-inherit)). A subagent *does* get its own system prompt and the project `CLAUDE.md`; it does **not** get the parent's history, the parent's system prompt, or another subagent's results unless you put them in the prompt.
 
 The practical consequence: if the synthesizer needs the researcher's findings, the *coordinator* must pass those findings into the synthesizer's prompt. Subagents can't reach across to each other — and structurally they can't even try, because "subagents cannot spawn their own subagents." The hub-and-spoke shape is enforced by the runtime, not just by convention.
 
 ### The coordinator as a loop
 
-Strip away the SDK and the pattern is the 1.1 loop with subagents as tools. The coordinator calls the model with a set of "subagent tools"; when the model asks for one, you run that subagent **in isolation** — handing it only the task string the coordinator composed — and feed the result back:
+Strip away the SDK and the pattern is the agentic loop from chapter 3.1 with subagents as tools. The coordinator calls the model with a set of "subagent tools"; when the model asks for one, you run that subagent **in isolation** — handing it only the task string the coordinator composed — and feed the result back:
 
 ```python
 def run_coordinator(client, query, subagent_tools, spawn_subagent, safety_cap=25):
@@ -153,10 +151,10 @@ The coordinator might call `researcher` twice (once for REST, once for gRPC), th
 
 ## Anti-patterns & pitfalls
 
-The exam guide's knowledge and skills for 1.2 map to four wrong patterns. Each one breaks the hub-and-spoke contract:
+The exam guide's knowledge and skills for this task statement (CCAF 1.2) map to four wrong patterns. Each one breaks the hub-and-spoke contract:
 
 1. **Subagents communicating directly (peer-to-peer).** Wiring one subagent's output straight into another, or letting subagents call each other, instead of "routing all subagent communication through the coordinator." This destroys observability and consistent error handling — and the runtime forbids it anyway, since "subagents cannot spawn their own subagents." If the synthesizer needs the researcher's findings, the *coordinator* passes them.
-2. **Always running the full pipeline.** Hardcoding "research → analyze → synthesize, every time" regardless of the request. The exam wants a coordinator that "analyze[s] query requirements and dynamically select[s] which subagents to invoke rather than always routing through the full pipeline." A fixed pipeline is a decision tree wearing an orchestrator costume — the same mistake 1.1 warns about, one level up.
+2. **Always running the full pipeline.** Hardcoding "research → analyze → synthesize, every time" regardless of the request. The exam wants a coordinator that "analyze[s] query requirements and dynamically select[s] which subagents to invoke rather than always routing through the full pipeline." A fixed pipeline is a decision tree wearing an orchestrator costume — the same mistake the agentic-loop lesson (chapter 3.1) warns about, one level up.
 3. **Assuming subagents inherit context.** Spawning a subagent with a vague prompt and expecting it to "remember" the conversation. It can't: it starts fresh and sees only the prompt string you pass. Forgetting to include the findings, file paths, or constraints the subagent needs is the most common cause of a subagent that "ignores" what the coordinator knows.
 4. **Bad decomposition — too narrow or too overlapping.** The guide flags "risks of overly narrow task decomposition… leading to incomplete coverage of broad research topics." Carve the work so subagents cover the whole question without redundant overlap — "partition… research scope across subagents to minimize duplication (e.g., assigning distinct subtopics or source types to each agent)."
 
@@ -170,4 +168,9 @@ This task statement is the backbone of **Scenario 3 (Multi-Agent Research System
 
 - [Agent SDK — Subagents in the SDK](https://code.claude.com/docs/en/agent-sdk/subagents) — how a coordinator spawns subagents, the "what subagents inherit" table, and the full `AgentDefinition` configuration. The primary reference for this lesson.
 - [Agent SDK — How the agent loop works](https://code.claude.com/docs/en/agent-sdk/agent-loop) — the loop the coordinator runs, and why subagents keep their intermediate work out of the parent's context window.
-- **CCA-F Exam Guide, Domain 1, Task Statement 1.2** — the scope authority: hub-and-spoke, context isolation, dynamic selection, and decomposition risks (linked from the README).
+
+## Exam coverage
+
+- **CCAF** — Domain 1 (Agentic Architecture & Orchestration), Task Statement 1.2: Orchestrate multi-agent systems with coordinator-subagent patterns.
+
+The authoritative exam → lesson map for the whole project is [`docs/exam-mapping.md`](../../../docs/exam-mapping.md).

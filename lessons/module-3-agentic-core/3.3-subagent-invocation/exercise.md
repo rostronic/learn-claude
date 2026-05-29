@@ -1,4 +1,4 @@
-# Task Statement 1.3: Configure subagent invocation, context passing, and spawning
+# Subagent invocation and context passing — exercise
 
 ## What you're building
 
@@ -56,14 +56,14 @@ Requirement 6 is graded directly by the rubric (`check: anti_pattern`).
 ## How to run it
 
 ```bash
-cd ~/learn-claude-work/1.3
+cd ~/learn-claude-work/3.3
 pip install -r requirements.txt
 pytest -v
 ```
 
 No `ANTHROPIC_API_KEY` needed — the exercise is pure logic.
 
-When you're ready (or stuck), run `/verify 1.3` and I'll grade you.
+When you're ready (or stuck), run `/verify 3.3` and I'll grade you.
 
 ## References
 

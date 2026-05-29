@@ -1,4 +1,4 @@
-"""Starter skeleton for Learn Claude Lesson 1.1 — Agentic Loops.
+"""Starter skeleton for Learn Claude chapter 3.1 — Agentic Loops.
 
 Implement run_agent_loop below. See exercise.md for the full spec.
 """

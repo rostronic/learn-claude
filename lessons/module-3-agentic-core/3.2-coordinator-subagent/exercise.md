@@ -1,10 +1,10 @@
-# Task Statement 1.2: Orchestrate multi-agent systems with coordinator-subagent patterns
+# Coordinator and subagent orchestration — exercise
 
 ## What you're building
 
 Implement `run_coordinator` in `coordinator.py`. It's a hub-and-spoke orchestrator: a coordinator agentic loop whose "tools" are subagents. The coordinator decides which subagents to invoke, hands each one an explicit task, and aggregates the results — routing everything through itself.
 
-This builds on Lesson 1.1: the coordinator is the same `stop_reason` loop, except each tool call spawns a subagent in **isolated context**.
+This builds on chapter 3.1: the coordinator is the same `stop_reason` loop, except each tool call spawns a subagent in **isolated context**.
 
 ## Function signature
 
@@ -49,14 +49,14 @@ Requirement 6 is graded directly by the rubric (`check: anti_pattern`). The veri
 ## How to run it
 
 ```bash
-cd ~/learn-claude-work/1.2
+cd ~/learn-claude-work/3.2
 pip install -r requirements.txt
 pytest -v
 ```
 
 The tests mock the Anthropic client and use a spy `spawn_subagent` — no `ANTHROPIC_API_KEY` needed, no API credits burned.
 
-When you're ready (or stuck), run `/verify 1.2` and I'll grade you.
+When you're ready (or stuck), run `/verify 3.2` and I'll grade you.
 
 ## References
 

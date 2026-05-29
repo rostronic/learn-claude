@@ -1,4 +1,4 @@
-"""Dummy tools and their Claude tool-use schemas for Lesson 1.1.
+"""Dummy tools and their Claude tool-use schemas for chapter 3.1.
 
 The schemas (WEATHER_TOOL, TIME_TOOL) are the shape Claude's API expects in the
 `tools` parameter of client.messages.create(). The functions (get_weather,

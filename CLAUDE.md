@@ -4,16 +4,16 @@ This file governs every lesson, exercise, and rubric in this repo. If you're aut
 
 ## What this project is
 
-Learn Claude is a study platform for the **Claude Certified Architect — Foundations (CCA-F)** exam. Our audience is working engineers preparing for that specific cert. Every piece of content here exists to help someone pass that exam.
+Learn Claude is a study platform for building real systems with Claude — and for passing the Anthropic certification exams that test those skills. Our audience is working engineers. Content is organized as a **dependency-ordered learning path** (see [docs/curriculum-map.md](docs/curriculum-map.md)); each lesson is **exam-agnostic** and teaches one topic well. Exams are an **overlay**: a lesson can map to one exam's task statements, several, or none. The first (and currently only) mapped exam is the **Claude Certified Architect — Foundations (CCA-F / "CCAF")**.
 
 ## Scope authority vs. teaching sources
 
 Two kinds of source, two distinct jobs. Don't conflate them.
 
-- **Scope authority — the CCA-F Exam Guide** (PDF linked from the README). It is the *only* authority on **what's testable**: the task-statement spine, the anti-patterns candidates are expected to avoid, and which scenarios matter. Every lesson and every rubric criterion must trace back to a specific task statement in the guide, and the lesson must cite it by ID (`1.1`, `2.3`, etc.) and exact title. If you're unsure what's in scope, **read the guide** — don't invent, don't paraphrase from memory, don't pull a topic in just because it's interesting.
+- **Scope authority — an exam's official guide.** For each exam we support, that exam's official guide is the *only* authority on **what's testable** for it: the task-statement spine, the anti-patterns candidates must avoid, and which scenarios matter. The exam → lesson mapping lives in **[docs/exam-mapping.md](docs/exam-mapping.md)** (the single source of truth), and each lesson restates its coverage in an "Exam coverage" footer. A lesson that claims to cover a CCAF task statement must trace to that statement in the CCA-F guide; if you're unsure what's in scope, **read the guide** — don't invent or pull a topic in just because it's interesting. Lessons may also be **unmapped** (general "learn Claude" content with no exam footer).
 - **Teaching reference — the official Anthropic / Claude docs** (`docs.claude.com`, `code.claude.com`, `platform.claude.com`). These are the canonical reference for **how the thing actually works**. Use them to teach with depth and accuracy: cite them inline where you make a claim, and list them in the lesson's `references:` frontmatter so the reader can go deeper and so tooling can surface and lint them.
 
-The exam guide decides *what* we teach; the official docs help us teach it *well*. **Third-party blogs, videos, and tutorials remain off-limits** — they dilute the source of truth and date badly. If a claim isn't supported by the exam guide (for scope) or an official doc (for mechanics), it doesn't go in a lesson.
+The exam guides decide *what's testable*; the official docs help us teach it *well*. **Third-party blogs, videos, and tutorials remain off-limits** — they dilute the source of truth and date badly. If a claim isn't supported by an exam guide (for scope) or an official doc (for mechanics), it doesn't go in a lesson.
 
 ## Tone
 

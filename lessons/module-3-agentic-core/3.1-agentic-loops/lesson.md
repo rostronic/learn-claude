@@ -1,7 +1,9 @@
 ---
-lesson_id: "1.1"
-task_statement: "1.1 Design and implement agentic loops for autonomous task execution"
-exam_guide_reference: "Domain 1, Task Statement 1.1"
+chapter: "3.1"
+slug: "agentic-loops"
+title: "Agentic loops"
+module: "module-3-agentic-core"
+sequence: 8
 references:
   - title: "Agent SDK — How the agent loop works"
     url: "https://code.claude.com/docs/en/agent-sdk/agent-loop"
@@ -19,13 +21,9 @@ references:
     url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls"
     type: official_docs
     covers: "tool_result block shape and the ordering rule (tool_result before text)"
-  - title: "CCA-F Exam Guide — Domain 1, Task Statement 1.1"
-    url: "https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F8lsy243ftffjjy1cx9lm3o2bw%2Fpublic%2F1773274827%2FClaude+Certified+Architect+%E2%80%93+Foundations+Certification+Exam+Guide.pdf"
-    type: exam_guide
-    covers: "Scope authority; the three loop-termination anti-patterns"
 ---
 
-# Task Statement 1.1: Design and implement agentic loops for autonomous task execution
+# Agentic loops
 
 ## Overview
 
@@ -154,4 +152,9 @@ Expect distractors that "feel right": confidence thresholds, text-pattern checks
 - [How Claude Code works — the agentic loop](https://code.claude.com/docs/en/how-claude-code-works) — the same loop, described conceptually (not SDK-specific).
 - [Messages API — tool use](https://platform.claude.com/docs/en/build-with-claude/tool-use) — the raw `tool_use` / `tool_result` block shapes and the full set of `stop_reason` values you branch on when you build the loop by hand.
 - [Handle tool calls](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls) — the `tool_result` block shape and the ordering rule (tool_result blocks first, text after) that otherwise causes a 400.
-- **CCA-F Exam Guide, Domain 1, Task Statement 1.1** — the scope authority for what's testable here, including the three anti-patterns above (linked from the README).
+
+## Exam coverage
+
+- **CCAF** — Domain 1 (Agentic Architecture & Orchestration), Task Statement 1.1: Design and implement agentic loops for autonomous task execution.
+
+The authoritative exam → lesson map for the whole project is [`docs/exam-mapping.md`](../../../docs/exam-mapping.md).

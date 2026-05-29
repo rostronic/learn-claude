@@ -1,4 +1,4 @@
-"""Subagent tool schemas and an isolated spawner for Lesson 1.2.
+"""Subagent tool schemas and an isolated spawner for chapter 3.2.
 
 The schemas (RESEARCHER, SYNTHESIZER) are the shape the coordinator passes in the
 `tools` parameter of client.messages.create() — each subagent is a "tool" the
