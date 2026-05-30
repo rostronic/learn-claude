@@ -10,8 +10,8 @@ This repo is being built in phases. Know which phase you're in before adding any
 |---|---|---|
 | **1** | Skeleton: `/study`, `/exercise`, `/verify` (manual), first lessons end-to-end, curriculum map | done |
 | **2** | Verifier subagent + grading MCP server — automated rubric checks replacing the manual `/verify` | done |
-| **3** | Examiner subagent + question bank + `/practice` (single Q) and `/mock-exam` (full timed run) | **current** |
-| **4** | Coach subagent as hub-and-spoke coordinator over verifier + examiner + progress-tracking MCP server | planned |
+| **3** | Examiner subagent + question bank + `/practice` (single Q) and `/mock-exam` (full timed run) | done |
+| **4** | Coach subagent as hub-and-spoke coordinator over verifier + examiner + progress-tracking MCP server | **current** |
 | **5** | Authoring commands (`/new-lesson`, `/new-question`) + full content build-out for all 37 lessons | planned |
 
 Each phase reinforces a CCA-F domain that the platform itself teaches — see [docs/curriculum-map.md](../docs/curriculum-map.md). Don't pull Phase N+1 work forward unless asked.

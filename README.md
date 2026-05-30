@@ -41,12 +41,12 @@ Both route through the read-only **examiner** subagent, which holds the answer k
 
 ## Status
 
-**Phase 1 of 5.** Seven chapters are fully built — Module 1 (1.1 Prompting with explicit criteria, 1.2 Few-shot prompting, 1.3 Structured output) and Module 3 (3.1 Agentic loops, 3.2 Coordinator and subagent orchestration, 3.3 Subagent invocation and context passing, 3.4 Distributing tools across agents & tool choice). The full 37-chapter learning path is mapped in [docs/curriculum-map.md](docs/curriculum-map.md) (with exam coverage in [docs/exam-mapping.md](docs/exam-mapping.md)); the rest will be built out in subsequent phases:
+**Phases 1–3 done; Phase 4 in progress.** The platform (slash commands, automated grading via the verifier + grading MCP server, and assessment via the examiner + `/practice`/`/mock-exam`) is built. **Seven of 37 chapters** are authored — Module 1 (1.1 Prompting with explicit criteria, 1.2 Few-shot prompting, 1.3 Structured output) and Module 3 (3.1 Agentic loops, 3.2 Coordinator and subagent orchestration, 3.3 Subagent invocation and context passing, 3.4 Distributing tools across agents & tool choice). The full 37-chapter learning path is mapped in [docs/curriculum-map.md](docs/curriculum-map.md) (with exam coverage in [docs/exam-mapping.md](docs/exam-mapping.md)); the rest are built out in Phase 5.
 
-- **Phase 1** (current) — Skeleton repo, slash commands, one lesson end-to-end
-- **Phase 2** — Verifier subagent + grading MCP server (automated rubric checks)
-- **Phase 3** — Examiner subagent, question bank, `/practice` and `/mock-exam`
-- **Phase 4** — Coach subagent (hub-and-spoke coordinator) + progress tracking
+- **Phase 1** ✅ — Skeleton repo, slash commands, first lessons end-to-end
+- **Phase 2** ✅ — Verifier subagent + grading MCP server (automated rubric checks)
+- **Phase 3** ✅ — Examiner subagent, question bank, `/practice` and `/mock-exam`
+- **Phase 4** (current) — Coach subagent (hub-and-spoke coordinator) + progress tracking
 - **Phase 5** — Authoring commands (`/new-lesson`, `/new-question`) + full content build-out
 
 ## Disclaimer
