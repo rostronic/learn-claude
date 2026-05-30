@@ -1,0 +1,27 @@
+chapter: "0.1"
+criteria:
+  - id: external_system_to_mcp
+    description: "Returns 'mcp' when the task signals connect_external_system"
+    weight: 15
+    check: code_review
+  - id: interactive_coding_to_claude_code
+    description: "Returns 'claude_code' when the task signals interactive_coding"
+    weight: 15
+    check: code_review
+  - id: autonomous_loop_to_agent_sdk
+    description: "Returns 'agent_sdk' when the task signals needs_autonomous_loop"
+    weight: 15
+    check: code_review
+  - id: simple_task_to_messages_api
+    description: "Defaults to 'messages_api' (the floor) when no special signal is set"
+    weight: 20
+    check: code_review
+  - id: no_agent_sdk_overreach
+    description: "Does NOT default the no-signal fallback to 'agent_sdk' (or any non-'messages_api' value) — reaching for the Agent SDK when the raw Messages API suffices is the forbidden pattern"
+    weight: 20
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_recommender.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_recommender.py -v"

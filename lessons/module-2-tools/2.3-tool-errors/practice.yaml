@@ -1,0 +1,65 @@
+# Per-lesson practice questions for chapter 2.3 (Structured error responses for tools).
+# Topic-only drills (no exam scenario) that test this chapter's material.
+chapter: "2.3"
+questions:
+  - id: "ccaf-d2-2.2-practice-001"
+    stem: >-
+      A custom tool's handler hits a network error mid-call. What should the handler do so
+      the agent can recover?
+    options:
+      A: "Catch the exception and return a tool_result with is_error set to true and an instructive message, so the agent loop continues and Claude can react."
+      B: "Let the exception propagate out of the handler so the caller sees the real stack trace."
+      C: "Return the error text as a normal successful result with no is_error flag."
+      D: "Swallow the exception and return an empty success result so the loop keeps going."
+    correct: "A"
+    explanation: >-
+      Returning an is_error tool_result keeps the agent loop alive and lets Claude see the
+      failure as data it can retry or explain. B is the central anti-pattern: an uncaught
+      throw stops the agent loop and Claude never sees the error, so the run fails. C omits
+      is_error, so Claude treats the failure as legitimate data and may proceed on garbage.
+      D hides the failure entirely — Claude has no signal that anything went wrong and will
+      act as if the call succeeded.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.2 Implement structured error responses for MCP tools"
+
+  - id: "ccaf-d2-2.2-practice-002"
+    stem: >-
+      A refund tool can fail two ways: the payments API is temporarily down (HTTP 503), or
+      the requested refund exceeds the policy limit. How should each be reported so Claude
+      reacts correctly?
+    options:
+      A: "The 503 as a transient error marked retryable; the policy violation as a business error marked NOT retryable."
+      B: "Both as retryable errors, so Claude always tries again until one succeeds."
+      C: "Both as non-retryable errors, so Claude never retries either."
+      D: "Neither as an error — return both as normal results and let Claude infer the difference from the text."
+    correct: "A"
+    explanation: >-
+      A transient failure like a 503 may succeed on retry, so it is retryable; a policy
+      violation is a well-formed but disallowed request that will fail identically every
+      time, so it is not retryable. B would loop forever on the policy violation, which can
+      never succeed. C abandons the recoverable 503 prematurely. D drops the is_error signal
+      and the category/retryable structure entirely, leaving Claude to guess how to react.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.2 Implement structured error responses for MCP tools"
+
+  - id: "ccaf-d2-2.2-practice-003"
+    stem: >-
+      Which tool error message best follows the official guidance for error responses?
+    options:
+      A: "\"Rate limit exceeded. Retry after 60 seconds.\" returned with is_error true."
+      B: "\"failed\" returned with is_error true."
+      C: "\"error\" returned as a normal result without is_error."
+      D: "A full Python traceback string returned with is_error true."
+    correct: "A"
+    explanation: >-
+      The docs prescribe instructive messages that say what went wrong and what to try next,
+      such as 'Rate limit exceeded. Retry after 60 seconds.' B is the generic 'failed' the
+      docs explicitly warn against — it gives Claude nothing to act on. C both uses a generic
+      message AND omits is_error, so the failure masquerades as data. D is marked correctly
+      but dumps an unstructured traceback rather than a concise, actionable message Claude can
+      use to recover.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.2 Implement structured error responses for MCP tools"

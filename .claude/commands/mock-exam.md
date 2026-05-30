@@ -26,7 +26,9 @@ The user invoked `/mock-exam $ARGUMENTS`. Treat `$ARGUMENTS` as an **exam code**
 
    Then use the Write tool to create `~/learn-claude-work/mock-exams/$ARGUMENTS/<UTC-timestamp>.md`, where the timestamp is ISO-8601 with `:` replaced by `-` (get it with `date -u +%Y-%m-%dT%H-%M-%SZ`, e.g. `2026-05-29T23-04-11Z.md`). The file content: the examiner's `MOCK RESULT` report, the PLAN (which scenarios/questions were drawn), the elapsed time vs. the advisory budget, and your review pointers. Mention the path in your reply.
 
-8. **Suggest a next step.** If they passed (≥720), congratulate them and suggest a fresh run (selection re-randomizes) or drilling any still-weak domain with `/practice <chapter>`. If they didn't, point them at the weakest domain's chapters from step 6 — study/practice those, then re-run `/mock-exam $ARGUMENTS`.
+8. **Record the result (optional, non-blocking).** So the Phase-4 `/coach` can track exam readiness and weak domains, record this run. From the `MOCK RESULT`, take the scaled score (`scaled`), the PASS/FAIL verdict (`passed`), and build `per_domain` as a map of domain id → **fraction correct (0–1)** from the per-domain breakdown (e.g. `{"1": 0.78, "2": 0.5, ...}`). If the progress MCP server is registered this session, call its `mcp__learn-claude-progress__record_mock` tool with `exam: $ARGUMENTS`, `scaled`, `passed`, and `per_domain`. If it isn't available, fall back to Bash: `python3 infra/progress-mcp/progress.py mock $ARGUMENTS <scaled> <true|false> '<per_domain_json>'`. **Ignore any failure silently** — tracking never alters the score the examiner returned.
+
+9. **Suggest a next step.** If they passed (≥720), congratulate them and suggest a fresh run (selection re-randomizes) or drilling any still-weak domain with `/practice <chapter>`. If they didn't, point them at the weakest domain's chapters from step 6 — study/practice those, then re-run `/mock-exam $ARGUMENTS`.
 
 ## Tone
 

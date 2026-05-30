@@ -1,0 +1,27 @@
+chapter: "2.1"
+criteria:
+  - id: select_tool_mapping
+    description: "select_tool maps each intent to the correct built-in tool (read_file->Read, find_files_by_name->Glob, search_file_contents->Grep, edit_region_of_existing_file->Edit, create_or_overwrite_file->Write, run_command->Bash)"
+    weight: 30
+    check: code_review
+  - id: no_bash_for_dedicated_ops
+    description: "Does NOT route file reads, content search, or name search to Bash (select_tool returns Read/Grep/Glob for those intents, never Bash) — the dedicated tool is used instead of the shell escape hatch"
+    weight: 20
+    check: anti_pattern
+  - id: requires_permission_posture
+    description: "requires_permission returns False for Read/Grep/Glob and True for Bash/Edit/Write (and other mutating/escaping tools), per the Tools-reference permission column"
+    weight: 20
+    check: code_review
+  - id: read_before_edit_enforced
+    description: "plan_is_safe returns False when an Edit/Write targets a path with no earlier Read of that path, and True only when every Edit/Write is preceded by a Read of its path"
+    weight: 15
+    check: code_review
+  - id: unknown_inputs_raise
+    description: "select_tool raises ValueError on an unknown intent and requires_permission raises ValueError on an unknown tool name"
+    weight: 5
+    check: code_review
+  - id: tests_pass
+    description: "All tests in test_tool_selection.py pass"
+    weight: 10
+    check: bash_execution
+    command: "pytest test_tool_selection.py -v"

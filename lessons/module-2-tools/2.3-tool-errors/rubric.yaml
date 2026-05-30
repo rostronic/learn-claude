@@ -1,0 +1,27 @@
+chapter: "2.3"
+criteria:
+  - id: error_classification
+    description: "classify_error maps each known exception to the right category (TransientError->transient, ValidationError->validation, BusinessRuleError->business, PermissionDeniedError->permission) and any unknown exception to 'unexpected'"
+    weight: 20
+    check: code_review
+  - id: retryable_flags_correct
+    description: "Retryability is correct: only 'transient' is retryable (True); validation, business, permission, and unexpected are all non-retryable (False)"
+    weight: 15
+    check: code_review
+  - id: structured_error_result
+    description: "to_tool_result returns a tool_result with is_error True and a content payload carrying error_category, retryable, and message"
+    weight: 20
+    check: code_review
+  - id: success_not_marked_error
+    description: "safe_invoke on a handler that returns normally produces a tool_result that is NOT marked is_error True (success is not reported as a failure)"
+    weight: 15
+    check: code_review
+  - id: no_exception_propagation
+    description: "Does NOT let a handler exception propagate out of safe_invoke — it catches every exception and returns a structured is_error result instead of re-raising (an uncaught throw would stop the agent loop)"
+    weight: 20
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_tool_errors.py pass"
+    weight: 10
+    check: bash_execution
+    command: "pytest test_tool_errors.py -v"

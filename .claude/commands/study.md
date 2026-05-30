@@ -30,7 +30,9 @@ The user invoked `/study $ARGUMENTS`. Treat `$ARGUMENTS` as a lesson ID in dotte
 
 7. **Surface the references.** Before wrapping up, point the user at the lesson's `references:` — the official docs this lesson is built on — as further reading. One or two lines, e.g. *"This lesson is built on the official docs: <title> (<url>). Worth a read if you want the full picture."*
 
-8. **End by suggesting `/exercise $ARGUMENTS`.** One line: *"Ready to build it? Run `/exercise $ARGUMENTS` and I'll set up the starter code."*
+8. **Record progress (optional, non-blocking).** So the Phase-4 `/coach` knows what you've covered, record that this chapter was studied. If the progress MCP server is registered this session, call its `mcp__learn-claude-progress__record_study` tool with `chapter: $ARGUMENTS`. If it isn't available, fall back to Bash: `python3 infra/progress-mcp/progress.py study $ARGUMENTS`. **Either way, ignore any failure silently** — progress tracking must never interrupt the lesson. Don't announce it; just do it.
+
+9. **End by suggesting `/exercise $ARGUMENTS`.** One line: *"Ready to build it? Run `/exercise $ARGUMENTS` and I'll set up the starter code."*
 
 ## Tone
 

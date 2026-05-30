@@ -6,13 +6,13 @@ Lessons are **exam-agnostic**. Which chapter covers which exam's task statements
 
 To study the path **in an exam's order** instead of course order, run `/exam <CODE>` (e.g. `/exam CCAF`): it reads the mapping, lists that exam's task statements in exam order, and walks you through the built chapters one at a time.
 
-**Status:** 7 of 37 chapters built (1.1, 1.2, 1.3, 3.1, 3.2, 3.3, 3.4). The rest are planned.
+**Status:** 11 of 37 chapters built (0.1, 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4). The rest are planned.
 
 ## Module 0 — Foundations
 
 | Chapter | Title | Status |
 |---|---|---|
-| 0.1 | Foundations: the four technologies (Claude API, Agent SDK, Claude Code, MCP) | planned |
+| 0.1 | Foundations: the four technologies (Claude API, Agent SDK, Claude Code, MCP) | **built** |
 
 ## Module 1 — Prompting & structured output
 
@@ -26,9 +26,9 @@ To study the path **in an exam's order** instead of course order, run `/exam <CO
 
 | Chapter | Title | Status |
 |---|---|---|
-| 2.1 | Built-in tools (Read, Write, Edit, Bash, Grep, Glob) | planned |
-| 2.2 | Designing tool interfaces | planned |
-| 2.3 | Structured error responses for tools | planned |
+| 2.1 | Built-in tools (Read, Write, Edit, Bash, Grep, Glob) | **built** |
+| 2.2 | Designing tool interfaces | **built** |
+| 2.3 | Structured error responses for tools | **built** |
 
 ## Module 3 — Agentic core
 

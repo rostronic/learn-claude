@@ -33,6 +33,16 @@ Once you've studied a chapter, test recall with multiple-choice questions before
 
 Both route through the read-only **examiner** subagent, which holds the answer key so the chat never does — you answer honestly, then it reveals the rationale (and, for the mock exam, a per-domain breakdown plus which chapters to review). `/mock-exam` randomly draws 4 of the 6 exam scenarios and ~30 domain-weighted questions each run, and saves your result to `~/learn-claude-work/mock-exams/<CODE>/` (outside the repo). The scaled score is an approximation of Anthropic's scoring model, not the official algorithm.
 
+### Coach
+
+Not sure what to do next? Let the coach read your history and build a plan:
+
+```bash
+/coach CCAF            # prioritized study plan: what to study/practice/verify next, and mock-exam readiness
+```
+
+`/coach` is a **hub-and-spoke coordinator**: it spawns the read-only **coach** subagent, which reads your progress (verify scores, mock-exam results) against the curriculum and exam maps and returns a prioritized plan — your weakest domains translated into the exact built chapters to study, the studied-but-unverified chapters that are one `/verify` from locked in, and whether you're ready to sit `/mock-exam CCAF`. The command then drives the top action for you (it can spawn the verifier or examiner directly to grade or quiz on the spot). Run it any time you finish a chapter or a mock and want to know where to point next.
+
 ## Prerequisites
 
 - [Claude Code](https://docs.claude.com/en/docs/claude-code) installed and authenticated
@@ -46,8 +56,8 @@ Both route through the read-only **examiner** subagent, which holds the answer k
 - **Phase 1** ✅ — Skeleton repo, slash commands, first lessons end-to-end
 - **Phase 2** ✅ — Verifier subagent + grading MCP server (automated rubric checks)
 - **Phase 3** ✅ — Examiner subagent, question bank, `/practice` and `/mock-exam`
-- **Phase 4** (current) — Coach subagent (hub-and-spoke coordinator) + progress tracking
-- **Phase 5** — Authoring commands (`/new-lesson`, `/new-question`) + full content build-out
+- **Phase 4** (current) — Coach subagent + `/coach` hub-and-spoke coordinator built; progress-tracking MCP server in progress
+- **Phase 5** (in progress) — Authoring commands `/new-lesson` + `/new-question` built; full content build-out remaining
 
 ## Disclaimer
 
@@ -61,9 +71,9 @@ MIT. See [LICENSE](LICENSE) (to be added).
 
 The platform is built using the same Anthropic primitives it teaches (CLAUDE.md, `.claude/rules/`, slash commands, skills, subagents, MCP). Contributing a lesson is itself exam-prep.
 
-Phase 1 contribution flow (Phase 5 will add `/new-lesson` to automate this):
+Two authoring commands scaffold the work (they produce a structurally-valid skeleton and coach you through filling it — they don't write the lesson for you):
 
-1. Pick an unbuilt task statement from [docs/curriculum-map.md](docs/curriculum-map.md).
-2. Create `lessons/module-N-<domain>/<task-id>-<slug>/` with `lesson.md`, `exercise.md`, `rubric.yaml`, and a `starter/` directory.
-3. Follow the conventions in [.claude/rules/lesson-authoring.md](.claude/rules/lesson-authoring.md) and [.claude/rules/rubric-authoring.md](.claude/rules/rubric-authoring.md) — Claude Code will load these automatically when you edit a matching file.
-4. Open a PR. Update the lesson's row in the curriculum map to `complete`.
+1. Pick an unbuilt chapter from [docs/curriculum-map.md](docs/curriculum-map.md).
+2. Run `/new-lesson <chapter>` (e.g. `/new-lesson 2.1`). It scaffolds `lessons/<module>/<chapter>-<slug>/` with `lesson.md`, `exercise.md`, `rubric.yaml`, and a `starter/` — frontmatter, the six-section structure, weights summing to 100 with an anti-pattern, and a compiling starter all in place — then walks you through filling each piece per [.claude/rules/lesson-authoring.md](.claude/rules/lesson-authoring.md) and [.claude/rules/rubric-authoring.md](.claude/rules/rubric-authoring.md) (these load automatically when you edit a matching file).
+3. Run `/new-question <chapter>` to seed that chapter's `practice.yaml`, or `/new-question CCAF` to add scenario questions to the mock-exam bank — both enforce [.claude/rules/question-authoring.md](.claude/rules/question-authoring.md) (one correct answer, three plausible distractors, an explanation that refutes each, every question traced to the guide).
+4. Run the `lesson-auditor` on the chapter until it passes, flip the chapter to **built** in the curriculum map and exam mapping, and open a PR.

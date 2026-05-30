@@ -1,0 +1,69 @@
+# Per-lesson practice questions for chapter 2.2 (Designing tool interfaces).
+# Topic-only drills (no exam scenario) that test this chapter's material.
+chapter: "2.2"
+questions:
+  - id: "ccaf-d2-2.1-practice-001"
+    stem: >-
+      Claude keeps calling the wrong tool when two of your tools have similar purposes.
+      What is the prescribed FIRST fix?
+    options:
+      A: "Improve the tool descriptions so each clearly states what it does, when to use it (and when not), and what its parameters mean."
+      B: "Add several few-shot examples of correct tool calls to the conversation prompt."
+      C: "Lower the temperature and add a system instruction telling Claude to be careful."
+      D: "Give Claude more tools so it has a better-matching option for every case."
+    correct: "A"
+    explanation: >-
+      Tool descriptions are by far the most important factor in tool performance, and the
+      docs name a more-detailed description as the first fix for selection problems. B is
+      the headline distractor: few-shot examples in the prompt are a supplement for complex
+      inputs at best, not the first remedy for selection — the fix belongs in the
+      interface. C treats a description problem as a sampling problem; it does not address
+      the missing information. D adds selection ambiguity rather than removing it — more
+      overlapping tools make the choice harder, not easier.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.1 Design effective tool interfaces with clear descriptions and boundaries"
+
+  - id: "ccaf-d2-2.1-practice-002"
+    stem: >-
+      Your integration exposes create_pr, review_pr, and merge_pr as three separate tools,
+      and Claude often confuses them. Which redesign best reduces selection ambiguity?
+    options:
+      A: "Consolidate them into a single manage_pr tool with an `action` parameter, so there are fewer, more capable tools to choose among."
+      B: "Split each one further into finer-grained tools so every variation has its own dedicated tool."
+      C: "Keep all three but append identical, generic descriptions so they look consistent."
+      D: "Force every turn to call a tool with tool_choice: any so Claude cannot answer in text."
+    correct: "A"
+    explanation: >-
+      The docs prescribe consolidating related operations into fewer tools with an action
+      parameter — fewer, more capable tools reduce selection ambiguity. B does the opposite,
+      multiplying the number of near-identical tools Claude must disambiguate. C makes the
+      problem worse by removing the distinguishing detail that descriptions are supposed to
+      carry. D forces a call but does nothing to clarify WHICH tool to pick — the ambiguity
+      remains.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.1 Design effective tool interfaces with clear descriptions and boundaries"
+
+  - id: "ccaf-d2-2.1-practice-003"
+    stem: >-
+      You are reviewing a tool whose description reads, in full: "Gets data for an id."
+      Its single `id` parameter has no description. By the Define-tools best practices,
+      what is the main problem?
+    options:
+      A: "The description is far too thin — it omits what the tool returns, when to use it, its boundaries, and what the `id` parameter means; aim for at least 3-4 sentences with the parameter documented."
+      B: "Nothing significant — a short description is preferred because it saves tokens."
+      C: "The tool name is the only thing that matters; the description text is ignored by the model."
+      D: "The only fix needed is to mark the `id` parameter as required."
+    correct: "A"
+    explanation: >-
+      This mirrors the docs' 'poor description' example: too brief, leaving Claude guessing
+      about behavior, return value, boundaries, and the parameter's meaning — descriptions
+      should run at least 3-4 sentences and document each parameter. B is wrong because a
+      thin description is the number-one cause of unreliable tool use, not a token-saving
+      virtue. C is false: the description is the single most important factor in tool
+      performance. D fixes an unrelated detail and leaves the real defect — the missing
+      information — untouched.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.1 Design effective tool interfaces with clear descriptions and boundaries"

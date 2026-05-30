@@ -1,0 +1,27 @@
+chapter: "2.2"
+criteria:
+  - id: description_quality_check
+    description: "lint_tool_definition emits description_missing for an absent/blank description and description_too_thin for a present description with fewer than 3 sentences (the description is the most important factor in tool performance)"
+    weight: 25
+    check: code_review
+  - id: name_and_schema_checks
+    description: "lint_tool_definition emits name_invalid for a name not matching ^[a-zA-Z0-9_-]{1,64}$, param_missing_description:<p> for each undescribed property, and required_not_in_properties:<r> for required names that are not declared properties"
+    weight: 20
+    check: code_review
+  - id: clean_definition_passes
+    description: "lint_tool_definition returns an empty list for a well-formed tool (valid name, 3+ sentence description, every property described, valid required list)"
+    weight: 15
+    check: code_review
+  - id: first_fix_description_not_fewshot
+    description: "Does NOT recommend few-shot examples as the first fix for wrong tool selection — first_fix_for('wrong_tool_selected') returns 'improve_description', never an examples/few-shot answer"
+    weight: 20
+    check: anti_pattern
+  - id: symptom_fix_mapping
+    description: "first_fix_for maps each symptom to its prescribed remedy (too_many_overlapping_tools->consolidate_tools, ambiguous_names_across_services->add_namespacing, responses_bloat_context->shape_responses) and raises ValueError on an unknown symptom"
+    weight: 10
+    check: code_review
+  - id: tests_pass
+    description: "All tests in test_tool_design.py pass"
+    weight: 10
+    check: bash_execution
+    command: "pytest test_tool_design.py -v"

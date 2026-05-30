@@ -28,7 +28,9 @@ The user invoked `/verify $ARGUMENTS`. Treat `$ARGUMENTS` as a lesson ID in dott
 
    The `results/` directory lives in the user's home tree, outside the repo, so it never gets committed.
 
-5. **Suggest a next step.** If they passed (≥80), congratulate them and point at the next lesson in `docs/curriculum-map.md`. If they failed, point them at the report's Fixes section and suggest re-reading the relevant part of `lesson.md` before iterating with `/verify $ARGUMENTS` again.
+5. **Record the score (optional, non-blocking).** So the Phase-4 `/coach` can track mastery, record the verifier's score for this chapter. Read the numeric `N` out of the report's `N/100` total (an integer 0–100). If the progress MCP server is registered this session, call its `mcp__learn-claude-progress__record_verify` tool with `chapter: $ARGUMENTS` and `score: <N>`. If it isn't available, fall back to Bash: `python3 infra/progress-mcp/progress.py verify $ARGUMENTS <N>`. **Ignore any failure silently** — tracking must never change or block the grade. The score recorded is the verifier's, exactly as reported.
+
+6. **Suggest a next step.** If they passed (≥80), congratulate them and point at the next lesson in `docs/curriculum-map.md`. If they failed, point them at the report's Fixes section and suggest re-reading the relevant part of `lesson.md` before iterating with `/verify $ARGUMENTS` again.
 
 ## Tone
 

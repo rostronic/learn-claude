@@ -1,0 +1,66 @@
+# Per-lesson practice questions for chapter 2.1 (Built-in tools).
+# Topic-only drills (no exam scenario) that test this chapter's material.
+chapter: "2.1"
+questions:
+  - id: "ccaf-d2-2.5-practice-001"
+    stem: >-
+      An agent needs to find every place a function name appears in the source of a
+      repository so it can reason about call sites. Which built-in tool is the right
+      choice, and why?
+    options:
+      A: "Grep — it searches file contents (built on ripgrep), returns matching lines, and respects .gitignore, without needing permission."
+      B: "Bash, running `grep -rn` — the shell is the most flexible way to search and avoids learning another tool."
+      C: "Glob — it matches patterns, so it will return the lines that contain the function name."
+      D: "Read — read every file in the repo and scan the contents in the agent's own logic."
+    correct: "A"
+    explanation: >-
+      Grep is the purpose-built content-search tool: ripgrep-backed, returns matching
+      lines with file/line numbers, and needs no permission. B routes a job with a
+      dedicated tool through Bash, which is slower, loses the structured output modes,
+      and needlessly escalates to a permissioned tool. C confuses the two: Glob finds
+      files by name, not lines inside them. D is wasteful and error-prone — reading the
+      whole tree to re-implement search ignores the tool built for exactly this.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.5 Select and apply built-in tools (Read, Write, Edit, Bash, Grep, Glob) effectively"
+
+  - id: "ccaf-d2-2.5-practice-002"
+    stem: >-
+      Claude needs to change a single function body inside a large existing source file,
+      leaving the rest of the file untouched. Which tool should it use?
+    options:
+      A: "Edit — a targeted, exact-string replacement of just that region; the docs prescribe Edit for partial changes."
+      B: "Write — overwrite the file with the full corrected contents so the change is guaranteed to land."
+      C: "Bash with `sed -i` — stream-edit the file in place to avoid reading it first."
+      D: "Read — reading the file is enough to update it."
+    correct: "A"
+    explanation: >-
+      Edit performs an exact-string replacement of one region and is explicitly the tool
+      for partial changes to an existing file. B uses Write, which overwrites the entire
+      file — it re-sends the whole file and risks clobbering content the change never
+      intended to touch; Write is for new files or true rewrites. C shells out for a job
+      Edit already does and skips the read-before-edit safety gate. D only inspects the
+      file; reading does not modify anything.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.5 Select and apply built-in tools (Read, Write, Edit, Bash, Grep, Glob) effectively"
+
+  - id: "ccaf-d2-2.5-practice-003"
+    stem: >-
+      A teammate claims "Grep and Glob behave the same way toward .gitignore, so it
+      doesn't matter which you reach for." Which statement is correct?
+    options:
+      A: "Grep respects .gitignore (gitignored files are skipped), while Glob does not by default (it returns gitignored files too)."
+      B: "Both respect .gitignore, so build artifacts are always hidden from each."
+      C: "Both ignore .gitignore, so each always returns gitignored files."
+      D: "Glob respects .gitignore but Grep returns gitignored files by default."
+    correct: "A"
+    explanation: >-
+      Per the Tools reference, Grep skips gitignored files unless you pass a path directly,
+      whereas Glob does not respect .gitignore by default and returns gitignored files
+      alongside tracked ones. B and C wrongly claim identical behavior (the whole point is
+      that they differ), and D reverses the two — it is Grep, not Glob, that respects
+      .gitignore.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.5 Select and apply built-in tools (Read, Write, Edit, Bash, Grep, Glob) effectively"

@@ -4,6 +4,11 @@
       "command": "python3",
       "args": ["infra/grading-mcp/server.py"],
       "env": {}
+    },
+    "learn-claude-progress": {
+      "command": "python3",
+      "args": ["infra/progress-mcp/server.py"],
+      "env": {}
     }
   }
 }

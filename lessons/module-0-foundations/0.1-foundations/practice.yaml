@@ -1,0 +1,68 @@
+# Per-lesson practice questions for chapter 0.1 (Foundations: the four technologies).
+# Orientation drills — can the reader tell the four technologies apart and pick
+# the right one for a task? This chapter is UNMAPPED (no CCAF task statement), so
+# the questions carry no exam tags.
+chapter: "0.1"
+questions:
+  - id: "found-0.1-practice-001"
+    stem: >-
+      A team needs to classify each incoming support email into one of five
+      categories. There are no tools to call, no multi-step loop — one prompt in,
+      one label out. Which technology is the right place to start?
+    options:
+      A: "The Messages API — a single, stateless model call is all the task needs."
+      B: "The Claude Agent SDK — any AI feature should be built on an agent framework."
+      C: "Claude Code — point it at the inbox and let it run in the terminal."
+      D: "MCP — stand up an MCP server so the model can read the emails."
+    correct: "A"
+    explanation: >-
+      A one-shot classification needs no loop, no tools, and no integration, so the
+      raw Messages API (one request, one response) is the floor and it is enough. B
+      is the chapter's central anti-pattern — reaching for the Agent SDK when the
+      Messages API suffices adds machinery the task never needed. C names an
+      interactive coding harness, which is the wrong shape for a backend
+      classification call. D treats MCP as a runtime, but MCP is a connector for
+      external systems, not a way to "run" a prompt.
+
+  - id: "found-0.1-practice-002"
+    stem: >-
+      Your backend service must run an autonomous agent that reads files, runs
+      commands, and edits code across several steps — all inside your own
+      process, not in a developer's terminal. Which technology fits best?
+    options:
+      A: "The Claude Agent SDK — it runs the agent loop, with built-in tools and context management, inside your application."
+      B: "The Messages API alone — hand-write the call-tool-feed-result loop from scratch every time."
+      C: "Claude Code — it's the same engine, so embed the terminal tool in your service."
+      D: "MCP — the protocol itself runs the multi-step agent for you."
+    correct: "A"
+    explanation: >-
+      The Agent SDK exists for exactly this: it runs the agent loop for you inside
+      your own Python/TypeScript process, exposing the same tools and context
+      management that power Claude Code. B is the inverse anti-pattern —
+      reimplementing the loop, tools, and context handling by hand is reinventing
+      what the SDK gives you (build it by hand to learn it, per Chapter 3.1, not by
+      default in production). C confuses Claude Code, the interactive developer
+      harness, with the SDK, its programmable form — a human-in-the-loop tool is
+      the wrong fit for an embedded agent. D miscasts MCP as a runtime; it is a
+      connector, not an agent loop.
+
+  - id: "found-0.1-practice-003"
+    stem: >-
+      Which statement best captures how the four technologies relate to one
+      another?
+    options:
+      A: "The Messages API is the layer underneath; the Agent SDK runs the loop on top of it; Claude Code is that loop packaged as a developer tool; and MCP connects external tools into whichever one you use."
+      B: "They are four interchangeable products, and you pick exactly one for any given project."
+      C: "MCP sits at the bottom, and the Messages API, Agent SDK, and Claude Code are all built on top of MCP."
+      D: "Claude Code is the lowest layer; the Agent SDK and the Messages API are thin wrappers around Claude Code."
+    correct: "A"
+    explanation: >-
+      The four form a stack with a connector across it: the Messages API is the
+      direct model-access layer, the Agent SDK runs the agent loop on top of it,
+      Claude Code is that same engine packaged as an agentic coding tool, and MCP
+      is the open standard that plugs external tools and data into the SDK or
+      Claude Code. B is wrong because they are layers, not interchangeable choices,
+      and they routinely combine. C inverts the relationship — MCP is a connector
+      that rides alongside the stack, not its foundation. D reverses the layering:
+      Claude Code shares the SDK's agent loop, which itself runs on the Messages
+      API, not the other way around.

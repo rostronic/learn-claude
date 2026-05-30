@@ -14,7 +14,9 @@ The user invoked `/practice $ARGUMENTS`. Treat `$ARGUMENTS` as a chapter id in d
 
 4. **Reveal via the examiner (GRADE mode).** Once the user answers, spawn the `examiner` again in GRADE mode: pass the same `practice.yaml` path and the single `{id, answer}` pair (the `id` from step 2, the user's letter). It returns the `RESULT` block — whether they were right, the correct option, and the explanation of why each distractor fails. Show it verbatim.
 
-5. **Offer the next step.** After the reveal, offer another question (`/practice $ARGUMENTS` again), or — if they're ready to build — point at `/verify $ARGUMENTS` to be graded on the exercise, or the next chapter in `docs/curriculum-map.md`. One or two lines, conversational.
+5. **Record the attempt (optional, non-blocking).** The examiner's `RESULT` block tells you whether the user got it right — record that for the Phase-4 `/coach`. If the progress MCP server is registered this session, call its `mcp__learn-claude-progress__record_practice` tool with `chapter: $ARGUMENTS` and `correct: <true|false>` (true iff the RESULT marked them correct). If it isn't available, fall back to Bash: `python3 infra/progress-mcp/progress.py practice $ARGUMENTS <true|false>`. **Ignore any failure silently.** Note you're only recording the user's *own* committed answer here — this stays consistent with never holding the key before they answer.
+
+6. **Offer the next step.** After the reveal, offer another question (`/practice $ARGUMENTS` again), or — if they're ready to build — point at `/verify $ARGUMENTS` to be graded on the exercise, or the next chapter in `docs/curriculum-map.md`. One or two lines, conversational.
 
 ## Tone
 

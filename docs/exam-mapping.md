@@ -15,11 +15,11 @@ exams:
       - { task_statement: "1.5 Apply Agent SDK hooks for tool call interception and data normalization", domain: 1, lesson_chapter: "4.2", status: planned }
       - { task_statement: "1.6 Design task decomposition strategies for complex workflows", domain: 1, lesson_chapter: "4.3", status: planned }
       - { task_statement: "1.7 Manage session state, resumption, and forking", domain: 1, lesson_chapter: "4.4", status: planned }
-      - { task_statement: "2.1 Design effective tool interfaces with clear descriptions and boundaries", domain: 2, lesson_chapter: "2.2", status: planned }
-      - { task_statement: "2.2 Implement structured error responses for MCP tools", domain: 2, lesson_chapter: "2.3", status: planned }
+      - { task_statement: "2.1 Design effective tool interfaces with clear descriptions and boundaries", domain: 2, lesson_chapter: "2.2", lesson_slug: "tool-interfaces", status: built }
+      - { task_statement: "2.2 Implement structured error responses for MCP tools", domain: 2, lesson_chapter: "2.3", lesson_slug: "tool-errors", status: built }
       - { task_statement: "2.3 Distribute tools appropriately across agents and configure tool choice", domain: 2, lesson_chapter: "3.4", lesson_slug: "tool-distribution", status: built }
       - { task_statement: "2.4 Integrate MCP servers into Claude Code and agent workflows", domain: 2, lesson_chapter: "5.5", status: planned }
-      - { task_statement: "2.5 Select and apply built-in tools (Read, Write, Edit, Bash, Grep, Glob) effectively", domain: 2, lesson_chapter: "2.1", status: planned }
+      - { task_statement: "2.5 Select and apply built-in tools (Read, Write, Edit, Bash, Grep, Glob) effectively", domain: 2, lesson_chapter: "2.1", lesson_slug: "built-in-tools", status: built }
       - { task_statement: "3.1 Configure CLAUDE.md files with appropriate hierarchy, scoping, and modular organization", domain: 3, lesson_chapter: "5.1", status: planned }
       - { task_statement: "3.2 Create and configure custom slash commands and skills", domain: 3, lesson_chapter: "5.3", status: planned }
       - { task_statement: "3.3 Apply path-specific rules for conditional convention loading", domain: 3, lesson_chapter: "5.2", status: planned }
@@ -54,7 +54,7 @@ Adding another exam later = adding a key under `exams:` and listing its coverage
 
 ## CCAF — Claude Certified Architect (Foundations)
 
-The course was reordered into a dependency-driven learning path, so CCAF's task statements are spread across the modules below. This table is in **CCAF's own order**; the **Chapter** column is where to learn that material in the course. (Seven chapters are built so far — 1.1–1.3 and 3.1–3.4; the rest are planned — see the curriculum map.)
+The course was reordered into a dependency-driven learning path, so CCAF's task statements are spread across the modules below. This table is in **CCAF's own order**; the **Chapter** column is where to learn that material in the course. (Built chapters are marked in the Status column; see the curriculum map for the running total.)
 
 | CCAF | Task statement | Domain | Course chapter | Status |
 |---|---|---|---|---|
@@ -65,11 +65,11 @@ The course was reordered into a dependency-driven learning path, so CCAF's task 
 | 1.5 | Apply Agent SDK hooks for tool call interception and data normalization | 1 | 4.2 | planned |
 | 1.6 | Design task decomposition strategies for complex workflows | 1 | 4.3 | planned |
 | 1.7 | Manage session state, resumption, and forking | 1 | 4.4 | planned |
-| 2.1 | Design effective tool interfaces with clear descriptions and boundaries | 2 | 2.2 | planned |
-| 2.2 | Implement structured error responses for MCP tools | 2 | 2.3 | planned |
+| 2.1 | Design effective tool interfaces with clear descriptions and boundaries | 2 | 2.2 | built |
+| 2.2 | Implement structured error responses for MCP tools | 2 | 2.3 | built |
 | 2.3 | Distribute tools appropriately across agents and configure tool choice | 2 | 3.4 | built |
 | 2.4 | Integrate MCP servers into Claude Code and agent workflows | 2 | 5.5 | planned |
-| 2.5 | Select and apply built-in tools (Read, Write, Edit, Bash, Grep, Glob) effectively | 2 | 2.1 | planned |
+| 2.5 | Select and apply built-in tools (Read, Write, Edit, Bash, Grep, Glob) effectively | 2 | 2.1 | built |
 | 3.1 | Configure CLAUDE.md files with appropriate hierarchy, scoping, and modular organization | 3 | 5.1 | planned |
 | 3.2 | Create and configure custom slash commands and skills | 3 | 5.3 | planned |
 | 3.3 | Apply path-specific rules for conditional convention loading | 3 | 5.2 | planned |
@@ -95,4 +95,4 @@ The course was reordered into a dependency-driven learning path, so CCAF's task 
 | Scenario 5 | Claude Code for Continuous Integration | scenario | 6.4 | planned |
 | Scenario 6 | Structured Data Extraction | scenario | 7.10 | planned |
 
-**Coverage:** all 30 CCAF task statements + 6 scenarios are mapped to exactly one course chapter. 7 of 36 are built (1.1–1.3, 3.1–3.4).
+**Coverage:** all 30 CCAF task statements + 6 scenarios are mapped to exactly one course chapter; built status is the Status column (kept in sync with the chapters on disk).
