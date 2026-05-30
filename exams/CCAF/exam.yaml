@@ -1,0 +1,45 @@
+# CCA-F mock-exam configuration.
+# This file is the assembly contract for the `/mock-exam` command and the examiner
+# subagent: it tells them how many questions to draw, from how many scenarios, how to
+# weight the domains, and what counts as a pass. The question pool lives in questions/.
+#
+# Scope authority: every field here traces to the Claude Certified Architect — Foundations
+# exam guide (see guide_url). Don't invent weights or thresholds — read the guide.
+exam: "CCAF"
+title: "Claude Certified Architect — Foundations"
+guide_url: "https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F8lsy243ftffjjy1cx9lm3o2bw%2Fpublic%2F1773274827%2FClaude+Certified+Architect+%E2%80%93+Foundations+Certification+Exam+Guide.pdf"
+
+# Scoring (guide: "Exam Results"). Scaled score 100–1,000; minimum passing score 720.
+passing_score: 720
+scaled_min: 100
+scaled_max: 1000
+
+# Assembly (guide: "Exam Scenarios"). A run presents 4 scenarios picked at random from
+# the full set of 6. target_questions is the size of an assembled mock run.
+scenario_count: 4
+target_questions: 30
+
+# Domain weights as a percentage of scored content (guide: "Content Outline").
+# Must sum to 100.
+domain_weights:
+  1: 27   # Agentic Architecture & Orchestration
+  2: 18   # Tool Design & MCP Integration
+  3: 20   # Claude Code Configuration & Workflows
+  4: 20   # Prompt Engineering & Structured Output
+  5: 15   # Context Management & Reliability
+
+domains:
+  1: "Agentic Architecture & Orchestration"
+  2: "Tool Design & MCP Integration"
+  3: "Claude Code Configuration & Workflows"
+  4: "Prompt Engineering & Structured Output"
+  5: "Context Management & Reliability"
+
+# The six scenarios (guide: "Exam Scenarios"). 4 of these are drawn per run.
+scenarios:
+  1: "Customer Support Resolution Agent"
+  2: "Code Generation with Claude Code"
+  3: "Multi-Agent Research System"
+  4: "Developer Productivity with Claude"
+  5: "Claude Code for Continuous Integration"
+  6: "Structured Data Extraction"

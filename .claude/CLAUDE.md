@@ -20,10 +20,20 @@ Each phase reinforces a CCA-F domain that the platform itself teaches — see [d
 
 All commands live in [.claude/commands/](commands/). Each is a single markdown file (`<name>.md`) whose body is the prompt Claude Code expands when the user types `/<name>`.
 
-- **Commands take an optional argument.** The convention across this repo is a **chapter id** in `module.lesson` form: `3.1`, `5.2`, `7.10` — the learning-path course order, **not** an exam's numbering. Inside the command body, reference it as `$ARGUMENTS`.
-- **Locate lessons by glob:** `lessons/**/<chapter>-*/`. Lesson directories are named `<chapter>-<slug>` (e.g. `3.1-agentic-loops`) so the chapter prefix is the lookup key. (Chapters are renumbered if the learning path is reordered; exam alignment lives in `docs/exam-mapping.md`.)
+- **Commands take an optional argument.** The convention across this repo is a **chapter id** in `module.lesson` form: `3.1`, `5.2`, `7.10` — the learning-path course order, **not** an exam's numbering. Inside the command body, reference it as `$ARGUMENTS`. Two commands are the exception: `/exam` and `/mock-exam` take an **exam code** (e.g. `CCAF`), because an exam is an overlay on the course, not a chapter.
+  - chapter id: `/study`, `/exercise`, `/verify`, `/practice`
+  - exam code: `/exam`, `/mock-exam`
+- **Locate lessons by glob:** `lessons/**/<chapter>-*/`. Lesson directories are named `<chapter>-<slug>` (e.g. `3.1-agentic-loops`) so the chapter prefix is the lookup key. (Chapters are renumbered if the learning path is reordered; exam alignment lives in `docs/exam-mapping.md`.) Per-lesson practice questions live alongside the lesson at `lessons/**/<chapter>-*/practice.yaml`; the mock-exam question bank lives at top-level `exams/<CODE>/` (`exam.yaml` config + `questions/*.yaml`).
 - **Be conversational, not mechanical.** A command should *use* the file it finds, not dump it. `/study` walks the user through the lesson; it doesn't `cat` it.
-- **Always end by suggesting the next step.** `/study` → `/exercise`. `/exercise` → `/verify`. `/verify` → next lesson or remediation.
+- **Always end by suggesting the next step.** `/study` → `/exercise`. `/exercise` → `/verify`. `/verify` → next lesson or remediation. `/practice` → another question or `/verify`. `/mock-exam` → review the weak domains' chapters, then re-run.
+
+### The `examiner` subagent (Phase 3)
+
+`/practice` and `/mock-exam` both delegate to the read-only [`examiner` subagent](agents/examiner.md) (`subagent_type: examiner`, tools: Read/Glob/Grep). Its reason to exist is **context isolation**: the examiner reads the question files — which contain the `correct` letter and `explanation` — so the **main conversation never holds the answer key while the learner is answering**. The command stays blind; the learner answers honestly.
+
+The examiner runs in three modes the command selects explicitly: **PRESENT** (return one practice question — stem + options only), **ASSEMBLE** (pick 4 of 6 scenarios and build a domain-weighted ~30-question mock set — stems + options only), and **GRADE** (given the learner's collected `{id, answer}` pairs, reveal correct answers + explanations and compute the score). PRESENT and ASSEMBLE are forbidden from emitting `correct`/`explanation`; only GRADE reveals, and only because the learner's submitted answers are its input. The interactive turn-taking (show question → wait for the letter → reveal) happens in the **main loop** of the command, because a subagent can't pause for live input — the examiner is the leak-proof question store and scorer, not the conversationalist.
+
+Mock-exam scoring is **scaled 100–1000, pass 720**: `scaled = round(1000 × domain-weighted fraction correct)`, with domain weights from `exam.yaml` (CCA-F: D1 27, D2 18, D3 20, D4 20, D5 15). This is documented as an *approximation* of Anthropic's scaled model, not the official algorithm. Mock-exam results persist to `~/learn-claude-work/mock-exams/<CODE>/<UTC-timestamp>.md` — user data, **outside the repo, never committed** (mirrors where `/verify` writes its per-chapter results).
 
 ## Infrastructure vs. coursework (load-bearing)
 

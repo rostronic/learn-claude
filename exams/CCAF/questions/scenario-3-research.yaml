@@ -1,0 +1,57 @@
+# CCAF mock-exam pool — Scenario 3: Multi-Agent Research System.
+# Production context (exam guide, "Exam Scenarios"): an Agent SDK system where a
+# coordinator delegates to specialized subagents (web search, document analysis,
+# synthesis, report generation) to produce comprehensive, cited reports.
+
+- id: "ccaf-d2-2.3-001"
+  stem: >-
+    In your research system, the synthesis subagent — whose job is to combine findings
+    from the search and analysis agents into a cited report — has been given the full tool
+    registry, including WebSearch and the raw fetch_url tool, "just in case." It has begun
+    running its own web searches mid-synthesis, producing inconsistent, uncited claims.
+    What is the most appropriate fix?
+  options:
+    A: "Scope the synthesis agent to only the tools its role needs (e.g., Read and a narrow verify_fact tool), routing any genuinely new research back through the coordinator."
+    B: "Keep all tools available but add a system-prompt instruction telling the synthesis agent not to search the web unless absolutely necessary."
+    C: "Give every subagent the identical full tool set so any agent can recover from another's gaps without coordinator involvement."
+    D: "Add more tools to the synthesis agent (a second search backend, a scraper) so its self-directed searches return better results."
+  correct: "A"
+  explanation: >-
+    Tools should be scoped tightly to each agent's role; a synthesis agent that cannot
+    search cannot mis-search, and high-frequency cross-role needs are served by a narrow,
+    constrained tool (verify_fact) while complex cases route through the coordinator. B
+    relies on prompt compliance to suppress a capability the agent simply shouldn't have —
+    the deterministic fix is to remove the tool. C is the over-provisioning anti-pattern:
+    more tools increase decision complexity and degrade selection reliability. D doubles
+    down on the wrong behavior, giving the agent even more ways to act outside its
+    specialization.
+  exam: "CCAF"
+  domain: 2
+  task_statement: "2.3 Distribute tools appropriately across agents and configure tool choice"
+  scenario: 3
+
+- id: "ccaf-d1-1.2-001"
+  stem: >-
+    As the research system grows, you are deciding how the web-search, document-analysis,
+    synthesis, and report-generation agents should be organized. One proposal is to let
+    each agent call the others directly as peers whenever it decides it needs them. What is
+    the orchestration pattern the exam favors for this kind of multi-agent system?
+  options:
+    A: "A coordinator agent that decomposes the task and delegates to specialized subagents, owning the control flow and aggregating their results."
+    B: "A fully peer-to-peer mesh where every agent may invoke every other agent directly, with no central coordinator."
+    C: "A single monolithic agent holding every tool and instruction, so there is no inter-agent communication to manage."
+    D: "A fixed linear pipeline hard-coded so each agent always runs exactly once in a preset order regardless of the research topic."
+  correct: "A"
+  explanation: >-
+    The prescribed pattern is coordinator-subagent: a coordinator decomposes the work,
+    delegates to role-specialized subagents, and aggregates results, which keeps control
+    flow and context flow explicit. B (peer mesh) makes control flow and error propagation
+    unmanageable and multiplies the chances of agents acting outside their roles. C
+    (monolith) gives up the reliability gains of specialization and scoped tools — the whole
+    reason to use subagents. D (rigid one-pass pipeline) can't adapt to topics that need an
+    agent more than once or not at all; the coordinator's loop is what makes delegation
+    responsive.
+  exam: "CCAF"
+  domain: 1
+  task_statement: "1.2 Orchestrate multi-agent systems with coordinator-subagent patterns"
+  scenario: 3

@@ -1,0 +1,58 @@
+# CCAF mock-exam pool — Scenario 2: Code Generation with Claude Code.
+# Production context (exam guide, "Exam Scenarios"): a team using Claude Code for code
+# generation, refactoring, debugging, and documentation, integrated into the workflow via
+# custom slash commands, CLAUDE.md configuration, and a sense of when to use plan mode vs
+# direct execution.
+
+- id: "ccaf-d3-3.4-001"
+  stem: >-
+    A teammate uses plan mode for every Claude Code task, including a one-line fix to
+    correct a typo in a single log string in one file. The change is small, fully
+    specified, and has no architectural choices to weigh. For this task, which approach
+    does the exam favor?
+  options:
+    A: "Use direct execution: the change is small, well-defined, and has a single obvious approach, so plan mode's exploration step adds overhead without value."
+    B: "Use plan mode anyway, because planning before any change is always the safer default regardless of task size."
+    C: "Use plan mode to enumerate every other place the same typo might appear before touching the file."
+    D: "Decline the task in Claude Code and make the one-line edit entirely by hand, since the model adds risk on trivial changes."
+  correct: "A"
+  explanation: >-
+    Plan mode is for complex tasks — large-scale changes, multiple valid approaches,
+    architectural decisions — where exploring before committing prevents costly rework. A
+    fully specified one-line fix has none of those properties, so direct execution is the
+    proportionate choice. B treats plan mode as a universal default; the exam frames it as
+    matched to task complexity, not applied unconditionally. C invents scope the task
+    didn't ask for. D rejects the tool entirely on a task it handles fine, confusing
+    "trivial" with "unsafe."
+  exam: "CCAF"
+  domain: 3
+  task_statement: "3.4 Determine when to use plan mode vs direct execution"
+  scenario: 2
+
+- id: "ccaf-d3-3.1-001"
+  stem: >-
+    Your monorepo has a root CLAUDE.md with org-wide conventions, but the payments/
+    service has stricter rules (no floating-point money, mandatory idempotency keys) that
+    apply only to code under that directory. You want Claude to pick up the org rules
+    everywhere and the stricter rules automatically when working inside payments/, without
+    bloating the root file. What is the most maintainable setup?
+  options:
+    A: "Keep org-wide conventions in the root CLAUDE.md and add a payments/CLAUDE.md with the payment-specific rules, relying on CLAUDE.md's directory hierarchy so the nested file applies for work under payments/."
+    B: "Move every rule, org-wide and payment-specific, into the single root CLAUDE.md and prefix the payment rules with 'only when editing payments/'."
+    C: "Delete the root CLAUDE.md and give each developer a personal ~/.claude CLAUDE.md containing whichever rules they decide are relevant."
+    D: "Put the payment rules in a regular Markdown doc in payments/ and rely on Claude to discover and read it on its own when it happens to open that folder."
+  correct: "A"
+  explanation: >-
+    CLAUDE.md supports a directory hierarchy: a root file carries org-wide context and a
+    nested CLAUDE.md scopes additional conventions to its subtree, so the payments rules
+    load automatically for work there without bloating the root or relying on the model to
+    remember scoping. B crams conditional rules into one file and leans on prose
+    instructions ('only when…') the model must remember to honor — the nested-file
+    mechanism makes scoping structural instead. C abandons shared, version-controlled
+    conventions for per-developer personal config, so the team no longer shares rules. D
+    uses an ordinary doc Claude has no reason to load automatically, making application
+    unreliable.
+  exam: "CCAF"
+  domain: 3
+  task_statement: "3.1 Configure CLAUDE.md files with appropriate hierarchy, scoping, and modular organization"
+  scenario: 2

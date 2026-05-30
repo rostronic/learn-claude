@@ -1,0 +1,53 @@
+# CCAF mock-exam pool — Scenario 4: Developer Productivity with Claude.
+# Production context (exam guide, "Exam Scenarios"): Agent SDK developer-productivity tools
+# that help engineers explore unfamiliar codebases, understand legacy systems, generate
+# boilerplate, and automate repetitive tasks, using built-in tools (Read, Write, Bash, Grep,
+# Glob) and MCP servers. Primary domains: Tool Design & MCP, Claude Code Config, Agentic.
+
+- id: "ccaf-d5-5.4-001"
+  stem: >-
+    Your code-exploration agent is asked to "find where rate limiting is enforced" in an
+    unfamiliar 4,000-file service. A first implementation reads whole files into context
+    one after another; it blows the context window and slows to a crawl before finding
+    anything. What is the most effective approach for exploring a large codebase?
+  options:
+    A: "Use Grep/Glob to locate the relevant files and symbols first, then Read only the targeted sections — keeping verbose output out of context."
+    B: "Read every file in the repository in full so the agent has complete information before answering."
+    C: "Raise max_tokens on each request so the agent can hold more of the codebase at once."
+    D: "Lower the temperature so the agent is less likely to wander into irrelevant files."
+  correct: "A"
+  explanation: >-
+    Large-codebase exploration is a context-management problem: search first (Grep/Glob) to
+    find the few relevant places, then read targeted sections, trimming verbose output so the
+    window holds signal, not noise. B reads everything and exhausts the window — the failure
+    described. C confuses output budget (max_tokens) with input/context capacity and doesn't
+    help. D (temperature) changes sampling randomness, not how much code must be loaded.
+  exam: "CCAF"
+  domain: 5
+  task_statement: "5.4 Manage context effectively in large codebase exploration"
+  scenario: 4
+
+- id: "ccaf-d3-3.4-001"
+  stem: >-
+    An engineer asks the productivity agent to "add OAuth2 to the auth module" in a legacy
+    codebase nobody fully understands. The agent immediately starts editing files and gets
+    the integration wrong because it misread how sessions are handled. What is the better
+    workflow for a complex, unfamiliar change like this?
+  options:
+    A: "Use plan mode first — read-only exploration that produces a reviewable plan — then execute the change after the plan is approved."
+    B: "Always edit directly; planning is overhead that slows engineers down on every task."
+    C: "Ask the engineer to specify every file and line to change up front, so the agent never has to explore."
+    D: "Run the change, then rely on tests to catch whatever the agent misunderstood."
+  correct: "A"
+  explanation: >-
+    For complex changes in unfamiliar code, separate exploration from execution: plan mode
+    explores read-only and yields a plan you can review before any edits, catching
+    misunderstandings (like the session handling) before they become broken code. B is wrong
+    for complex/ambiguous work (direct execution is right only for simple, well-scoped
+    changes). C defeats the point of an exploration agent and isn't realistic for legacy
+    code. D ships the misunderstanding and hopes tests catch it — far more expensive than
+    planning first.
+  exam: "CCAF"
+  domain: 3
+  task_statement: "3.4 Determine when to use plan mode vs direct execution"
+  scenario: 4

@@ -22,6 +22,17 @@ Studying for a specific certification? Run the course in that exam's order inste
 /exam CCAF             # lists CCAF's task statements in exam order, walks the built chapters
 ```
 
+### Assess
+
+Once you've studied a chapter, test recall with multiple-choice questions before (or instead of) the coding exercise:
+
+```bash
+/practice 3.1          # one practice question for chapter 3.1 — hidden answer, revealed after you commit
+/mock-exam CCAF        # a full, timed, domain-weighted mock exam — scaled score out of 1000, pass 720
+```
+
+Both route through the read-only **examiner** subagent, which holds the answer key so the chat never does — you answer honestly, then it reveals the rationale (and, for the mock exam, a per-domain breakdown plus which chapters to review). `/mock-exam` randomly draws 4 of the 6 exam scenarios and ~30 domain-weighted questions each run, and saves your result to `~/learn-claude-work/mock-exams/<CODE>/` (outside the repo). The scaled score is an approximation of Anthropic's scoring model, not the official algorithm.
+
 ## Prerequisites
 
 - [Claude Code](https://docs.claude.com/en/docs/claude-code) installed and authenticated

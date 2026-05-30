@@ -1,0 +1,69 @@
+# Per-lesson practice questions for chapter 1.1 (Prompting with explicit criteria).
+# Topic-only drills (no exam scenario) that test this chapter's material. The /practice
+# command serves these one at a time via the examiner subagent.
+chapter: "1.1"
+questions:
+  - id: "ccaf-d4-4.1-practice-001"
+    stem: >-
+      A code-review agent flags too many false positives on comment-accuracy checks.
+      The current instruction reads: "Check that comments are accurate. Be conservative
+      and only report high-confidence findings." Which revision best improves precision?
+    options:
+      A: "Flag a comment only when the claimed behavior contradicts the actual code behavior; skip stylistic or subjective comment issues."
+      B: "Check that comments are accurate. Be very conservative and only report findings you are extremely confident about."
+      C: "Check that comments are accurate. Use your best judgment about which issues are worth reporting."
+      D: "Lower the model temperature so the agent reports fewer issues overall."
+    correct: "A"
+    explanation: >-
+      Precision comes from an explicit, categorical criterion that draws the boundary —
+      "contradicts the actual code behavior," with a category to skip — not from asking the
+      model to gauge its own confidence. B and C are confidence-/judgment-based filters:
+      they don't define the boundary, so the model keeps guessing where it lies and the
+      false positives persist. D changes sampling randomness, not the specification, so a
+      vague criterion stays vague.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.1 Design prompts with explicit criteria to improve precision and reduce false positives"
+
+  - id: "ccaf-d4-4.1-practice-002"
+    stem: >-
+      You instruct an agent to "find security issues" in pull requests. It reports a flood
+      of low-value items — naming nits, local style choices, speculative concerns — alongside
+      the real findings. Following the chapter's guidance, what is the most effective fix?
+    options:
+      A: "Name both sides: list the categories to report (e.g., injection, auth bypass, secret leakage) and the categories to skip (e.g., minor style, unverifiable local conventions)."
+      B: "Add the sentence 'only report important issues' to the end of the prompt."
+      C: "Ask the agent to assign each finding a 1–10 importance score and silently drop everything below 7."
+      D: "Tell the agent to be less sensitive so it surfaces fewer findings across the board."
+    correct: "A"
+    explanation: >-
+      Naming only what to find leaves a gray zone the model fills with false positives;
+      stating the categories to report and the categories to skip removes that gray zone.
+      B ('important') is another undefined dial, not a category boundary. C reintroduces a
+      confidence/score filter the chapter warns against — the threshold is arbitrary and
+      drifts. D globally dials down sensitivity, which suppresses true positives too instead
+      of sharpening the definition.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.1 Design prompts with explicit criteria to improve precision and reduce false positives"
+
+  - id: "ccaf-d4-4.1-practice-003"
+    stem: >-
+      Your rubric labels findings critical / major / minor, but two runs over the same code
+      classify the same bug differently each time. What change most improves classification
+      consistency?
+    options:
+      A: "Anchor each severity level to a concrete worked example (e.g., critical = 'unsanitized SQL string interpolation'; minor = 'off-by-one in a log line')."
+      B: "Add the words 'be consistent' and 'apply the same standard every time' to the severity instructions."
+      C: "Reduce the levels to a single 'is this a problem? yes/no' so there is nothing to classify."
+      D: "Tell the model to re-read its own classification twice before finalizing it."
+    correct: "A"
+    explanation: >-
+      Severity labels are vague until each level has a concrete anchor example; anchoring
+      makes classification repeatable across runs. B is an unanchored plea for consistency
+      that gives the model no new boundary to apply. C discards the severity signal the task
+      needs rather than fixing it. D adds self-review churn without supplying the missing
+      definitions, so the model still has nothing concrete to classify against.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.1 Design prompts with explicit criteria to improve precision and reduce false positives"

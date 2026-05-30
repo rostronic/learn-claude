@@ -1,0 +1,58 @@
+# CCAF mock-exam pool — Scenario 6: Structured Data Extraction.
+# Production context (exam guide, "Exam Scenarios"): a system that extracts information
+# from unstructured documents, validates output against JSON schemas, maintains high
+# accuracy, handles edge cases gracefully, and integrates with downstream systems.
+
+- id: "ccaf-d4-4.3-001"
+  stem: >-
+    Your extraction pipeline feeds invoice fields straight into a downstream billing
+    system that rejects anything malformed. Today you prompt Claude to "return the fields
+    as JSON" and parse the text of its reply, but a few percent of responses include a
+    prose preamble or a trailing note that breaks json.loads. What is the most reliable way
+    to get schema-conformant structured output?
+  options:
+    A: "Define the schema as a tool's input_schema and have Claude call that tool, so the model returns arguments conforming to the JSON schema instead of free-form text you parse."
+    B: "Keep parsing free-form text but append 'Return ONLY valid JSON and nothing else' to the prompt and strip any leading or trailing prose before json.loads."
+    C: "Lower the temperature to 0 so the model is deterministic and therefore always emits parseable JSON."
+    D: "Ask for the fields in Markdown bullet points and write a regex to pull each field out of the formatted text."
+  correct: "A"
+  explanation: >-
+    Tool use with a JSON input_schema is the mechanism for enforcing structured output: the
+    model returns tool-call arguments that conform to the schema, removing the brittle
+    text-parsing step entirely. B still parses free-form text — it only reduces the failure
+    rate with a prompt plea and post-hoc stripping, so malformed replies still slip
+    through. C confuses determinism with conformance: temperature 0 makes outputs
+    repeatable, not schema-valid, and a deterministic reply can be deterministically
+    malformed. D replaces JSON parsing with even more fragile regex over prose, the opposite
+    of enforcement.
+  exam: "CCAF"
+  domain: 4
+  task_statement: "4.3 Enforce structured output using tool use and JSON schemas"
+  scenario: 6
+
+- id: "ccaf-d4-4.1-001"
+  stem: >-
+    Reviewers complain the extractor over-reports: when a contract doesn't mention a
+    governing-law clause, the model frequently fabricates a plausible-looking value rather
+    than leaving it absent, hurting precision. Your current instruction says "extract the
+    governing law; be careful and only include it if you're confident." What change most
+    effectively reduces these false positives?
+  options:
+    A: "Replace the confidence language with an explicit rule: include governing_law only when an explicit governing-law clause is present in the text, and return null otherwise — with a short example of a document that has no such clause."
+    B: "Strengthen the existing wording to 'be very careful and only extract governing law when you are highly confident it is correct.'"
+    C: "Add a post-processing step that deletes any governing_law value the model returns for documents shorter than two pages."
+    D: "Raise the model to a larger variant so it makes fewer mistakes overall, leaving the instruction unchanged."
+  correct: "A"
+  explanation: >-
+    Precision problems are specification problems: the fix is an explicit, categorical
+    criterion (present clause → extract; absent → null) anchored with an example, which
+    draws the boundary the model was previously guessing at. B just turns up the same
+    confidence dial — "be more careful"/"highly confident" doesn't define the boundary, so
+    the drift continues. C is an arbitrary heuristic unrelated to whether the clause
+    actually appears, so it both misses long documents and wrongly strips short ones. D
+    throws capability at a specification gap; without a sharper criterion the model still
+    has no rule for when to abstain.
+  exam: "CCAF"
+  domain: 4
+  task_statement: "4.1 Design prompts with explicit criteria to improve precision and reduce false positives"
+  scenario: 6

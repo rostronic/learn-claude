@@ -1,0 +1,66 @@
+# Per-lesson practice questions for chapter 3.1 (Agentic loops).
+# Topic-only drills (no exam scenario) that test this chapter's material.
+chapter: "3.1"
+questions:
+  - id: "ccaf-d1-1.1-practice-001"
+    stem: >-
+      You are building an agent loop by hand on the Messages API. After each
+      client.messages.create call, which field tells you whether to run the requested
+      tools and continue, or to stop and return the final answer?
+    options:
+      A: "response.stop_reason — \"tool_use\" means run the tools and loop again; \"end_turn\" means the agent is done."
+      B: "Whether response.content includes a text block — if it does, the agent has answered and the loop ends."
+      C: "The number of iterations elapsed — stop once a fixed count is reached."
+      D: "Whether the assistant's text contains a phrase like \"I'm finished\" or \"let me know.\""
+    correct: "A"
+    explanation: >-
+      stop_reason is the protocol-level signal designed for exactly this branch: "tool_use"
+      to continue after running tools, "end_turn" to stop. B is wrong because text and
+      tool_use blocks can appear in the same turn, so a text block does not mean the work is
+      finished. C uses an iteration cap as the primary stop, but a cap is only a safety net
+      and real tasks need a variable number of turns. D parses natural language, which both
+      misses the many phrasings of completion and false-fires on mid-task asides.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.1 Design and implement agentic loops for autonomous task execution"
+
+  - id: "ccaf-d1-1.1-practice-002"
+    stem: >-
+      A single assistant turn returns a text block ("Let me check the weather…") and a
+      tool_use block in the same response, with stop_reason == "tool_use". What should the
+      loop do?
+    options:
+      A: "Execute the requested tool(s), append the tool_result blocks as the next user message, and call the model again."
+      B: "Treat the presence of the text block as completion and return that text to the caller."
+      C: "Return the text immediately and ignore the tool_use block, since the model already spoke."
+      D: "Raise an error, because text and tool_use blocks must never appear together in one turn."
+    correct: "A"
+    explanation: >-
+      stop_reason == "tool_use" means the model is requesting tools; the loop runs every
+      tool_use block and feeds the results back. B and C both treat the narration text as a
+      stop signal, but text and tool_use legitimately co-occur — acting on the text would
+      strand the pending tool call and end the task early. D is false: a turn may contain
+      both a text block and one or more tool_use blocks, and that is normal.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.1 Design and implement agentic loops for autonomous task execution"
+
+  - id: "ccaf-d1-1.1-practice-003"
+    stem: >-
+      Your loop wraps its body in `for _ in range(25)` and also returns when stop_reason is
+      "end_turn". What is the correct role of that range(25) cap?
+    options:
+      A: "A safety net that prevents an infinite loop; the intended exit is the end_turn return, not the cap."
+      B: "The primary termination signal — the agent is considered finished once 25 iterations elapse."
+      C: "A performance tuning knob with no effect on correctness that can be removed freely."
+      D: "A replacement for checking stop_reason, so the loop can ignore stop_reason entirely."
+    correct: "A"
+    explanation: >-
+      The cap is a guard against spinning forever (the same role the Agent SDK's max_turns
+      plays); the real exit is returning on end_turn. B makes the cap the primary signal,
+      which turns "not done yet" into "done" at an arbitrary count. C misreads it as inert —
+      it is a deliberate backstop, not free to drop. D is the core error the chapter warns
+      against: dispatching on anything other than stop_reason.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.1 Design and implement agentic loops for autonomous task execution"

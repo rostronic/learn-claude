@@ -1,0 +1,115 @@
+# CCAF mock-exam pool — Scenario 1: Customer Support Resolution Agent.
+# Production context (exam guide, "Exam Scenarios"): an Agent SDK support agent handling
+# returns, billing disputes, and account issues via custom MCP tools
+# (get_customer, lookup_order, process_refund, escalate_to_human); target 80%+
+# first-contact resolution while knowing when to escalate.
+#
+# ccaf-d1-1.4-001 and ccaf-d2-2.1-001 are the two official sample questions from the
+# CCA-F exam guide ("Sample Questions"), reproduced verbatim (stem, options, correct,
+# explanation). Do not edit their wording — they are the anchor for this pool's calibration.
+
+- id: "ccaf-d1-1.4-001"
+  stem: >-
+    Production data shows that in 12% of cases, your agent skips get_customer entirely
+    and calls lookup_order using only the customer's stated name, occasionally leading to
+    misidentified accounts and incorrect refunds. What change would most effectively
+    address this reliability issue?
+  options:
+    A: "Add a programmatic prerequisite that blocks lookup_order and process_refund calls until get_customer has returned a verified customer ID."
+    B: "Enhance the system prompt to state that customer verification via get_customer is mandatory before any order operations."
+    C: "Add few-shot examples showing the agent always calling get_customer first, even when customers volunteer order details."
+    D: "Implement a routing classifier that analyzes each request and enables only the subset of tools appropriate for that request type."
+  correct: "A"
+  explanation: >-
+    When a specific tool sequence is required for critical business logic (like verifying
+    customer identity before processing refunds), programmatic enforcement provides
+    deterministic guarantees that prompt-based approaches cannot. Options B and C rely on
+    probabilistic LLM compliance, which is insufficient when errors have financial
+    consequences. Option D addresses tool availability rather than tool ordering, which is
+    not the actual problem.
+  exam: "CCAF"
+  domain: 1
+  task_statement: "1.4 Implement multi-step workflows with enforcement and handoff patterns"
+  scenario: 1
+  source: "CCA-F exam guide — Sample Questions, Question 1 (verbatim)"
+
+- id: "ccaf-d2-2.1-001"
+  stem: >-
+    Production logs show the agent frequently calls get_customer when users ask about
+    orders (e.g., "check my order #12345"), instead of calling lookup_order. Both tools
+    have minimal descriptions ("Retrieves customer information" / "Retrieves order
+    details") and accept similar identifier formats. What's the most effective first step
+    to improve tool selection reliability?
+  options:
+    A: "Add few-shot examples to the system prompt demonstrating correct tool selection patterns, with 5-8 examples showing order-related queries routing to lookup_order."
+    B: "Expand each tool's description to include input formats it handles, example queries, edge cases, and boundaries explaining when to use it versus similar tools."
+    C: "Implement a routing layer that parses user input before each turn and pre-selects the appropriate tool based on detected keywords and identifier patterns."
+    D: "Consolidate both tools into a single lookup_entity tool that accepts any identifier and internally determines which backend to query."
+  correct: "B"
+  explanation: >-
+    Tool descriptions are the primary mechanism LLMs use for tool selection. When
+    descriptions are minimal, models lack the context to differentiate between similar
+    tools. Option B directly addresses this root cause with a low-effort, high-leverage
+    fix. Few-shot examples (A) add token overhead without fixing the underlying issue. A
+    routing layer (C) is over-engineered and bypasses the LLM's natural language
+    understanding. Consolidating tools (D) is a valid architectural choice but requires
+    more effort than a "first step" warrants when the immediate problem is inadequate
+    descriptions.
+  exam: "CCAF"
+  domain: 2
+  task_statement: "2.1 Design effective tool interfaces with clear descriptions and boundaries"
+  scenario: 1
+  source: "CCA-F exam guide — Sample Questions, Question 2 (verbatim)"
+
+- id: "ccaf-d1-1.1-001"
+  stem: >-
+    Your support agent runs as a hand-built loop on the Messages API. A teammate's
+    implementation decides the agent is finished whenever the latest assistant turn
+    contains a text block, and otherwise keeps looping. In production it sometimes replies
+    to the customer while a refund tool call is still pending in the same turn, and other
+    times never stops. What is the correct termination signal for the loop?
+  options:
+    A: "Continue while response.stop_reason is \"tool_use\" and stop when it is \"end_turn\", executing any requested tools before the next call."
+    B: "Stop as soon as an assistant turn contains a text block, since a textual reply means the agent has answered the customer."
+    C: "Stop after a fixed cap of 10 iterations, treating the cap as the agent's normal completion condition."
+    D: "Scan the assistant's text for a completion phrase such as \"is there anything else\" and stop when it matches."
+  correct: "A"
+  explanation: >-
+    stop_reason is the protocol-level field Claude returns to say why it stopped; the loop
+    must branch on it ("tool_use" means run the requested tools and continue, "end_turn"
+    means the agent is done). B is wrong because text and tool_use blocks can co-occur in
+    one turn, so a text block is not the absence of pending work — exactly the bug
+    described. C uses an iteration cap as the primary stop; a cap is only a safety net, and
+    real tasks need a variable number of turns. D parses natural language, which misses the
+    many ways completion is phrased and false-fires on mid-task asides.
+  exam: "CCAF"
+  domain: 1
+  task_statement: "1.1 Design and implement agentic loops for autonomous task execution"
+  scenario: 1
+
+- id: "ccaf-d5-5.1-001"
+  stem: >-
+    A single billing-dispute conversation can run dozens of turns, accumulating tool
+    outputs (order histories, prior tickets) until the verified customer ID and the
+    original dispute terms established early on risk being pushed out of the usable context
+    window. You need those facts to remain authoritative for the whole session. What is the
+    most reliable way to preserve them?
+  options:
+    A: "Maintain a structured running summary of confirmed facts (verified customer ID, dispute terms, decisions made) and keep it in context as turns accumulate, rather than relying on the raw transcript alone."
+    B: "Raise max_tokens on each request so individual responses are longer and the model has more room to reason."
+    C: "Trust the model to recall the early turns verbatim, since everything said in the conversation stays in history."
+    D: "Lower the temperature so the model's answers stay closer to what it said at the start of the conversation."
+  correct: "A"
+  explanation: >-
+    Critical facts must be deliberately preserved as the context window fills; a compact,
+    structured summary of confirmed facts kept in context is the durable mechanism, because
+    raw history grows without bound and the earliest tokens are the ones at risk of being
+    crowded out. B confuses output length (max_tokens) with input/context retention — it
+    does nothing to keep early facts available. C is the failure mode: as the window fills,
+    earlier content stops being reliably attended to, so "it's still in history" is not a
+    guarantee. D (temperature) controls sampling randomness, not what information remains in
+    context.
+  exam: "CCAF"
+  domain: 5
+  task_statement: "5.1 Manage conversation context to preserve critical information across long interactions"
+  scenario: 1

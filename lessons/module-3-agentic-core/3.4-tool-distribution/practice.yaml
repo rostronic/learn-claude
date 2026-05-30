@@ -1,0 +1,66 @@
+# Per-lesson practice questions for chapter 3.4 (Distributing tools across agents & tool choice).
+# Topic-only drills that test this chapter's material (CCAF Task Statement 2.3).
+chapter: "3.4"
+questions:
+  - id: "ccaf-d2-2.3-practice-001"
+    stem: >-
+      A multi-agent research system gives every subagent the full set of 18 tools "so each
+      one can handle anything." Tool-selection reliability is poor — agents frequently call
+      the wrong tool. What change most directly improves selection reliability?
+    options:
+      A: "Scope each subagent's tools to the 4–5 its role actually needs; fewer, role-appropriate tools reduce decision complexity."
+      B: "Add more detailed few-shot examples to every subagent showing which of the 18 tools to use when."
+      C: "Increase max_tokens so each agent has more room to reason about which tool to pick."
+      D: "Give every agent all 18 tools but add a longer system prompt instructing it to choose carefully."
+    correct: "A"
+    explanation: >-
+      Tool selection is a reasoning task whose difficulty grows with the number of options;
+      18 tools is far more to disambiguate than 4–5, so scoping each agent to its role's
+      tools is the direct fix. B and D keep the oversized tool set (the root cause) and lean
+      on prompting to compensate. C confuses output budget (max_tokens) with selection
+      difficulty — it does nothing about the 18-way choice.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.3 Distribute tools appropriately across agents and configure tool choice"
+
+  - id: "ccaf-d2-2.3-practice-002"
+    stem: >-
+      A synthesis subagent should combine findings, not gather new ones, but it occasionally
+      fires off web searches and derails. You still want it to confirm an occasional fact.
+      What is the best design?
+    options:
+      A: "Give the synthesizer a narrow, scoped tool (e.g. verify_fact) for its high-frequency need, and route anything broader back through the coordinator."
+      B: "Give the synthesizer the full WebSearch tool so it can check whatever it wants."
+      C: "Remove all tools from the synthesizer and hope it never needs to verify anything."
+      D: "Let the synthesizer call the research subagent directly whenever it wants a fact."
+    correct: "A"
+    explanation: >-
+      Scope cross-role capability to a constrained tool for the specific high-frequency need,
+      and send complex cases through the coordinator — that prevents misuse while keeping the
+      agent capable. B re-introduces the broad tool that causes the derailing. C is too rigid
+      (it can't verify at all). D breaks hub-and-spoke: subagents shouldn't call each other
+      directly; the coordinator owns routing.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.3 Distribute tools appropriately across agents and configure tool choice"
+
+  - id: "ccaf-d2-2.3-practice-003"
+    stem: >-
+      For a document-processing turn, you need the model to ALWAYS call extract_metadata
+      first (before any enrichment tools), even though it would sometimes answer directly.
+      Which tool_choice configuration enforces that?
+    options:
+      A: "tool_choice = {\"type\": \"tool\", \"name\": \"extract_metadata\"} to force that specific tool on the turn."
+      B: "tool_choice = {\"type\": \"auto\"} and a system-prompt note asking it to please call extract_metadata first."
+      C: "tool_choice = {\"type\": \"any\"} so it must call some tool, whichever it likes."
+      D: "Omit tool_choice entirely and rely on the tool description to make it call extract_metadata."
+    correct: "A"
+    explanation: >-
+      Forcing a specific tool requires {\"type\": \"tool\", \"name\": …}; that guarantees
+      extract_metadata runs on the turn. B (\"auto\") lets the model answer in text and skip
+      the tool — exactly what you're trying to prevent. C (\"any\") guarantees a tool call
+      but not which one, so it might pick an enrichment tool first. D (the default) is the
+      weakest — no guarantee at all.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.3 Distribute tools appropriately across agents and configure tool choice"

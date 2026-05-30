@@ -1,0 +1,51 @@
+# CCAF mock-exam pool — Scenario 5: Claude Code for Continuous Integration.
+# Production context (exam guide, "Exam Scenarios"): Claude Code integrated into a CI/CD
+# pipeline that runs automated code reviews, generates test cases, and gives PR feedback;
+# you must design prompts that give actionable feedback and minimize false positives.
+# Primary domains: Claude Code Configuration & Workflows, Prompt Engineering & Structured Output.
+
+- id: "ccaf-d4-4.1-001"
+  stem: >-
+    Your CI review bot comments on every PR, but developers have started ignoring it: it
+    flags stylistic nits, speculative "maybe consider" remarks, and things the team does on
+    purpose. The signal-to-noise ratio is too low. What most effectively reduces the false
+    positives?
+  options:
+    A: "Replace the vague instruction to 'be thorough' with explicit categorical criteria — the specific issue types to report and the ones to skip, with severities anchored to examples."
+    B: "Instruct the model to 'be conservative and only flag high-confidence issues.'"
+    C: "Lower the model's temperature so it produces fewer comments overall."
+    D: "Post every comment but prefix the uncertain ones with 'low confidence' so developers can sort them out."
+  correct: "A"
+  explanation: >-
+    Precision comes from explicit, categorical criteria — naming exactly what to report and
+    what to skip — not from asking the model to self-regulate confidence. B ('be
+    conservative'/'high-confidence') is the classic vague instruction that doesn't define the
+    boundary, so it drifts. C (temperature) changes verbosity/randomness, not which issues
+    are in scope. D still posts the noise and pushes the triage burden onto developers — the
+    behavior eroding trust in the first place.
+  exam: "CCAF"
+  domain: 4
+  task_statement: "4.1 Design prompts with explicit criteria to improve precision and reduce false positives"
+  scenario: 5
+
+- id: "ccaf-d3-3.6-001"
+  stem: >-
+    You're wiring Claude Code into a CI pipeline to review pull requests automatically. The
+    first attempt hangs: the job stalls waiting on interactive permission prompts that no
+    human is there to answer. What's the right way to run Claude Code in CI?
+  options:
+    A: "Run it non-interactively with the allowed tools and permissions pre-configured for the job, so no step depends on a human approving a prompt mid-run."
+    B: "Keep the interactive prompts but set a short timeout so the job fails fast when nobody answers."
+    C: "Disable all permission checks entirely so nothing can ever block, regardless of what the job does."
+    D: "Have the pipeline page an on-call engineer to approve each tool use as the review runs."
+  correct: "A"
+  explanation: >-
+    CI is non-interactive, so the agent must run headless with its tool/permission scope
+    configured up front — pre-authorize exactly what the review job needs and nothing more.
+    B keeps an interactive dependency that can't be satisfied in CI (it just fails reliably
+    instead of hanging). C trades the hang for an unsafe, unscoped agent in an automated
+    pipeline. D defeats the point of automation and doesn't scale to every PR.
+  exam: "CCAF"
+  domain: 3
+  task_statement: "3.6 Integrate Claude Code into CI/CD pipelines"
+  scenario: 5
