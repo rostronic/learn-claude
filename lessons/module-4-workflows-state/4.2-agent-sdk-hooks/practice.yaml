@@ -1,0 +1,71 @@
+# Per-lesson practice questions for chapter 4.2 (Agent SDK hooks for tool interception & normalization).
+chapter: "4.2"
+questions:
+  - id: "ccaf-d1-1.5-practice-001"
+    stem: >-
+      You register a PreToolUse hook with HookMatcher(matcher="Write") to block
+      writes to any path ending in ".env", but it never blocks the .env write.
+      What is the most likely cause?
+    options:
+      A: "Matchers filter by tool name only, so the .env path check must be done inside the callback by reading tool_input['file_path'] — the matcher can't see arguments."
+      B: "The matcher should be 'Write|.env' so the regex also matches the file path."
+      C: "PreToolUse hooks cannot block tools; only PostToolUse can."
+      D: "The hook must be registered under 'PreToolUse' AND 'PostToolUse' to take effect."
+    correct: "A"
+    explanation: >-
+      The matcher regex is tested against the tool name, never the arguments, so
+      a path-based rule has to inspect tool_input inside the callback. B is wrong
+      because the matcher still only matches the tool name — adding '.env' to the
+      regex doesn't make it see the path. C is false: PreToolUse is exactly the
+      event that can block a call (permissionDecision 'deny'). D is false: a hook
+      fires for the event it's registered under; duplicating it changes nothing
+      about argument matching.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.5 Apply Agent SDK hooks for tool call interception and data normalization"
+
+  - id: "ccaf-d1-1.5-practice-002"
+    stem: >-
+      A PreToolUse hook returns hookSpecificOutput with updatedInput that rewrites
+      a file_path, but the agent still writes to the original path. The hook is
+      firing. What's missing?
+    options:
+      A: "permissionDecision must be 'allow' (or 'ask') alongside updatedInput — without it the modified input is ignored."
+      B: "updatedInput must be placed at the top level of the return value, not inside hookSpecificOutput."
+      C: "The hook must mutate input_data['tool_input'] directly instead of returning a new dict."
+      D: "updatedInput only works on PostToolUse, so the rewrite must move to that event."
+    correct: "A"
+    explanation: >-
+      The SDK applies updatedInput only when the same hook also returns
+      permissionDecision 'allow' (or 'ask'); otherwise the modification is
+      dropped. B is backwards — updatedInput must be INSIDE hookSpecificOutput, not
+      at the top level. C is the opposite of the documented rule: you must return
+      a new object and not mutate tool_input. D is false: input modification is a
+      PreToolUse capability — PostToolUse changes outputs (updatedToolOutput), not
+      inputs.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.5 Apply Agent SDK hooks for tool call interception and data normalization"
+
+  - id: "ccaf-d1-1.5-practice-003"
+    stem: >-
+      A third-party MCP tool returns weather payloads with inconsistent key casing
+      and a sometimes-missing units field. You need the model to always see one
+      canonical shape. What is the right mechanism?
+    options:
+      A: "A PostToolUse hook that returns updatedToolOutput with the normalized payload, so every result is canonicalized before the model sees it."
+      B: "A system-prompt instruction telling the model to normalize the payload before reasoning about it."
+      C: "A PreToolUse hook that denies the tool call until the upstream server is fixed."
+      D: "A few-shot example showing the canonical shape so the model imitates it."
+    correct: "A"
+    explanation: >-
+      PostToolUse runs after the tool returns and updatedToolOutput replaces the
+      result before the model sees it, giving a guaranteed canonical shape every
+      time. B relies on the model choosing to normalize, which is the prompt-as-
+      control anti-pattern — not a guarantee. C blocks useful work and doesn't
+      normalize anything. D shapes behavior probabilistically and still lets raw,
+      inconsistent payloads reach the model. Normalization that must always happen
+      belongs in a deterministic hook.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.5 Apply Agent SDK hooks for tool call interception and data normalization"

@@ -1,0 +1,31 @@
+chapter: "4.1"
+criteria:
+  - id: unguarded_tools_allowed
+    description: "prerequisite_gate returns {} for a tool not in PREREQUISITES (unguarded calls pass through)"
+    weight: 12
+    check: code_review
+  - id: denies_until_prereqs_complete
+    description: "Denies a guarded call (issue_refund) until all its prerequisite steps are present in state['completed']"
+    weight: 20
+    check: code_review
+  - id: enforces_policy_eligibility
+    description: "For issue_refund, additionally denies unless the handed-off policy output (state['data']['check_refund_policy']['eligible']) is True"
+    weight: 16
+    check: code_review
+  - id: deny_object_shape
+    description: "Deny verdict has the exact PreToolUse shape: hookSpecificOutput with hookEventName, permissionDecision 'deny', and a non-empty permissionDecisionReason; allow is {}"
+    weight: 12
+    check: code_review
+  - id: record_step_handoff
+    description: "record_step adds the step to state['completed'] and stores its output at state['data'][step] so the gate can read it"
+    weight: 12
+    check: code_review
+  - id: no_prompt_or_text_enforcement
+    description: "Does NOT base the gate decision on assistant/model text or a prompt instruction — the verdict is a deterministic function of state only"
+    weight: 16
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_workflow.py pass"
+    weight: 12
+    check: bash_execution
+    command: "pytest test_workflow.py -v"

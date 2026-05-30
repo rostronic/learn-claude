@@ -1,0 +1,31 @@
+chapter: "6.4"
+criteria:
+  - id: headless_command
+    description: "claude_ci_command returns argv containing -p, the prompt, --allowedTools with the comma-joined scoped tools, and --output-format (a non-interactive CI invocation)"
+    weight: 20
+    check: code_review
+  - id: routes_sync_vs_batch
+    description: "route_review_job returns 'sync' for blocking jobs and 'batch' for latency-tolerant ones"
+    weight: 15
+    check: code_review
+  - id: independent_multi_pass_review
+    description: "review_pull_request runs one focused independent pass per file plus one integration pass (len(files)+1 fresh instances, no generation context threaded in)"
+    weight: 20
+    check: code_review
+  - id: filters_to_explicit_criteria
+    description: "review_pull_request keeps only findings whose category is in report_categories (explicit categorical criteria to minimize false positives)"
+    weight: 15
+    check: code_review
+  - id: no_skip_all_permissions
+    description: "Does NOT disable permission checks wholesale in the CI command (no 'dangerously skip permissions'-style flag); tools are scoped with --allowedTools instead"
+    weight: 10
+    check: anti_pattern
+  - id: no_blocking_to_batch
+    description: "Does NOT route a blocking pre-merge check to the batch API (which has no latency guarantee)"
+    weight: 5
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_ci_review.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_ci_review.py -v"

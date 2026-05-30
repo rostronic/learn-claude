@@ -1,0 +1,26 @@
+chapter: "7.8"
+criteria:
+  - id: coordinator_subagent_design
+    description: "design.md describes a coordinator that decomposes the question into sub-questions and spawns one research subagent per sub-question, and states that each subagent runs in its own context window"
+    weight: 18
+    check: code_review
+  - id: context_passing
+    description: "design.md specifies what each subagent's PROMPT STRING contains (scoped sub-question, source pointers, output contract, constraints) and states the prompt is the only parent->child channel — the subagent does not inherit the coordinator's context"
+    weight: 16
+    check: code_review
+  - id: error_propagation
+    description: "design.md defines a structured subagent failure shape that names WHICH subagent failed (provenance) and describes the coordinator collecting failures as first-class results without threading a failed subagent's value into the synthesis"
+    weight: 18
+    check: code_review
+  - id: provenance_synthesis
+    description: "design.md's synthesis maps every claim to a non-empty source reference, keeps and annotates conflicts (rather than silently resolving), drops unsourced claims, and reports uncovered required topics as explicit coverage gaps"
+    weight: 18
+    check: code_review
+  - id: independent_review
+    description: "design.md's quality stage is an independent review instance — a fresh agent in its own context that never saw the synthesis being written, receiving only the finished artifact plus a checklist"
+    weight: 15
+    check: code_review
+  - id: anti_self_review
+    description: "design.md does NOT use self-review in place of independent review instances, and does NOT swallow subagent errors (no try/except returning None/empty, no anonymous 'failed' errors, no re-raise that aborts the whole run)"
+    weight: 15
+    check: anti_pattern

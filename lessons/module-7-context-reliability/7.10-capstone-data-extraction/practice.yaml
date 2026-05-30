@@ -1,0 +1,73 @@
+# Per-lesson practice questions for chapter 7.10 (Capstone — Structured Data Extraction).
+# CCA-F Scenario 6 drills.
+chapter: "7.10"
+questions:
+  - id: "ccaf-s6-practice-001"
+    stem: >-
+      You're building a high-volume pipeline that extracts invoice fields into a record
+      consumed by an automated accounting system. A teammate's prototype prompts "return the
+      invoice fields as JSON" and then runs json.loads on the response after stripping a
+      markdown code fence. In production it occasionally throws on a trailing comma or an
+      extra field. What is the correct fix?
+    options:
+      A: "Use structured outputs (output_config.format with type json_schema), or strict tool use, so constrained decoding guarantees the response matches the schema."
+      B: "Add a more robust regex and a try/except around json.loads so malformed responses are caught and retried."
+      C: "Lower the temperature and add few-shot JSON examples so the model formats its prose more reliably."
+      D: "Post-process every response through a second model call that reformats the prose into clean JSON."
+    correct: "A"
+    explanation: >-
+      Structured outputs guarantee the response conforms to your JSON schema via constrained
+      decoding — "always valid: no more JSON.parse() errors" — which removes this entire class
+      of bug; strict tool use gives the same guarantee for tool inputs. B keeps parsing free
+      text and only makes the inevitable failures slightly less fatal — it treats a solved
+      problem as unsolved. C reduces but never eliminates malformed output; the shape is still
+      unguaranteed. D adds latency, cost, and a second source of error while still never
+      guaranteeing the shape.
+    exam: "CCAF"
+    domain: scenario
+    scenario: 6
+
+  - id: "ccaf-s6-practice-002"
+    stem: >-
+      Your extractor returns schema-valid records, but underwriting caught a case where
+      total_amount was a valid number that didn't equal the sum of the line items. You add a
+      business-rule check. When that check fails, what should the pipeline do?
+    options:
+      A: "Feed the specific failure (which rule failed and what to recheck) back to the model and retry, bounded by a max attempt count, then escalate to human review if it still fails."
+      B: "Accept the record anyway, since structured outputs already proved it is schema-valid."
+      C: "Retry with the identical prompt repeatedly until the numbers happen to match."
+      D: "Drop the record silently and move on so the bad value never reaches underwriting."
+    correct: "A"
+    explanation: >-
+      Schema conformance proves shape, not business correctness, so a second validation layer
+      must drive a retry that feeds back the SPECIFIC error (so the next attempt can converge),
+      is bounded, and escalates rather than shipping or discarding an invalid record. B trusts
+      the schema to catch a rule it cannot express — a category error. C retries with no new
+      information, so the model tends to repeat the same mistake, and is unbounded. D silently
+      dropping the record loses data with no audit trail and no human ever sees the problem.
+    exam: "CCAF"
+    domain: scenario
+    scenario: 6
+
+  - id: "ccaf-s6-practice-003"
+    stem: >-
+      Reviewers complain they can't tell which extracted fields to trust, and that verifying a
+      flagged field means re-reading the whole document. You're redesigning confidence and
+      provenance. Which approach is correct?
+    options:
+      A: "Attach per-field confidence and route only the individual low-confidence fields to human review; attach each field's supporting source span using the Citations feature so reviewers jump straight to the cited text."
+      B: "Compute one confidence score for the whole document and send the entire record to a human whenever it falls below the threshold."
+      C: "After extraction, ask the same model to state, in free text, which part of the document supports each field."
+      D: "Skip provenance to save tokens and trust the model's overall confidence, since Citations is incompatible with structured outputs anyway."
+    correct: "A"
+    explanation: >-
+      Confidence and routing must be per field so one shaky field doesn't dump four good ones
+      on a human, and Citations gives guaranteed-valid pointers (cited_text, document_index,
+      location) that send a reviewer straight to the source span. B collapses to a document
+      score, which either over-reviews good fields or lets a bad field ride on the average. C
+      asks for free-text provenance after the fact, which invites a fabricated citation —
+      exactly what Citations' guaranteed-valid pointers prevent. D abandons provenance entirely;
+      the incompatibility is real but is solved by a two-pass design, not by dropping provenance.
+    exam: "CCAF"
+    domain: scenario
+    scenario: 6

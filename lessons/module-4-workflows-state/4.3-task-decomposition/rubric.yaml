@@ -1,0 +1,31 @@
+chapter: "4.3"
+criteria:
+  - id: independent_finders_parallel
+    description: "decompose produces the three finders (style-checker, security-scanner, test-runner) in parallel_group 0 with depends_on == []"
+    weight: 18
+    check: code_review
+  - id: synthesis_depends_and_ordered
+    description: "decompose places synthesis in parallel_group 1 with depends_on listing all three finders, so it runs in a later batch"
+    weight: 16
+    check: code_review
+  - id: least_privilege_tools
+    description: "Read-only finders get exactly ['Read','Grep','Glob']; test-runner additionally gets Bash; synthesis is read-only"
+    weight: 14
+    check: code_review
+  - id: validate_flags_inversion_and_unknown
+    description: "validate_plan returns [] for the good plan and flags dependency inversions (dep in same/later group) and unknown dependency names"
+    weight: 16
+    check: code_review
+  - id: parallel_batches_ordered
+    description: "parallel_batches groups subtask names by parallel_group into ascending ordered batches"
+    weight: 12
+    check: code_review
+  - id: no_agent_tool_in_subtasks
+    description: "No subtask spec grants the 'Agent' tool (subagents cannot spawn subagents), and validate_plan flags any plan that does"
+    weight: 14
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_decompose.py pass"
+    weight: 10
+    check: bash_execution
+    command: "pytest test_decompose.py -v"

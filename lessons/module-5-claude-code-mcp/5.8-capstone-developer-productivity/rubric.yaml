@@ -1,0 +1,35 @@
+chapter: "5.8"
+criteria:
+  - id: correct-plan-passes
+    description: >
+      validate_plan returns an empty list for a plan that maps every requirement to
+      its Anthropic-prescribed mechanism (project CLAUDE.md, path rule, blocking
+      PreToolUse hook, user-only deploy skill, project-scope secret-free MCP, secrets
+      CI key).
+    weight: 25
+    check: code_review
+  - id: flags-each-antipattern
+    description: >
+      validate_plan flags each module anti-pattern by its requirement key: wrong
+      scope for conventions, unscoped language rules, no-edit rule as a prompt or a
+      non-blocking hook, model-invocable deploy skill, non-project/secret-leaking MCP,
+      and a hard-coded CI key.
+    weight: 30
+    check: code_review
+  - id: catches-missing-requirements
+    description: >
+      A required requirement key absent from the plan is reported as a problem.
+    weight: 15
+    check: code_review
+  - id: tests-pass
+    description: The provided pytest suite passes.
+    weight: 20
+    check: bash_execution
+    command: pytest -q
+  - id: no-hardcoded-secret-accepted
+    description: >
+      validate_plan must NOT accept a hard-coded literal CI api key (only a
+      ${{ secrets.* }} reference is valid) — committing a literal key is the core CI
+      anti-pattern.
+    weight: 10
+    check: anti_pattern

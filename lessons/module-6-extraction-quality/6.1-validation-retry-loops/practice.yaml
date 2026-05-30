@@ -1,0 +1,68 @@
+# Per-lesson practice questions for chapter 6.1 (Validation, retry & feedback loops).
+# Topic-only drills that test this chapter's material.
+chapter: "6.1"
+questions:
+  - id: "ccaf-d4-4.4-practice-001"
+    stem: >-
+      Your extractor forces a tool_use call against a strict JSON schema, so every result is
+      schema-valid. Yet a downstream system keeps rejecting invoices whose line items don't
+      add up to the stated total. What should you add?
+    options:
+      A: "A semantic validation step that recomputes the total from line items and compares it to the stated total, then retries with that specific discrepancy fed back."
+      B: "A stricter JSON schema with more required fields, since the schema is what guarantees the values are correct."
+      C: "A lower temperature so the model is less likely to make arithmetic mistakes."
+      D: "A post-processing step that overwrites the stated total with the computed sum without telling the model."
+    correct: "A"
+    explanation: >-
+      Tool use eliminates syntax errors but not semantic ones; the fix is to validate the
+      values (calculated vs stated total) and retry with the specific error. B is wrong
+      because a JSON schema guarantees shape, never that numbers add up — more required fields
+      can't catch a mismatch. C misframes it: temperature changes sampling, not whether the
+      extraction is internally consistent. D silently masks the conflict instead of surfacing
+      it — if the line items were misread, you've now hidden the error rather than corrected it.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.4 Implement validation, retry, and feedback loops for extraction quality"
+
+  - id: "ccaf-d4-4.4-practice-002"
+    stem: >-
+      Two extraction failures look similar at first: (1) the model put the date in the wrong
+      field, and (2) the document never stated a due date at all. How should a retry loop treat
+      them differently?
+    options:
+      A: "Retry (1) with the specific error fed back — it's a fixable structural mistake — but do not retry (2); mark the field unresolved or escalate, since the information is absent."
+      B: "Retry both the same number of times; retries correct any extraction failure given enough attempts."
+      C: "Retry (2) more aggressively than (1), because a missing value is the more serious problem."
+      D: "Retry neither; if the first extraction is imperfect, fall back to parsing the document with a regex."
+    correct: "A"
+    explanation: >-
+      Retries fix format/structural errors but cannot conjure information that isn't in the
+      source — so the wrong-field case is retryable while the absent-value case is not. B is
+      the trap: re-asking for an absent value wastes calls and tempts the model to fabricate
+      one. C inverts the rule — retrying harder for missing data only increases the fabrication
+      risk. D abandons the reliable structured-output path for brittle text parsing, the
+      approach tool use exists to replace.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.4 Implement validation, retry, and feedback loops for extraction quality"
+
+  - id: "ccaf-d4-4.4-practice-003"
+    stem: >-
+      On a validation failure, your loop calls the model again with the exact same prompt and
+      no mention of what went wrong. Results barely improve. What's the prescribed fix?
+    options:
+      A: "Append the specific validation errors (and the failed extraction) to the retry request so the model corrects against a precise critique."
+      B: "Increase max_attempts so the loop keeps resampling until one result happens to pass."
+      C: "Add few-shot examples of unrelated correct invoices to the system prompt and keep the retry prompt unchanged."
+      D: "Switch tool_choice to 'auto' on the retry so the model can explain itself in prose instead."
+    correct: "A"
+    explanation: >-
+      Retry-with-error-feedback means appending the specific validation errors so the model
+      knows exactly what to fix — that feedback is the mechanism. B just buys more identical
+      coin flips at higher cost without changing the information the model has. C adds generic
+      examples but still never tells the model what was wrong with THIS extraction. D removes
+      the forcing that guarantees structured output, letting a free-text answer escape the
+      schema entirely.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.4 Implement validation, retry, and feedback loops for extraction quality"

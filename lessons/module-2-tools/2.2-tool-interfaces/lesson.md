@@ -21,7 +21,7 @@ references:
 
 A tool definition is a **prompt** as much as it is an API contract. When you give Claude a tool, the model reads its name, description, and input schema to decide *whether* to call it, *which* tool to pick among several, and *what arguments* to pass. Get the interface right and tool selection is reliable; get it wrong and Claude reaches for the wrong tool, omits parameters, or calls nothing at all. CCAF Task Statement 2.1 is about designing these interfaces well: clear descriptions and clear boundaries.
 
-A client tool definition has exactly three parts ([Define tools](https://platform.claude.com/docs/en/agents-and-tools/tool-use/implement-tool-use)):
+A client tool definition has three core parts ([Define tools](https://platform.claude.com/docs/en/agents-and-tools/tool-use/implement-tool-use)) — plus optional fields like `input_examples` we'll come to:
 
 - **`name`** — a unique identifier matching `^[a-zA-Z0-9_-]{1,64}$`.
 - **`description`** — "a detailed plaintext description of what the tool does, when it should be used, and how it behaves."

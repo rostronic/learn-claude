@@ -1,0 +1,27 @@
+chapter: "7.5"
+criteria:
+  - id: field_level_routing
+    description: "select_fields_for_review returns the field names whose confidence is strictly below the threshold (field-level, not a document-level score)"
+    weight: 18
+    check: code_review
+  - id: calibration_buckets
+    description: "calibration_report buckets the labeled set into deciles (1.0 in bucket 9), skips empty buckets, and returns {bucket, n, predicted=mean confidence, empirical=fraction correct} sorted by bucket"
+    weight: 20
+    check: code_review
+  - id: calibration_gap
+    description: "Each calibration bucket reports gap = abs(predicted - empirical), the per-bucket predicted-vs-empirical miscalibration"
+    weight: 12
+    check: code_review
+  - id: stratified
+    description: "stratified_sample allocates counts proportional to each stratum's share with largest-remainder rounding summing to exactly n, defaults rng to random.Random(0), and is reproducible across calls"
+    weight: 20
+    check: code_review
+  - id: anti_doc_level_or_uniform
+    description: "Does NOT route on a single document-level confidence score (e.g. averaging/min/max the record to one number), and does NOT sample uniformly at random ignoring strata"
+    weight: 15
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_review.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_review.py -v"

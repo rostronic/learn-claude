@@ -1,0 +1,27 @@
+chapter: "6.3"
+criteria:
+  - id: independent_fresh_context
+    description: "independent_review builds a fresh single-turn request containing only the review instruction + code (no assistant/generator turns), forces review_tool, and returns its findings"
+    weight: 25
+    check: code_review
+  - id: multi_pass_split
+    description: "multi_pass_review runs one focused pass per file plus one integration pass over all files (len(files)+1 model calls) and returns the combined findings"
+    weight: 20
+    check: code_review
+  - id: confidence_routing
+    description: "route_by_confidence splits findings into auto vs human_review at the confidence threshold (>= threshold goes to auto)"
+    weight: 15
+    check: code_review
+  - id: no_self_review_context
+    description: "Does NOT perform self-review by passing the generator's conversation/reasoning context into the review request (the reviewer must be an independent instance)"
+    weight: 15
+    check: anti_pattern
+  - id: no_single_combined_pass
+    description: "Does NOT collapse a multi-file review into a single combined pass over all files at once instead of per-file + integration passes"
+    weight: 10
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_review_architecture.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_review_architecture.py -v"

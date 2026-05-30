@@ -1,0 +1,77 @@
+# Per-lesson practice questions for chapter 7.3
+# (Escalation and ambiguity resolution).
+# Topic-only drills that test this chapter's material.
+chapter: "7.3"
+questions:
+  - id: "ccaf-d5-5.2-practice-001"
+    stem: >-
+      A customer messages a support agent: "cancel my order." The account has
+      three open orders and the request names none of them; the cancel tool
+      requires an order_id. What should the agent do?
+    options:
+      A: "Ask a targeted clarifying question that names what's missing, e.g. \"Which order should I cancel? Please give the order_id.\""
+      B: "Cancel the most recent order, since that is the most likely one the customer means."
+      C: "Reply \"Can you clarify?\" and wait for the customer to figure out what to send."
+      D: "Cancel all three open orders to be safe, then let the customer re-order if needed."
+    correct: "A"
+    explanation: >-
+      A required field (order_id) is missing and the request is ambiguous, so the
+      agent cannot proceed — the prescribed move is to allow uncertainty and ask
+      for clarification, naming exactly what's missing so the customer can answer
+      in one turn. B guesses to fill the gap, which is the hallucination the
+      guardrail exists to prevent and risks cancelling the wrong order. C asks,
+      but vaguely — it pushes the work back on the customer and usually earns a
+      second vague reply. D acts destructively on missing information, the worst
+      outcome of all.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.2 Design effective escalation and ambiguity resolution patterns"
+
+  - id: "ccaf-d5-5.2-practice-002"
+    stem: >-
+      A refund agent must route any refund above $500 to a human when the model
+      is not confident. The team needs this escalation to hold reliably, including
+      on adversarial inputs. Which design enforces it?
+    options:
+      A: "A code gate that reads the model's structured confidence/stakes signal and refuses to call the refund tool when stakes are high and confidence is below the threshold, escalating to a human."
+      B: "A system-prompt line: \"If you are not confident about a high-value refund, escalate to a human instead of issuing it.\""
+      C: "A few-shot set of example refunds in the prompt showing the model when to escalate, so it learns the pattern."
+      D: "A post-hoc log review that flags refunds the model should have escalated, so a human can reverse them later."
+    correct: "A"
+    explanation: >-
+      Escalation of a high-stakes action requiring deterministic compliance must
+      be enforced programmatically — the model proposes via a structured signal and
+      code disposes, refusing the side-effecting tool when the gate says escalate.
+      B is a prompt instruction, which is a suggestion the model can misjudge or be
+      argued out of, and it fails precisely on the adversarial inputs that matter
+      most — it is not a control. C likewise leaves the decision to the model and
+      adds nothing deterministic. D is detection after the money has already moved,
+      not prevention.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.2 Design effective escalation and ambiguity resolution patterns"
+
+  - id: "ccaf-d5-5.2-practice-003"
+    stem: >-
+      An agent issues account closures (high-stakes, irreversible). For one
+      request, every required field is present and unambiguous, but the model's
+      confidence on whether the user truly wants to close is only 0.7, below the
+      0.85 high-stakes threshold. What is the correct route?
+    options:
+      A: "Escalate to a human, because the action is high-stakes and confidence is below the high-stakes threshold."
+      B: "Answer (close the account), because all required fields are present and the request is unambiguous."
+      C: "Ask a clarifying question, even though nothing is missing and nothing is ambiguous."
+      D: "Answer, because 0.7 is a fairly high confidence and the action would otherwise be delayed."
+    correct: "A"
+    explanation: >-
+      High-stakes actions face a stricter bar; 0.7 is below the 0.85 high-stakes
+      threshold, so the triage gate routes to escalate and a human decides. B and D
+      both answer on an irreversible action the model isn't sufficiently sure about
+      — exactly the high-stakes-low-confidence case escalation is reserved for; that
+      the fields are complete does not clear the confidence bar. C clarifies, but
+      clarification is for missing or ambiguous information, and here nothing is
+      missing or ambiguous — the issue is confidence, which calls for a human, not
+      another question to the user.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.2 Design effective escalation and ambiguity resolution patterns"

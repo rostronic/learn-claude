@@ -1,0 +1,28 @@
+chapter: "5.6"
+criteria:
+  - id: check-driven-loop
+    description: >
+      should_keep_iterating continues only while the check has not passed and
+      attempts < max_attempts; it stops as soon as the check passes, regardless of
+      remaining budget.
+    weight: 30
+    check: code_review
+  - id: context-reset-rules
+    description: >
+      next_context_action returns "clear" on an unrelated-task switch or after more
+      than two same-issue corrections, and "continue" otherwise (two corrections is
+      still "continue").
+    weight: 30
+    check: code_review
+  - id: tests-pass
+    description: The provided pytest suite passes.
+    weight: 25
+    check: bash_execution
+    command: pytest -q
+  - id: no-count-based-stop
+    description: >
+      should_keep_iterating must NOT use the attempt count as the primary stop
+      signal — a passing check stops the loop immediately, and a failing check keeps
+      it going until the cap is reached.
+    weight: 15
+    check: anti_pattern

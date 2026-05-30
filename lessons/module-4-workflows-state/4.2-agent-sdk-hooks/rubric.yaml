@@ -1,0 +1,31 @@
+chapter: "4.2"
+criteria:
+  - id: guard_inspects_file_path
+    description: "guard_secrets reads tool_input['file_path'] and denies only Write/Edit calls whose basename is '.env'; allows other paths and non-write tools"
+    weight: 18
+    check: code_review
+  - id: deny_object_shape
+    description: "guard_secrets returns the exact PreToolUse deny shape (hookSpecificOutput with hookEventName, permissionDecision 'deny', non-empty permissionDecisionReason); {} to allow"
+    weight: 12
+    check: code_review
+  - id: normalize_canonical_output
+    description: "normalize_output returns updatedToolOutput with lowercased keys and a 'units' default of 'fahrenheit', preserving an existing units value"
+    weight: 16
+    check: code_review
+  - id: normalize_idempotent
+    description: "normalize_output returns {} when the tool_response is already canonical (no needless rewrite)"
+    weight: 12
+    check: code_review
+  - id: redirect_allows_with_updated_input
+    description: "redirect_write returns permissionDecision 'allow' together with updatedInput whose file_path is prefixed with '/sandbox'"
+    weight: 16
+    check: code_review
+  - id: no_mutate_or_missing_allow
+    description: "Does NOT mutate input_data['tool_input'] in place and does NOT return updatedInput without permissionDecision 'allow' (both make the modification a silent no-op)"
+    weight: 14
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_hooks.py pass"
+    weight: 12
+    check: bash_execution
+    command: "pytest test_hooks.py -v"

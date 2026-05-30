@@ -1,0 +1,28 @@
+chapter: "5.7"
+criteria:
+  - id: secret-reference-check
+    description: >
+      is_secret_reference returns True only for a ${{ secrets.NAME }} reference
+      (whitespace-tolerant) and False for any other value, including a hard-coded
+      key and a ${{ env.* }} expression.
+    weight: 30
+    check: code_review
+  - id: headless-command-builder
+    description: >
+      build_headless_command produces ["claude","-p",prompt] plus --allowedTools
+      (comma-joined, omitted when empty), --output-format (only when not "text"),
+      and --permission-mode (when set), in that order.
+    weight: 30
+    check: code_review
+  - id: tests-pass
+    description: The provided pytest suite passes.
+    weight: 25
+    check: bash_execution
+    command: pytest -q
+  - id: no-hardcoded-secret-accepted
+    description: >
+      is_secret_reference must NOT accept a hard-coded literal key (e.g.
+      "sk-ant-...") as a valid secret reference — committing such a literal is the
+      core CI anti-pattern.
+    weight: 15
+    check: anti_pattern

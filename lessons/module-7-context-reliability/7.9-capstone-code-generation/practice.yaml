@@ -1,0 +1,77 @@
+# Per-lesson practice questions for chapter 7.9
+# (Capstone — Code Generation with Claude Code). Scenario 2 drills.
+chapter: "7.9"
+questions:
+  - id: "ccaf-s2-practice-001"
+    stem: >-
+      You're adding a feature to a ~400k-line monorepo you've never opened. You need to
+      understand how authentication middleware is wired before you can change it. Which
+      approach keeps the main context window healthy on a repo this size?
+    options:
+      A: "Have Claude read every file under src/ so it 'understands the whole codebase,' then make the change."
+      B: "Search broad-then-narrow to locate the seam, and delegate the deep file-reading exploration to a subagent that returns only its findings to the main agent."
+      C: "Open the twenty most likely files yourself in the main session and keep them all resident so Claude has full context for the rest of the task."
+      D: "Paste the entire authentication package into the prompt as a single message so it's all in one place."
+    correct: "B"
+    explanation: >-
+      B is the prescribed workflow: find before you read (search-first), then delegate the
+      exploration to a subagent that runs in its own fresh window so only its summary returns
+      to the parent — the main context gains the map, not the files. A is the headline
+      anti-pattern: dumping the whole repo blows the window and degrades accuracy with
+      irrelevant content. C explores in the main context, so all twenty files stay resident
+      and crowd out the actual work — exactly what subagent delegation avoids. D is the same
+      dump in a different shape: a huge package pasted into one message is still loading
+      everything into context.
+    exam: "CCAF"
+    domain: scenario
+    task_statement: "5.4 Manage context on large codebases"
+    scenario: 2
+
+  - id: "ccaf-s2-practice-002"
+    stem: >-
+      Claude Code is about to apply a change to a request-middleware module that every public
+      route flows through, in a large production repo. The edit is hard to revert if wrong.
+      How should you have it execute the change?
+    options:
+      A: "Use plan mode: have Claude propose the edits as a reviewable plan and approve it before anything is written to disk."
+      B: "Let Claude edit directly — plan mode adds friction and the change needs to ship quickly."
+      C: "Skip both plan mode and tests; review the diff visually after it's written and revert if it looks wrong."
+      D: "Force plan mode for this and every other edit in the repo, including one-line typo fixes, to be safe."
+    correct: "A"
+    explanation: >-
+      A is correct: a high-blast-radius, hard-to-revert change is exactly what plan mode is
+      for — analyze and propose before any edit touches disk, then approve. B skips plan mode
+      on a high-risk change, the scenario's second headline anti-pattern. C compounds the
+      risk by also dropping verification, relying on eyeballing a diff to a module every route
+      depends on. D over-applies the criterion: the decision is blast radius and
+      reversibility, so forcing plan mode on trivial one-line fixes is needless friction that
+      pushes people to disable review entirely.
+    exam: "CCAF"
+    domain: scenario
+    task_statement: "3.1 Choose plan mode vs. direct execution"
+    scenario: 2
+
+  - id: "ccaf-s2-practice-003"
+    stem: >-
+      Across a code-generation session, Claude keeps forgetting to run the formatter and
+      occasionally edits files in a generated/ directory that must never be hand-edited. What
+      is the most reliable way to make generated code respect these project norms?
+    options:
+      A: "Encode the conventions in CLAUDE.md (test/lint commands, 'do not edit generated/', layering rules) so they apply automatically to every turn."
+      B: "Re-state the conventions in every prompt: 'remember to run the formatter and don't touch generated/.'"
+      C: "Add the rules as comments at the top of each source file and trust Claude to read them when it opens the file."
+      D: "Lower the model temperature so Claude is less likely to deviate from the conventions."
+    correct: "A"
+    explanation: >-
+      A is the prescribed approach: CLAUDE.md is loaded automatically and applies to every
+      turn, so conventions written there are configuration that always holds — the same
+      reliability argument as programmatic enforcement over prompt instructions. B is the
+      prompt-instruction-over-configuration error: re-stating rules each turn is brittle and
+      depends on the instruction surviving in context. C only helps for files Claude happens
+      to open and read, and does nothing for the do-not-edit directory it must avoid in the
+      first place. D conflates style adherence with sampling randomness; temperature does not
+      encode project conventions.
+    exam: "CCAF"
+    domain: scenario
+    task_statement: "3.4 Configure CLAUDE.md for project norms"
+    scenario: 2

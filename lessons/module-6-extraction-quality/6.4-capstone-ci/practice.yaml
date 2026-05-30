@@ -1,0 +1,67 @@
+# Per-lesson practice questions for chapter 6.4 (Capstone — Claude Code for CI).
+# Scenario-5 framing; each question wraps one task statement in the CI narrative.
+chapter: "6.4"
+questions:
+  - id: "ccaf-s5-6.4-practice-001"
+    stem: >-
+      Your pipeline runs `claude "Review this PR for security issues"` and the job hangs
+      indefinitely; logs show Claude Code waiting for interactive input. What's the correct fix?
+    options:
+      A: "Run it non-interactively with the -p (--print) flag and pre-authorize the tools the review needs via --allowedTools."
+      B: "Set CLAUDE_HEADLESS=true before the command so it skips interactive mode."
+      C: "Disable all permission checks so nothing can ever block the run."
+      D: "Add a --batch flag so the review is queued instead of waiting for input."
+    correct: "A"
+    explanation: >-
+      CI has no human to answer prompts, so the run must be headless: -p processes the prompt,
+      prints the result, and exits, with tools pre-authorized via --allowedTools. B invents an
+      environment variable that doesn't exist. C trades the hang for an unscoped agent in an
+      automated pipeline — unsafe. D invents a --batch flag; batch is a separate API, not a
+      Claude Code CLI flag, and wouldn't address the interactive-input hang anyway.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.6 Integrate Claude Code into CI/CD pipelines"
+    scenario: 5
+
+  - id: "ccaf-s5-6.4-practice-002"
+    stem: >-
+      A CI review bot comments on every PR — stylistic nits, speculative 'maybe consider'
+      remarks, and things the team does on purpose — and developers have started ignoring it.
+      What most effectively cuts the false positives?
+    options:
+      A: "Replace the vague 'be thorough' instruction with explicit categorical criteria: the specific issue types to report and the ones to skip."
+      B: "Instruct the model to 'be conservative and only flag high-confidence issues.'"
+      C: "Lower the temperature so the model produces fewer comments overall."
+      D: "Post every comment but prefix uncertain ones with 'low confidence' so developers can sort them out."
+    correct: "A"
+    explanation: >-
+      Precision comes from explicit, categorical criteria — naming what to report and what to
+      skip — not from self-regulation. B's 'be conservative' never defines the boundary, so it
+      drifts. C changes verbosity/randomness, not which issues are in scope. D still posts the
+      noise and pushes triage onto developers, the very thing eroding trust. (This mirrors the
+      exam's Scenario 5 false-positive question.)
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.1 Design prompts with explicit criteria to improve precision and reduce false positives"
+    scenario: 5
+
+  - id: "ccaf-s5-6.4-practice-003"
+    stem: >-
+      Two CI workflows make real-time Claude calls: a blocking pre-merge check developers wait
+      on, and an overnight technical-debt report. To cut costs, which move is correct?
+    options:
+      A: "Move only the overnight report to the Message Batches API (50% cheaper, up-to-24-hour window); keep the pre-merge check synchronous."
+      B: "Move both to the Batches API with status polling, since the savings apply everywhere."
+      C: "Move both to batch with a real-time fallback if a batch runs long."
+      D: "Keep both synchronous to avoid batch result-ordering problems."
+    correct: "A"
+    explanation: >-
+      Batch suits the latency-tolerant overnight report but not the blocking pre-merge check,
+      which can't accept a 24-hour, no-SLA window. B ignores that a blocking check has a latency
+      requirement batch can't meet. C adds complexity and still can't guarantee the check
+      finishes in time. D rests on a misconception — batch results correlate by custom_id, so
+      ordering is never the problem.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.5 Design efficient batch processing strategies"
+    scenario: 5

@@ -1,0 +1,26 @@
+chapter: "5.5"
+criteria:
+  - id: scope-precedence
+    description: >
+      resolve_server returns the config from the highest-precedence scope
+      (local > project > user) that defines the name, and None when undefined.
+    weight: 25
+    check: code_review
+  - id: env-expansion
+    description: >
+      expand_env expands ${VAR} from env and ${VAR:-default} to the default when
+      unset, leaving non-placeholder text unchanged, and raises KeyError for a
+      required ${VAR} that is missing.
+    weight: 30
+    check: code_review
+  - id: tests-pass
+    description: The provided pytest suite passes.
+    weight: 25
+    check: bash_execution
+    command: pytest -q
+  - id: no-cross-scope-merge
+    description: >
+      resolve_server must NOT merge fields across scopes — the winning scope's
+      config is returned whole, not combined with lower-precedence definitions.
+    weight: 20
+    check: anti_pattern

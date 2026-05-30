@@ -1,0 +1,60 @@
+chapter: "5.3"
+questions:
+  - id: "ccaf-d3-3.2-practice-001"
+    stem: >-
+      You author a /deploy skill that pushes to production. You want it reusable but
+      you must control timing — Claude should never run it on its own judgment. What
+      do you set?
+    options:
+      A: "disable-model-invocation: true in the SKILL.md frontmatter."
+      B: "user-invocable: false in the SKILL.md frontmatter."
+      C: "Nothing — Claude never runs skills automatically."
+      D: "Move the deploy steps into CLAUDE.md so they load every session."
+    correct: "A"
+    explanation: >-
+      disable-model-invocation: true makes the skill user-invocable only, so Claude
+      cannot trigger it automatically — exactly the recommendation for side-effecting
+      workflows like /deploy. B is backwards: user-invocable: false makes it
+      Claude-only, the opposite of what you want. C is false: by default Claude can
+      auto-invoke skills based on their description. D bloats every session and still
+      doesn't give you a controlled /deploy trigger.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.2 Create and configure custom slash commands and skills"
+  - id: "ccaf-d3-3.2-practice-002"
+    stem: >-
+      What does the `description` field in a SKILL.md primarily control?
+    options:
+      A: "How Claude decides when to load the skill automatically (and what shows in listings)."
+      B: "The /command name the user types to invoke it."
+      C: "Which tools the skill may use without a permission prompt."
+      D: "The order skills load at session start."
+    correct: "A"
+    explanation: >-
+      The description is what Claude uses to decide when a model-invokable skill is
+      relevant, and it's the part always kept in context. B is wrong: the command
+      name comes from the skill's directory (or file) name, not description. C is the
+      allowed-tools field. D is invented — skill bodies load on demand, not in a
+      description-driven order.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.2 Create and configure custom slash commands and skills"
+  - id: "ccaf-d3-3.2-practice-003"
+    stem: >-
+      You have a multi-step PR-review procedure you only need occasionally. Where
+      should it live to avoid bloating every session's context?
+    options:
+      A: "In a skill (SKILL.md), whose body loads only when invoked."
+      B: "In the root CLAUDE.md so it's always available."
+      C: "In a path-scoped rule under .claude/rules/."
+      D: "As a PreToolUse hook."
+    correct: "A"
+    explanation: >-
+      A skill's body loads only when used, so occasional procedures belong there
+      rather than in CLAUDE.md, which loads in full every session (B, the bloat to
+      avoid). C is for path-conditional standing conventions, not an on-demand
+      procedure. D is for deterministic enforcement at tool-call time, not a review
+      workflow you invoke.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.2 Create and configure custom slash commands and skills"

@@ -1,0 +1,64 @@
+# Per-lesson practice questions for chapter 6.2 (Batch processing strategies).
+chapter: "6.2"
+questions:
+  - id: "ccaf-d4-4.5-practice-001"
+    stem: >-
+      Two workflows currently use real-time API calls: (1) a blocking pre-merge check
+      developers wait on before merging, and (2) an overnight technical-debt report. A manager
+      wants both moved to the Message Batches API for the 50% savings. What's the right call?
+    options:
+      A: "Move only the overnight report to batch; keep the pre-merge check synchronous, because batch has no latency guarantee (up to a 24-hour window)."
+      B: "Move both to batch with status polling; the savings apply to every workload."
+      C: "Move both to batch with a timeout fallback to real-time if a batch runs long."
+      D: "Keep both synchronous to avoid batch result-ordering problems."
+    correct: "A"
+    explanation: >-
+      Batch fits latency-tolerant work (the overnight report) but not blocking work (the
+      pre-merge check), which can't accept 'done within 24 hours, no SLA.' B ignores that a
+      blocking check has a latency requirement batch can't meet. C adds complexity and still
+      can't guarantee the pre-merge check finishes in time — the fallback fires unpredictably.
+      D is based on a misconception: batch results are correlated by custom_id, so ordering is
+      never a problem.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.5 Design efficient batch processing strategies"
+
+  - id: "ccaf-d4-4.5-practice-002"
+    stem: >-
+      A 50,000-document batch finishes with 300 requests in an 'errored' or 'expired' state.
+      How should you handle the failures most efficiently?
+    options:
+      A: "Resubmit only the 300 failed requests, identified by their custom_id, applying fixes such as chunking documents that exceeded the context limit."
+      B: "Resubmit the entire 50,000-document batch so nothing is missed."
+      C: "Switch the whole job to synchronous calls and re-run all 50,000 one at a time."
+      D: "Treat 'expired' as success, since expired requests aren't billed, and ignore them."
+    correct: "A"
+    explanation: >-
+      You resubmit only what failed — identified by custom_id — often with a modification like
+      chunking oversized documents. B re-runs 49,700 already-succeeded requests, paying again
+      (even at half price) to redo finished work. C abandons the cost savings entirely and is
+      far slower. D confuses 'not billed' with 'done': an expired request never produced a
+      result, so the document still needs processing.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.5 Design efficient batch processing strategies"
+
+  - id: "ccaf-d4-4.5-practice-003"
+    stem: >-
+      You must guarantee a 30-hour end-to-end SLA for incoming documents, and the Message
+      Batches API processes within a 24-hour window. How do you size submissions?
+    options:
+      A: "Submit batches on a 4-hour cadence, so a document waits at most ~4 hours to be included plus up to 24 to process — comfortably under 30."
+      B: "Submit one batch per day; most batches finish in under an hour anyway."
+      C: "Submit each document the instant it arrives and rely on typical sub-hour completion to stay under 30 hours."
+      D: "Submit batches every 28 hours, since 24 + a small buffer still beats 30."
+    correct: "A"
+    explanation: >-
+      You budget around the 24-hour worst case: a ~4-hour submission cadence plus up to 24
+      hours processing stays under 30. B can leave a document waiting ~24 hours before
+      submission plus up to 24 processing — well over 30. C plans around the average ('usually
+      under an hour'), but there is no SLA, so the worst case can blow the budget. D already
+      exceeds 30 hours before any processing time is counted.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.5 Design efficient batch processing strategies"

@@ -1,0 +1,59 @@
+chapter: "5.7"
+questions:
+  - id: "ccaf-d3-3.6-practice-001"
+    stem: >-
+      In a GitHub Actions workflow using anthropics/claude-code-action, how should
+      the Claude API key be supplied?
+    options:
+      A: "anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }} — stored as a repository secret, never in the file."
+      B: "Paste the key literally into the workflow YAML so the action can read it."
+      C: "Commit the key to a .env file in the repo and source it in the step."
+      D: "Hard-code it in CLAUDE.md so Claude can authenticate itself."
+    correct: "A"
+    explanation: >-
+      API keys must live in GitHub Secrets and be referenced as
+      ${{ secrets.ANTHROPIC_API_KEY }} — never committed. B and C both put the secret
+      in version control, leaking it to anyone with repo access (and to forks). D
+      misunderstands CLAUDE.md (context, not a credential store) and still commits the
+      secret. Enterprises can instead use OIDC to Bedrock/Vertex for rotating creds.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.6 Integrate Claude Code into CI/CD pipelines"
+  - id: "ccaf-d3-3.6-practice-002"
+    stem: >-
+      You're running `claude -p` unattended in CI to apply automated fixes. How
+      should you handle permissions?
+    options:
+      A: "Scope tools with --allowedTools (or use --permission-mode dontAsk) so only pre-approved actions run."
+      B: "Use --dangerously-skip-permissions so nothing ever blocks the run."
+      C: "Rely on the interactive permission prompts to approve each action."
+      D: "Grant blanket Bash access so the job never fails on a missing permission."
+    correct: "A"
+    explanation: >-
+      Unattended runs have no human to approve, so you pre-authorize exactly what's
+      needed with --allowedTools, or deny-by-default with dontAsk. B removes all
+      safety checks in an automated context — the opposite of least privilege. C can't
+      work: -p is non-interactive, so there are no prompts to answer (repeated blocks
+      just abort). D is unbounded and lets the run do anything.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.6 Integrate Claude Code into CI/CD pipelines"
+  - id: "ccaf-d3-3.6-practice-003"
+    stem: >-
+      You need to pipe a build log into Claude in a script and parse the result
+      programmatically. Which invocation fits?
+    options:
+      A: "cat build.log | claude -p \"explain the root cause\" --output-format json, then parse with jq."
+      B: "Open an interactive `claude` session and copy the answer out by hand."
+      C: "claude -p \"explain\" and screen-scrape the colored terminal output."
+      D: "Use the GitHub Action @claude mention from inside the shell script."
+    correct: "A"
+    explanation: >-
+      Headless mode reads stdin and, with --output-format json, returns a structured
+      payload you can parse with jq — exactly the scripted pattern. B is manual, not
+      automatable. C relies on fragile text scraping instead of the JSON format built
+      for this. D mixes surfaces: @claude mentions are a GitHub-event trigger, not a
+      shell-script invocation.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.6 Integrate Claude Code into CI/CD pipelines"

@@ -1,0 +1,28 @@
+chapter: "5.2"
+criteria:
+  - id: glob-segment-semantics
+    description: >
+      glob_match treats '*' as matching within a single path segment (never
+      crossing '/') and '**' as matching zero or more whole segments, anchored to
+      the full path (e.g. "*.md" matches "README.md" but not "docs/README.md").
+    weight: 30
+    check: code_review
+  - id: conditional-activation
+    description: >
+      active_rules returns unconditional rules (no paths) for every file, and a
+      path-scoped rule only when one of its globs matches the file; results
+      preserve input order.
+    weight: 25
+    check: code_review
+  - id: tests-pass
+    description: The provided pytest suite passes.
+    weight: 25
+    check: bash_execution
+    command: pytest -q
+  - id: no-overbroad-leak
+    description: >
+      glob_match must NOT let a pattern leak across segment boundaries — e.g.
+      "*.md" must not match "docs/README.md", and "migrations/**" must not match
+      "app/migrations.py".
+    weight: 20
+    check: anti_pattern

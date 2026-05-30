@@ -1,0 +1,27 @@
+chapter: "7.6"
+criteria:
+  - id: provenance_required
+    description: "Every emitted item carries a non-empty 'provenance' list of {source_id, title}, with the title looked up from the sources map"
+    weight: 22
+    check: code_review
+  - id: conflict_annotated
+    description: "When claims for a topic conflict, the non-winning claims are kept in 'conflicts' with source_id, title, timestamp, and a non-empty annotation explaining the resolution"
+    weight: 20
+    check: code_review
+  - id: temporal
+    description: "'resolved' is the statement of the claim with the newest timestamp for that topic"
+    weight: 16
+    check: code_review
+  - id: coverage_gaps
+    description: "required_topics with no supporting claim are returned in 'coverage_gaps'; when required_topics is omitted, coverage_gaps is an empty list"
+    weight: 12
+    check: code_review
+  - id: anti_unsourced
+    description: "Does NOT emit any claim without a source mapping (a claim whose source_id is not in sources is dropped, not emitted unsourced) AND does NOT silently drop a conflicting source (losers are kept in conflicts)"
+    weight: 15
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_synthesis.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_synthesis.py -v"

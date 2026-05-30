@@ -37,6 +37,10 @@ The single most important rule comes from the custom-tools guide, which contrast
 So a tool handler must **catch its own exceptions and return them as error results** — an uncaught throw takes down the run. The docs' example wraps the work in `try/except` and, on failure, returns a result with `is_error: True` rather than letting the exception escape:
 
 ```python
+import json
+import httpx
+from claude_agent_sdk import tool
+
 @tool("fetch_data", "Fetch data from an API", {"endpoint": str})
 async def fetch_data(args):
     try:

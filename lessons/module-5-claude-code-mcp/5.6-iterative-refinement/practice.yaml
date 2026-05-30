@@ -1,0 +1,59 @@
+chapter: "5.6"
+questions:
+  - id: "ccaf-d3-3.5-practice-001"
+    stem: >-
+      You want Claude to refine an implementation without you reviewing every
+      intermediate attempt. What is the most effective single technique?
+    options:
+      A: "Give Claude a check it can run (tests, build, or a screenshot diff) and tell it to iterate until the check passes."
+      B: "Tell Claude to try three times and pick the best result."
+      C: "Ask Claude to be more careful and double-check its own work."
+      D: "Increase the model's temperature so it explores more solutions."
+    correct: "A"
+    explanation: >-
+      A verifiable pass/fail check closes the loop on its own — Claude does the work,
+      runs the check, reads the result, and iterates until it passes, so you aren't
+      the verification loop. B fixes the count, not the outcome; the result may still
+      be wrong. C is vague self-review with no objective signal. D is unrelated to
+      refinement and not a documented technique.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.5 Apply iterative refinement techniques for progressive improvement"
+  - id: "ccaf-d3-3.5-practice-002"
+    stem: >-
+      You've corrected Claude three times on the same issue in one session and it's
+      still wrong. What's the recommended move?
+    options:
+      A: "Run /clear and restart with a sharper prompt that incorporates what you learned."
+      B: "Keep correcting in the same session until it gets it right."
+      C: "Switch to a different model mid-session."
+      D: "Add more rules to CLAUDE.md describing the bug."
+    correct: "A"
+    explanation: >-
+      After more than two corrections the context is cluttered with failed
+      approaches that actively cause mistakes; a clean session plus a better prompt
+      almost always beats another correction. B piles onto the polluted context. C
+      doesn't address the cluttered context. D bloats every future session for a
+      one-off bug and still doesn't clear the current mess.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.5 Apply iterative refinement techniques for progressive improvement"
+  - id: "ccaf-d3-3.5-practice-003"
+    stem: >-
+      Claude starts going down the wrong path mid-task. What's the fastest way to
+      redirect without losing useful context?
+    options:
+      A: "Press Esc to stop it mid-action — context is preserved — then redirect."
+      B: "Close the terminal and start over from scratch."
+      C: "Wait for it to finish, then explain everything that was wrong."
+      D: "Run /clear immediately to wipe the session."
+    correct: "A"
+    explanation: >-
+      Esc stops Claude mid-action while preserving context, so you can correct course
+      immediately — the tight feedback loop the docs recommend. B throws away all
+      context unnecessarily. C wastes a whole turn going further off track before you
+      intervene. D is for unrelated tasks or a polluted session, not a single
+      mid-task redirect where the context is still useful.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.5 Apply iterative refinement techniques for progressive improvement"

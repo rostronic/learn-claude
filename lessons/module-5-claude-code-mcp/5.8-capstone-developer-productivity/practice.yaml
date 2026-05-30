@@ -1,0 +1,65 @@
+chapter: "5.8"
+questions:
+  - id: "ccaf-s4-practice-001"
+    stem: >-
+      The platform team needs Python files to follow ruff/type-hint conventions and
+      frontend files to follow Prettier rules, without loading both rule sets into
+      every session across the monorepo. What should they do?
+    options:
+      A: "Put each rule set in a .claude/rules/ file with a paths glob (e.g. paths: [\"**/*.py\"]) so it loads only for matching files."
+      B: "Put both rule sets in the root CLAUDE.md so they're always available."
+      C: "Create a PreToolUse hook that injects the right rules before each edit."
+      D: "Ask engineers to paste the relevant conventions into chat each session."
+    correct: "A"
+    explanation: >-
+      Path-scoped rules load only when Claude works with matching files — exactly the
+      conditional, context-saving mechanism. B loads everything every session, the
+      bloat they're avoiding. C misuses hooks (enforcement, not advisory context
+      delivery) and is far more complex than needed. D defeats the point of shared,
+      automatic conventions.
+    exam: "CCAF"
+    domain: "scenario"
+    scenario: 4
+    task_statement: "Scenario 4: Developer Productivity with Claude"
+  - id: "ccaf-s4-practice-002"
+    stem: >-
+      The team wants a /deploy command everyone can run, but Claude must never
+      trigger a production deploy on its own. And generated proto/ code must never be
+      edited by Claude under any circumstances. Which pair is correct?
+    options:
+      A: "/deploy as a skill with disable-model-invocation: true; a PreToolUse hook (exit 2 / deny) blocking edits under proto/."
+      B: "/deploy as a normal skill; a CLAUDE.md line saying 'never edit proto/'."
+      C: "/deploy as a skill with user-invocable: false; proto/ protection via a path-scoped rule."
+      D: "/deploy triggered automatically when tests pass; proto/ files set read-only on disk."
+    correct: "A"
+    explanation: >-
+      disable-model-invocation makes /deploy user-only (Claude can't fire it), and a
+      blocking PreToolUse hook deterministically prevents proto/ edits — both are the
+      prescribed mechanisms. B leaves the deploy model-invocable and makes the proto
+      rule merely advisory. C inverts the deploy flag (user-invocable: false would
+      hide it from users) and uses a rule (context, not enforcement) for a must-hold
+      rule. D auto-deploys (the exact danger) and relies on a filesystem side effect.
+    exam: "CCAF"
+    domain: "scenario"
+    scenario: 4
+    task_statement: "Scenario 4: Developer Productivity with Claude"
+  - id: "ccaf-s4-practice-003"
+    stem: >-
+      The team adds CI that auto-reviews every PR with claude-code-action, plus a
+      shared MCP server for the analytics database. Which setup is correct?
+    options:
+      A: "CI authenticates via ${{ secrets.ANTHROPIC_API_KEY }} with scoped tools; the MCP server is project-scoped with the DSN supplied by ${ANALYTICS_DSN} and a read-only credential."
+      B: "Paste the API key into the workflow YAML and hard-code the DSN in .mcp.json so everything works out of the box."
+      C: "Give the CI run bypassPermissions so it never blocks, and grant the DB credential full read/write."
+      D: "Keep both the key and the DSN in CLAUDE.md so Claude can read them when needed."
+    correct: "A"
+    explanation: >-
+      Secrets belong in CI secret storage (never literals), unattended runs need
+      scoped permissions, and a shared DB server is project-scoped with the secret
+      kept out of the committed file and a least-privilege (read-only) credential. B
+      commits two secrets to version control. C removes all CI safety and over-grants
+      the DB credential. D misuses CLAUDE.md as a secret store and still leaks both.
+    exam: "CCAF"
+    domain: "scenario"
+    scenario: 4
+    task_statement: "Scenario 4: Developer Productivity with Claude"

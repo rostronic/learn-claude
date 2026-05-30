@@ -1,0 +1,65 @@
+# Per-lesson practice questions for chapter 6.3 (Multi-instance & multi-pass review).
+chapter: "6.3"
+questions:
+  - id: "ccaf-d4-4.6-practice-001"
+    stem: >-
+      Claude generates a module and you want a quality check on it before merging. Which
+      architecture most reliably catches subtle bugs in the generated code?
+    options:
+      A: "Send the code to a second, independent Claude instance with no generation context, and have it review."
+      B: "Ask the same conversation that wrote the code to review its own output for bugs."
+      C: "Re-run the original generation with extended thinking enabled so it reasons harder about its own code."
+      D: "Add a system-prompt instruction telling the generator to double-check its work before finishing."
+    correct: "A"
+    explanation: >-
+      An independent instance has no prior reasoning context, so it will question decisions the
+      generator already convinced itself were correct — the prescribed approach, and more
+      effective than self-review or extended thinking. B is self-review in the same session:
+      it retains the generation bias and is least likely to find its own flaw. C adds thinking
+      inside the same biased context, which the guide ranks below an independent instance. D is
+      still self-review — a prompt instruction doesn't shed the reasoning that hid the bug.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.6 Design multi-instance and multi-pass review architectures"
+
+  - id: "ccaf-d4-4.6-practice-002"
+    stem: >-
+      A single-pass review of a 14-file pull request gives detailed feedback on some files,
+      superficial comments on others, and even contradicts itself — flagging a pattern in one
+      file while approving identical code in another. How should you restructure it?
+    options:
+      A: "Run a focused pass on each file for local issues, then a separate integration pass over all files for cross-file data flow."
+      B: "Switch to a higher-tier model with a larger context window so all 14 files fit comfortably in one pass."
+      C: "Require developers to split the PR into 3-4 file submissions before the automated review runs."
+      D: "Run the same full-PR review three times and keep only findings that appear in at least two runs."
+    correct: "A"
+    explanation: >-
+      The symptom is attention dilution from reviewing too much at once; splitting into per-file
+      passes plus an integration pass fixes it directly. B misdiagnoses the cause — the files
+      already fit; a bigger window doesn't focus attention. C offloads the tool's limitation
+      onto developers instead of restructuring the analysis. D just repeats the same diluted
+      single pass at triple the cost without addressing why any single pass is inconsistent.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.6 Design multi-instance and multi-pass review architectures"
+
+  - id: "ccaf-d4-4.6-practice-003"
+    stem: >-
+      You want most review findings to act automatically but uncertain ones to reach a human.
+      What's an effective way to route them?
+    options:
+      A: "Have each review pass self-report a confidence score per finding, then auto-apply high-confidence findings and send low-confidence ones to human review."
+      B: "Auto-apply every finding; reviewers can revert anything that turns out to be wrong."
+      C: "Send every finding to a human, since the model can't be trusted to judge its own certainty at all."
+      D: "Route findings randomly to humans at a fixed sampling rate regardless of the finding."
+    correct: "A"
+    explanation: >-
+      Self-reported confidence alongside each finding enables calibrated routing — high
+      confidence acts automatically, low confidence escalates. B removes the human gate
+      entirely, so wrong high-stakes findings ship before anyone checks. C discards the
+      calibration signal and floods humans with findings the model was sure about. D ignores
+      the finding's own confidence, so it sends easy findings to humans and risky ones to
+      automation at random.
+    exam: "CCAF"
+    domain: 4
+    task_statement: "4.6 Design multi-instance and multi-pass review architectures"

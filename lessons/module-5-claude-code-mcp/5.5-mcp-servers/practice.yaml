@@ -1,0 +1,59 @@
+chapter: "5.5"
+questions:
+  - id: "ccaf-d2-2.4-practice-001"
+    stem: >-
+      You want your whole team to get the same MCP server when they check out the
+      repo, and the server needs a database DSN that must not be committed. How do
+      you set it up?
+    options:
+      A: "Add it at project scope (checked-in .mcp.json) and reference the DSN via ${ANALYTICS_DSN} env-var expansion."
+      B: "Add it at project scope and paste the DSN directly into .mcp.json so it works for everyone."
+      C: "Add it at local scope so each teammate runs `claude mcp add` themselves."
+      D: "Add it at user scope so it loads in all your projects."
+    correct: "A"
+    explanation: >-
+      Project scope writes a shared .mcp.json so the whole team gets the server, and
+      env-var expansion keeps the secret out of version control (a missing required
+      var fails to parse rather than connecting blank). B leaks the DSN to everyone
+      with repo access. C isn't shared via the repo at all (local scope is private).
+      D loads in all YOUR projects but isn't shared with the team either.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.4 Integrate MCP servers into Claude Code and agent workflows"
+  - id: "ccaf-d2-2.4-practice-002"
+    stem: >-
+      A teammate adds a third-party MCP server that fetches web pages and external
+      tickets. What is the most important integration concern?
+    options:
+      A: "Trust and prompt-injection risk — verify the server and treat its external content as untrusted, with least-privilege credentials."
+      B: "Whether it uses SSE or WebSocket transport."
+      C: "That MCP tool output might exceed the token warning threshold."
+      D: "That it will slow session startup because all tools load upfront."
+    correct: "A"
+    explanation: >-
+      Servers that fetch external content are a prompt-injection surface, so trust
+      and least privilege are the primary concern (project-scoped servers even
+      require approval before use). B is a minor detail. C is a real warning but not
+      the security issue at stake. D is wrong: MCP tools are deferred via tool search
+      by default, so they don't bloat startup.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.4 Integrate MCP servers into Claude Code and agent workflows"
+  - id: "ccaf-d2-2.4-practice-003"
+    stem: >-
+      The same server name is defined at local, project, and user scope with
+      different URLs. Which definition does Claude Code use?
+    options:
+      A: "The local-scope definition, used whole — scopes are not merged."
+      B: "A merge of all three, with user scope filling in missing fields."
+      C: "The user-scope definition, since it is broadest."
+      D: "It errors on the duplicate and refuses to connect."
+    correct: "A"
+    explanation: >-
+      Precedence is local > project > user, and Claude Code uses the highest-
+      precedence definition whole — fields are not merged across scopes. B describes
+      merging, which the docs explicitly rule out. C inverts the precedence. D is
+      wrong: duplicates are resolved by precedence, not treated as an error.
+    exam: "CCAF"
+    domain: 2
+    task_statement: "2.4 Integrate MCP servers into Claude Code and agent workflows"

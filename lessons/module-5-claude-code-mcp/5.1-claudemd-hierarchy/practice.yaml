@@ -1,0 +1,58 @@
+chapter: "5.1"
+questions:
+  - id: "ccaf-d3-3.1-practice-001"
+    stem: >-
+      You launch Claude Code from frontend/ in a repo that has a root CLAUDE.md and
+      a frontend/CLAUDE.md. Which memory applies?
+    options:
+      A: "Only the root CLAUDE.md, because it is the project root."
+      B: "Only frontend/CLAUDE.md, because it is closest to the working directory."
+      C: "Both — files are concatenated root-down, so the root provides project-wide context and frontend/CLAUDE.md layers on top (read last)."
+      D: "Neither, unless you pass a --memory flag."
+    correct: "C"
+    explanation: >-
+      CLAUDE.md files compose: Claude Code walks up the tree and concatenates every
+      file it finds rather than overriding, ordered root-down so the nearest file is
+      read last. So the root is not ignored (A wrong) and the subdirectory file is
+      not the only one (B wrong) — they layer. D invents a flag that does not exist.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.1 Configure CLAUDE.md files with appropriate hierarchy, scoping, and modular organization"
+  - id: "ccaf-d3-3.1-practice-002"
+    stem: >-
+      You want "always write conventional-commit messages and be terse" to apply to
+      you on every repo, without imposing it on teammates. Where does it go?
+    options:
+      A: "The project's committed ./CLAUDE.md."
+      B: "User memory at ~/.claude/CLAUDE.md."
+      C: "Managed policy memory."
+      D: "A ./CLAUDE.local.md committed to the repo."
+    correct: "B"
+    explanation: >-
+      Personal preferences that follow YOU across all projects belong in user memory
+      (~/.claude/CLAUDE.md). Putting them in the committed project file (A) forces
+      your taste on the team. Managed policy (C) is org-wide, not personal. D is
+      self-contradictory: CLAUDE.local.md is meant to be gitignored, so committing it
+      defeats its purpose (and it is project-specific, not cross-project).
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.1 Configure CLAUDE.md files with appropriate hierarchy, scoping, and modular organization"
+  - id: "ccaf-d3-3.1-practice-003"
+    stem: >-
+      Your root CLAUDE.md has grown past 200 lines and Claude is starting to ignore
+      rules buried in it. Which change actually reduces the per-session context cost?
+    options:
+      A: "Split the file into several @path imports of the same content."
+      B: "Move path-specific guidance into .claude/rules/ with a paths field (and procedures into skills) so it loads only when relevant."
+      C: "Rename it to CLAUDE.local.md so it stops loading."
+      D: "Wrap the long sections in markdown code blocks."
+    correct: "B"
+    explanation: >-
+      Path-scoped rules (and skills) load only when relevant, genuinely cutting
+      startup context. A is wrong because imported files still load in full at launch
+      — imports organize but do not shrink context. C is wrong: CLAUDE.local.md still
+      loads (it's just personal/local), and renaming would also un-share it from the
+      team. D changes nothing about loading and would just break the instructions.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.1 Configure CLAUDE.md files with appropriate hierarchy, scoping, and modular organization"

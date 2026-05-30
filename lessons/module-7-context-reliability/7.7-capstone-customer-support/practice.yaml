@@ -1,0 +1,75 @@
+# Per-lesson practice questions for chapter 7.7
+# (Capstone — Customer Support Resolution Agent, CCA-F Scenario 1).
+# Scenario-tagged drills spanning the five decisions the capstone ties together.
+chapter: "7.7"
+questions:
+  - id: "ccaf-s1-practice-001"
+    stem: >-
+      A customer support agent investigates a ticket across order-lookup, payment, and
+      shipping tools. Its closing replies vary ("Anything else I can help with?", "All set!",
+      "You're refunded — take care."), and it often narrates ("Let me check the carrier…")
+      in the same turn it requests a tool. How should the investigation loop decide it is
+      finished and may emit its resolution?
+    options:
+      A: "Terminate when response.stop_reason == \"end_turn\"; keep a max_turns cap only as a runaway guard."
+      B: "Maintain a list of closing phrases and stop when the assistant's text matches one of them."
+      C: "Stop after a fixed number of turns (e.g. 6), since a support investigation rarely needs more."
+      D: "Stop as soon as a turn contains a text block, since narration means the agent has answered."
+    correct: "A"
+    explanation: >-
+      stop_reason is the protocol-level termination signal; the loop continues on "tool_use"
+      and exits on "end_turn", with the cap as a pure safety net. B parses natural language —
+      the agent phrases closings unpredictably and the list will both miss and false-fire. C
+      makes a turn count the primary signal, declaring victory mid-investigation when a ticket
+      needs more turns. D is the classic error: text and tool_use blocks co-occur in one turn,
+      so the presence of text is not the absence of pending work.
+    exam: "CCAF"
+    domain: scenario
+    task_statement: "1.1 Design and implement agentic loops for autonomous task execution"
+    scenario: 1
+
+  - id: "ccaf-s1-practice-002"
+    stem: >-
+      Company policy: the support agent may auto-approve refunds up to $200, but any refund
+      above $200 requires human approval, and the policy must hold for every ticket and be
+      provable in an audit. How should this limit be enforced?
+    options:
+      A: "A deterministic code gate the proposed refund passes through, returning 'escalate' when amount_usd > 200 before any money moves."
+      B: "A clear system-prompt instruction telling the model never to issue a refund over $200 without approval."
+      C: "A few-shot set of examples in the prompt showing the agent escalating large refunds."
+      D: "A post-hoc check where the same agent re-reads its own decision and confirms it stayed under the limit."
+    correct: "A"
+    explanation: >-
+      A deterministic business rule requires programmatic enforcement: the gate intercepts the
+      proposed action in code, so the limit holds every time and is auditable. B relies on a
+      prompt instruction, which the model follows only most of the time — not a control you can
+      prove. C is the same prompt-only weakness dressed as examples; behaviour still isn't
+      guaranteed. D is self-review, which is weaker than an independent or programmatic check
+      and still leaves enforcement to the model that may have erred.
+    exam: "CCAF"
+    domain: scenario
+    task_statement: "5.2 Design effective escalation and ambiguity resolution patterns"
+    scenario: 1
+
+  - id: "ccaf-s1-practice-003"
+    stem: >-
+      The agent passed the action gate (a $15 refund, well under the limit), but it grounded
+      "the order shipped" only on an inference, not a carrier record, so its confidence that
+      the customer is even eligible is low. How should the agent handle this field?
+    options:
+      A: "Route the low-confidence eligibility field to a human, using a threshold calibrated to the high cost of refunding an ineligible customer."
+      B: "Proceed with the refund — it cleared the $200 action gate, which is the only control that matters."
+      C: "Apply one global confidence threshold (say 0.7) uniformly across every field, including refund eligibility."
+      D: "Have the same agent re-rate its own confidence; if the second pass clears 0.7, proceed automatically."
+    correct: "A"
+    explanation: >-
+      Confidence-based handoff is a separate axis from the action gate: a low-confidence,
+      high-cost field goes to a human, with the threshold tied to the cost of being wrong. B
+      conflates the two controls — clearing the amount gate says nothing about whether the
+      claim is grounded. C uses one global cutoff, which under-protects expensive fields like
+      eligibility and over-escalates cheap ones. D is self-review, which is weaker than an
+      independent human check for a high-stakes field.
+    exam: "CCAF"
+    domain: scenario
+    task_statement: "5.5 Design human review workflows and confidence calibration"
+    scenario: 1

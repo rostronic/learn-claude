@@ -1,0 +1,79 @@
+# Per-lesson practice questions for chapter 7.4
+# (Error propagation across multi-agent systems). Topic-only drills.
+chapter: "7.4"
+questions:
+  - id: "ccaf-d5-5.3-practice-001"
+    stem: >-
+      A retrieval subagent in your coordinator pipeline hits an unrecoverable
+      error. The wrapper catches it and returns None, which the coordinator
+      threads into the next stage as that subagent's "result." The final answer
+      comes back confidently wrong, and you cannot tell which subagent caused
+      it. What is the correct way to propagate this failure?
+    options:
+      A: "Return a structured error object carrying the failing subagent's name (provenance) and an instructive message, and stop threading the missing value forward."
+      B: "Keep returning None on failure, but add a comment so future readers know None can mean failure."
+      C: "Return an empty dict {} so the next stage still receives a value of the expected shape."
+      D: "Log the exception to a file and continue with None, since the log preserves the failure for later debugging."
+    correct: "A"
+    explanation: >-
+      Because only a subagent's final message returns to the parent, a failure
+      must be surfaced explicitly as a structured, attributed error — who failed
+      and what went wrong — and the missing value must not be passed downstream.
+      B still returns a success-shaped None, so downstream stages consume a hole
+      as if it were data; the comment changes nothing. C is the same swallowing
+      bug dressed up: an empty dict is still a success-shaped value with no
+      provenance and no error. D logs but still threads None forward, so the
+      final answer is silently corrupted at runtime regardless of what the log
+      says — the failure must be in the value that crosses the boundary, not
+      only in a side file.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.3 Implement error propagation strategies across multi-agent systems"
+
+  - id: "ccaf-d5-5.3-practice-002"
+    stem: >-
+      A coordinator fans work out to five independent research subagents. One
+      subagent fails on a recoverable timeout. What is the prescribed way to
+      handle this so the system stays reliable?
+    options:
+      A: "Record the one subagent's failure as a contained, structured error and let the other four proceed, retrying the transient failure within its own branch."
+      B: "Re-raise the subagent's exception out of the coordinator so the entire run aborts and nothing returns partial results."
+      C: "Discard all five results and restart the whole pipeline from scratch whenever any single subagent fails."
+      D: "Suppress the failure entirely and return the four successful results as if all five had completed."
+    correct: "A"
+    explanation: >-
+      Subagent isolation is a blast-radius benefit: each runs in its own context,
+      so one failing branch can be contained while the others continue, and a
+      transient failure is retried in that branch. B throws away that isolation —
+      one expected, recoverable failure should not crash the whole system. C is
+      wasteful and also lets one transient failure destroy four good results.
+      D swallows the failure: returning four results as if they were five hides
+      that a capability is down and silently corrupts the final synthesis.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.3 Implement error propagation strategies across multi-agent systems"
+
+  - id: "ccaf-d5-5.3-practice-003"
+    stem: >-
+      A tool a subagent depends on is rate-limited. You return a tool_result
+      with is_error set to true. What should the error message contain so the
+      agent can actually recover?
+    options:
+      A: "An instructive message stating what went wrong and what to try next, e.g. \"Rate limit exceeded. Retry after 60 seconds.\""
+      B: "A generic \"Tool failed\" so the agent knows only that something went wrong."
+      C: "The full internal stack trace and nothing else, so the agent can parse the exception class."
+      D: "An empty string, since is_error: true already signals the failure on its own."
+    correct: "A"
+    explanation: >-
+      The guidance for tool errors is to write messages that include what went
+      wrong AND what to try next; the canonical example is "Rate limit exceeded.
+      Retry after 60 seconds." That tells the agent the failure class and the
+      next move, which is what makes the error recoverable. B is generic — it
+      conveys failure but no actionable next step, so the agent cannot choose to
+      wait and retry versus fall back. C dumps an internal trace the agent is not
+      meant to parse and omits the recovery instruction. D relies on is_error
+      alone, leaving the agent with no idea why it failed or what to do, which is
+      the opposite of an instructive message.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.3 Implement error propagation strategies across multi-agent systems"

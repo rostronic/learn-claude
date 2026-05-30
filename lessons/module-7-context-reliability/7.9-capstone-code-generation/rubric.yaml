@@ -1,0 +1,26 @@
+chapter: "7.9"
+criteria:
+  - id: search_first_design
+    description: "design.md's exploration strategy is search-first (find before read) AND delegates the deep exploration to a subagent, specifying the subagent's prompt and the findings it returns so the main context never holds the files it opened"
+    weight: 20
+    check: code_review
+  - id: plan_vs_direct
+    description: "design.md states a plan-mode-vs-direct decision criterion based on blast radius / reversibility and applies it — the high-risk part goes through plan mode (reviewed before edits hit disk); trivial well-scoped edits may go direct"
+    weight: 20
+    check: code_review
+  - id: claude_md
+    description: "design.md lists concrete CLAUDE.md conventions to encode (e.g. test/lint commands, layering/import rules, do-not-edit dirs) so generated code matches project norms without re-stating them each turn"
+    weight: 16
+    check: code_review
+  - id: context_mgmt
+    description: "design.md gives a large-repo context strategy that keeps the main window lean — names techniques such as search-over-read, subagent-delegated exploration, deliberate @-references, or scoping the working set"
+    weight: 14
+    check: code_review
+  - id: verification_loop
+    description: "design.md describes a generate -> run executable checks -> feed failures back -> correct -> re-run loop with an objective terminating condition (tests/build/lint green), not self-assessment"
+    weight: 15
+    check: code_review
+  - id: anti_dump_or_skip_plan
+    description: "design.md does NOT dump the whole codebase into context (no 'read every file first') AND does NOT skip plan mode for the high-risk change"
+    weight: 15
+    check: anti_pattern

@@ -1,0 +1,27 @@
+chapter: "6.2"
+criteria:
+  - id: routes_on_blocking
+    description: "choose_api returns 'sync' for blocking workflows and 'batch' for latency-tolerant ones"
+    weight: 20
+    check: code_review
+  - id: custom_id_correlation
+    description: "build_batch_requests sets each request's custom_id to the document's stable id and builds a valid params Messages payload (model, max_tokens >= 1, messages)"
+    weight: 20
+    check: code_review
+  - id: poll_until_ended_bounded
+    description: "poll_batch returns the batch when processing_status == 'ended' and raises TimeoutError after max_polls instead of looping forever"
+    weight: 20
+    check: code_review
+  - id: resubmit_only_failures
+    description: "resubmittable_ids returns only the custom_ids of errored/expired results"
+    weight: 10
+    check: code_review
+  - id: no_blocking_to_batch
+    description: "Does NOT route a blocking workflow (e.g. a pre-merge check) to the batch API, which has no latency guarantee"
+    weight: 15
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_batch_strategy.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_batch_strategy.py -v"

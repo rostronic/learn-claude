@@ -1,0 +1,79 @@
+# Per-lesson practice questions for chapter 7.1
+# (Managing conversation context across long interactions).
+# Topic-only drills that test this chapter's material.
+chapter: "7.1"
+questions:
+  - id: "ccaf-d5-5.1-practice-001"
+    stem: >-
+      You're building a multi-turn agent and want to compact the conversation
+      before it nears the context limit, but only when it's actually large
+      enough to matter. How should you decide, before sending a request, whether
+      the input will fit your token budget?
+    options:
+      A: "Call client.messages.count_tokens(...) with the same model/system/messages/tools to estimate input_tokens, and compact if the projected size is near your budget."
+      B: "Send the request and rely on the model to remember everything; if it forgets, the history must have been short enough."
+      C: "Count the characters in the messages and divide by 100 — token APIs are unreliable, so a rough character heuristic is safer."
+      D: "Send the request as-is every time and only react when the API returns model_context_window_exceeded."
+    correct: "A"
+    explanation: >-
+      count_tokens prices a request before you spend on it, returning an
+      estimate of input_tokens for the exact same shape you'd send, so you can
+      compact proactively. B hopes the model "remembers" rather than measuring,
+      which is exactly the failure mode the docs warn against. C invents an
+      unreliable heuristic when the official token-counting API exists for this
+      purpose. D is reactive: it discovers overflow only after the API rejects
+      the request with model_context_window_exceeded, mid-task.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.1 Manage conversation context to preserve critical information across long interactions"
+
+  - id: "ccaf-d5-5.1-practice-002"
+    stem: >-
+      A long support session is approaching the context limit. It opens with a
+      system prompt holding standing instructions and the customer's account ID.
+      How should you reduce the token footprint without losing critical
+      information?
+    options:
+      A: "Summarize the older middle turns into a concise summary placed right after the pinned system prompt, keeping the system prompt and the most recent turns verbatim."
+      B: "Keep only the last N messages (messages = messages[-N:]) so the conversation fits, discarding everything older."
+      C: "Summarize the whole conversation including the system prompt into one block to maximize the tokens reclaimed."
+      D: "Switch to the largest available context window so you never have to compact at all."
+    correct: "A"
+    explanation: >-
+      This is progressive summarization (the idea behind compaction): replace
+      stale content with a concise summary while pinning the system prompt and
+      the recent turns, with the summary at the high-attention head rather than
+      buried in the middle. B is naive truncation — it drops the system prompt
+      and the early account details, losing exactly the critical info 5.1 is
+      about preserving. C destroys the standing instructions by summarizing the
+      system prompt, which must be pinned. D ignores context rot: a fuller
+      window degrades the model's focus and recall, so a bigger ceiling is not a
+      substitute for managing context.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.1 Manage conversation context to preserve critical information across long interactions"
+
+  - id: "ccaf-d5-5.1-practice-003"
+    stem: >-
+      An agent works a task across several sessions, and compaction will discard
+      the raw turns where key decisions were recorded. How do you make sure a
+      later session can recover the critical state (progress, decisions, an open
+      checklist) even after those turns are gone?
+    options:
+      A: "Use the memory tool to write a progress log and checklist to files in /memories; each new session reads them to recover state and updates them before ending."
+      B: "Set keep_recent high enough that the old turns are never summarized away, so the raw history is always in context."
+      C: "Lower the compaction threshold so summarization never triggers and the full transcript is always retained."
+      D: "Paste the entire prior transcript back into the system prompt at the start of every new session."
+    correct: "A"
+    explanation: >-
+      The memory tool persists important information in /memories files outside
+      the context window, surviving compaction boundaries and whole sessions;
+      the multi-session pattern is exactly write-a-log/checklist then read-to-
+      recover. B and C both try to keep all raw turns in context, which guarantees
+      overflow and triggers context rot — the very problems context management
+      solves. D re-injects the full transcript every session, recreating the
+      accumulation problem and burning the budget on stale content that
+      compaction exists to remove.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.1 Manage conversation context to preserve critical information across long interactions"

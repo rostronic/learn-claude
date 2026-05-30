@@ -1,0 +1,27 @@
+chapter: "6.1"
+criteria:
+  - id: forces_extraction_tool
+    description: "Every client.messages.create call passes tool_choice forcing the named extraction tool (so corrections cannot escape as free text), and the extraction is read off the tool_use block's input"
+    weight: 15
+    check: code_review
+  - id: validates_and_returns_on_success
+    description: "Calls validate(data) each attempt and returns the extraction immediately when validate returns an empty list (the only success exit)"
+    weight: 20
+    check: code_review
+  - id: retry_includes_specific_errors
+    description: "On a failed validation, the retry appends a user/tool_result message containing the specific validation error strings (with is_error true) so the model can self-correct"
+    weight: 20
+    check: code_review
+  - id: bounded_and_raises
+    description: "The loop is capped at max_attempts and raises ExtractionFailed carrying the unresolved errors when the validator never passes"
+    weight: 15
+    check: code_review
+  - id: no_blind_retry
+    description: "Does NOT retry by resampling without feeding the specific validation errors back (no bare 'try again' / re-sending the same prompt with no critique)"
+    weight: 15
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_extraction_loop.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_extraction_loop.py -v"

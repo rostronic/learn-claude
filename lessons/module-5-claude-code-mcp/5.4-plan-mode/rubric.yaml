@@ -1,0 +1,27 @@
+chapter: "5.4"
+criteria:
+  - id: plan-triggers
+    description: >
+      should_use_plan_mode returns True when any documented trigger holds
+      (approach_uncertain, files_touched > 1, or unfamiliar_code) and False for a
+      clear-scope single-file familiar task.
+    weight: 35
+    check: code_review
+  - id: plan-mode-readonly
+    description: >
+      plan_mode_allows returns True for non-mutating actions and False for mutating
+      (edit/write) actions, reflecting that plan mode makes no edits.
+    weight: 25
+    check: code_review
+  - id: tests-pass
+    description: The provided pytest suite passes.
+    weight: 25
+    check: bash_execution
+    command: pytest -q
+  - id: no-over-planning
+    description: >
+      The decision must NOT return True (plan) for a one-sentence-diff task — a
+      clear-scope, single-file, familiar change — since plan mode adds overhead
+      there.
+    weight: 15
+    check: anti_pattern

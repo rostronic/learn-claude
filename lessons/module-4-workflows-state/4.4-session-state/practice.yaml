@@ -1,0 +1,69 @@
+# Per-lesson practice questions for chapter 4.4 (Session state, resumption, and forking).
+chapter: "4.4"
+questions:
+  - id: "ccaf-d1-1.7-practice-001"
+    stem: >-
+      A multi-user assistant runs many concurrent sessions in the same working
+      directory. To follow up on a particular user's earlier conversation, how
+      should you return to it?
+    options:
+      A: "Capture that session's session_id from its ResultMessage and pass resume=session_id."
+      B: "Use continue_conversation=True, which resumes the most recent session in the directory."
+      C: "Paste the prior conversation into a new prompt so the agent has the context."
+      D: "Start a fresh session — prior context isn't needed for a follow-up."
+    correct: "A"
+    explanation: >-
+      Resume by a captured session_id targets the specific conversation, which is
+      required when multiple sessions share a directory. B grabs whatever ran
+      most recently — likely the wrong user — so continue is only safe with one
+      conversation at a time. C re-feeds the transcript manually, wasting context
+      and losing fidelity (tool results, structure) that resume preserves. D
+      throws away the context the follow-up depends on.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.7 Manage session state, resumption, and forking"
+
+  - id: "ccaf-d1-1.7-practice-002"
+    stem: >-
+      You want to try an alternative approach on an existing session while keeping
+      the original thread intact to return to later. What does forking
+      (resume=session_id with fork_session=True) give you?
+    options:
+      A: "A new session with its own id that starts as a copy of the original's history; the original's id and history stay unchanged."
+      B: "The same session id, now continuing down the new direction in place."
+      C: "A snapshot of both the conversation and the filesystem that you can revert."
+      D: "A merge of the two directions into a single combined transcript."
+    correct: "A"
+    explanation: >-
+      Fork creates an independent new session (its own id) seeded with a copy of
+      the original's history, leaving the original untouched — two threads you can
+      resume separately. B describes in-place continuation, not a fork; a fork
+      does not reuse the id or mutate the original. C overreaches: forking
+      branches the conversation only, not the filesystem (that's file
+      checkpointing). D is wrong — forking diverges into a separate history, it
+      does not merge.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.7 Manage session state, resumption, and forking"
+
+  - id: "ccaf-d1-1.7-practice-003"
+    stem: >-
+      A CI job captures a session_id on one worker, then calls resume from a
+      different worker whose working directory differs, and gets an agent with no
+      prior context. Why?
+    options:
+      A: "Session files are keyed by an encoding of the absolute cwd; a resume from a different cwd looks in the wrong place and silently returns a fresh session."
+      B: "session_id values expire after a few seconds and must be refreshed."
+      C: "resume only works inside ClaudeSDKClient, never with the standalone query() function."
+      D: "Forking is required before a session can ever be resumed."
+    correct: "A"
+    explanation: >-
+      Sessions live at ~/.claude/projects/<encoded-cwd>/<session-id>.jsonl, so a
+      mismatched cwd (or host) makes the SDK look in the wrong directory and
+      quietly start a fresh session. Fixes: match the cwd / move the .jsonl, or
+      carry results forward as app state. B invents an expiry that doesn't exist.
+      C is false — resume is an option on query() too. D is unrelated — forking
+      is not a prerequisite for resuming.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.7 Manage session state, resumption, and forking"

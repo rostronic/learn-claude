@@ -1,0 +1,78 @@
+# Per-lesson practice questions for chapter 7.5
+# (Human review workflows and confidence calibration).
+# Topic-only drills that test this chapter's material.
+chapter: "7.5"
+questions:
+  - id: "ccaf-d5-5.5-practice-001"
+    stem: >-
+      A Claude pipeline extracts 30 fields per invoice, each with its own
+      confidence, and a human review budget covers a small fraction of the work.
+      One field (the tax ID) is frequently a low-confidence guess while the other
+      29 are reliably high-confidence. How should you route documents to human
+      review?
+    options:
+      A: "Route the individual fields whose confidence is below a threshold to review, and auto-accept the rest of the fields."
+      B: "Compute one document-level confidence (e.g. the average across all 30 fields) and review whole documents below a threshold."
+      C: "Review the whole document whenever any single field is low-confidence, re-checking all 30 fields each time."
+      D: "Skip routing entirely and have humans spot-check documents at random."
+    correct: "A"
+    explanation: >-
+      Field-level routing sends a reviewer only the shaky field (the tax ID) and
+      auto-accepts the 29 confident ones, which is the right granularity. B
+      averages the record to a single number; 29 confident fields drown out the
+      one bad field, so the document auto-accepts and the error ships. C catches
+      the error but wastes the reviewer re-checking 29 correct fields per
+      document. D abandons the confidence signal altogether and under-samples the
+      one field that actually needs eyes.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.5 Design human review workflows and confidence calibration"
+
+  - id: "ccaf-d5-5.5-practice-002"
+    stem: >-
+      You want to wire an auto-accept gate at "confidence >= 0.9" so anything
+      above it skips human review. Before trusting that threshold, what should you
+      do?
+    options:
+      A: "Calibrate against a labeled set: bucket predictions by confidence, measure the empirical accuracy per bucket, and read the gap between predicted and empirical."
+      B: "Trust the model's confidence directly — it was trained to estimate its own certainty, so 0.9 means 90% accurate."
+      C: "Raise the gate to 0.99 to be safe, without measuring what either threshold means empirically."
+      D: "Average all the confidences across the stream and accept everything above the mean."
+    correct: "A"
+    explanation: >-
+      Calibration against ground truth is the only way to learn what 0.9 actually
+      means: bucket the labeled predictions, compute empirical accuracy per
+      bucket, and the predicted-minus-empirical gap tells you whether the model is
+      over-confident in that band. B assumes calibration that usually doesn't
+      hold — models are frequently over-confident, so a 0.9 tag can be ~70%
+      accurate. C just moves an unmeasured threshold; without calibration you
+      still don't know what 0.99 buys you. D replaces a meaningful per-item signal
+      with a stream average, which says nothing about any individual prediction's
+      reliability.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.5 Design human review workflows and confidence calibration"
+
+  - id: "ccaf-d5-5.5-practice-003"
+    stem: >-
+      Your classifier handles three document types in production: invoices (60%),
+      receipts (30%), and contracts (10%, the highest-risk class). You sample 100
+      items per week for ongoing human QA. How should you draw the sample so the
+      high-risk class is reliably covered?
+    options:
+      A: "Stratify by document type and allocate the sample proportionally across strata, so contracts get their share every week."
+      B: "Sample 100 items uniformly at random from the combined stream."
+      C: "Sample only the lowest-confidence 100 items regardless of class."
+      D: "Sample 100 invoices, since invoices are the majority of the volume."
+    correct: "A"
+    explanation: >-
+      Stratified sampling partitions by class and allocates proportionally, so the
+      10% contract class is represented in every QA draw — coverage of the
+      rare, high-risk class is guaranteed. B (uniform random) expects ~10
+      contracts but routinely draws far fewer by chance, and the class you most
+      need to watch is the one you under-sample. C fixates on low confidence and
+      misses confident-but-wrong errors and whole classes. D samples only the
+      majority class, giving the high-risk contracts zero coverage.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.5 Design human review workflows and confidence calibration"

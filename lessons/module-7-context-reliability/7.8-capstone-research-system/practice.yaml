@@ -1,0 +1,72 @@
+# Per-lesson practice questions for chapter 7.8 (Capstone — Multi-Agent Research System).
+# Scenario-3 drills tying together subagent isolation, error propagation, and independent review.
+chapter: "7.8"
+questions:
+  - id: "ccaf-s3-practice-001"
+    stem: >-
+      In a multi-agent research system, the coordinator finishes synthesizing the subagents'
+      findings into one cited answer. Before returning it to the user, what is the prescribed
+      way to quality-check the synthesis?
+    options:
+      A: "Pass the finished synthesis to an independent review instance — a fresh agent in its own context that never saw the synthesis being written — along with a checklist to verify against."
+      B: "Have the same agent that wrote the synthesis re-read its own output and confirm it looks correct before returning it."
+      C: "Run a second review pass inside the same context that produced the draft, so the reviewer has full visibility into how each claim was assembled."
+      D: "Skip review when every claim already carries a source, since cited claims cannot be wrong."
+    correct: "A"
+    explanation: >-
+      Independent review instances beat self-review: a fresh agent in its own context catches what
+      the writer can't see, exactly the context-isolation property that powers subagents. B is
+      self-review — the author shares the blind spots that produced the draft and rationalizes rather
+      than catches. C is self-review wearing a second hat: the same context that wrote the draft can't
+      review it independently; the value is in NOT having seen it written. D is wrong because citations
+      guarantee a source exists, not that conflicts were kept, gaps reported, or the right source chosen —
+      those are exactly what an independent reviewer checks.
+    exam: "CCAF"
+    domain: scenario
+    scenario: 3
+
+  - id: "ccaf-s3-practice-002"
+    stem: >-
+      A coordinator spawns a research subagent to find $/kWh figures. The coordinator already knows
+      the original user question, its overall research plan, and the file paths it located. What must
+      the coordinator do for the subagent to use any of that information?
+    options:
+      A: "Write whatever the subagent needs — the scoped sub-question, the source paths, the output contract, the constraints — explicitly into the subagent's prompt string, because that prompt is the only channel from parent to child."
+      B: "Nothing — the subagent inherits the coordinator's conversation history and context window automatically when it is spawned."
+      C: "Store the plan and paths in the coordinator's context; the subagent reads the parent's context window on demand during its own loop."
+      D: "Pass only the original user question; the subagent infers the scope, the sources, and the output format from it."
+    correct: "A"
+    explanation: >-
+      A subagent runs in its own fresh context window and only the prompt string crosses from parent
+      to child; intermediate context does not flow downhill. So the coordinator must pass the
+      sub-question, source paths, output contract, and constraints explicitly. B and C are the same
+      false assumption — that the subagent inherits or can read the parent's context; it cannot. D
+      under-specifies: handing over just the broad question leaves the subagent guessing at sources,
+      scope, and output shape, which is the "it'll figure it out from context" trap when there is no
+      shared context to figure it out from.
+    exam: "CCAF"
+    domain: scenario
+    scenario: 3
+
+  - id: "ccaf-s3-practice-003"
+    stem: >-
+      One of five research subagents times out on its source retrieval. Its final message is the only
+      thing that returns to the coordinator. How should that failure be handled so the system stays
+      reliable?
+    options:
+      A: "Return a structured error in the subagent's final message that names which subagent failed and what went wrong; the coordinator records it, leaves that topic as a coverage gap, and lets the other four subagents' results proceed."
+      B: "Catch the timeout and return None for that subagent so the coordinator can keep going without interruption."
+      C: "Re-raise the timeout out of the coordinator so the entire research run aborts and the user gets a clean failure."
+      D: "Return a generic {\"error\": \"failed\"} with no subagent identifier, since the coordinator only needs to know that something went wrong."
+    correct: "A"
+    explanation: >-
+      A failure crossing the subagent boundary must be visible, attributed, and contained: a structured
+      error tagged with which subagent failed lets the coordinator record it, report the missing topic as
+      a coverage gap, and keep the other branches' work — subagent isolation means one failure is contained,
+      not fatal. B swallows the failure: a None gets threaded into the synthesis as if it were data, a
+      silent hole with the provenance destroyed. C throws away the blast-radius isolation subagents give
+      you, killing four good results over one timeout. D loses provenance — "something failed" is
+      unactionable across five subagents; you can't retry the right branch or tell the user what's missing.
+    exam: "CCAF"
+    domain: scenario
+    scenario: 3

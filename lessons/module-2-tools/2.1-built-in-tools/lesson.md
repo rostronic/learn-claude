@@ -70,18 +70,18 @@ This is why `Edit` is the tool for surgical changes: it refuses to guess. The re
 
 ### Selecting tools is also scoping access
 
-Because tool names are the unit of permission, "which tools" is a first-class configuration choice, not just an in-the-moment decision. When you stand up a read-only exploration agent, you give it exactly the read tools and nothing that can mutate or shell out:
+Because tool names are the unit of configuration, "which tools" is a first-class design choice, not just an in-the-moment decision. A named subagent's `tools` field restricts what it can use — "`tools` only: the subagent gets only the listed tools" ([Tools reference — Agent tool behavior](https://code.claude.com/docs/en/tools-reference#agent-tool-behavior)). Stand up a read-only exploration subagent by listing only the navigation tools:
 
 ```python
-from claude_agent_sdk import query, ClaudeAgentOptions
-
-# A read-only code-exploration agent: navigation tools only, no Bash/Write/Edit.
-options = ClaudeAgentOptions(
-    allowed_tools=["Read", "Grep", "Glob"],   # exact tool-name strings
-)
+# A read-only code-exploration subagent. Listing only these three removes every
+# other tool from its context — omitting the field would let it inherit all tools.
+explorer = {
+    "description": "Read-only code exploration",
+    "tools": ["Read", "Grep", "Glob"],   # navigation only — no Bash/Write/Edit available
+}
 ```
 
-`Read`, `Grep`, and `Glob` need no permission, so this agent runs without prompts and physically cannot modify the tree or run a shell — the selection *is* the guardrail ([Tools reference](https://code.claude.com/docs/en/tools-reference)). (Distributing tools across agents is the focus of chapter 3.4; here the point is narrower: choosing the right built-in tool is also choosing the right privilege.)
+With only `Read`, `Grep`, and `Glob` in scope, the subagent can navigate the tree but has no `Write`, `Edit`, or `Bash` available to modify it or run a shell — the selection bounds its capability. And because those three need no permission, it also runs without prompts. (Distributing tools across agents is the focus of chapter 3.4; here the point is narrower: choosing the right built-in tools is also choosing the right capability boundary. Note that an `allowedTools` *permission* list only auto-approves calls — it's the `tools` *availability* field that removes a tool from the subagent's reach.)
 
 ## Worked example
 
@@ -110,7 +110,7 @@ def select_tool(intent: str) -> str:
 def requires_permission(tool: str) -> bool:
     # Per the Tools reference permission column.
     needs = {"Bash", "Edit", "Write", "WebFetch", "WebSearch", "NotebookEdit"}
-    safe = {"Read", "Grep", "Glob", "Agent", "TodoWrite"}
+    safe = {"Read", "Grep", "Glob", "Agent"}
     if tool in needs:
         return True
     if tool in safe:

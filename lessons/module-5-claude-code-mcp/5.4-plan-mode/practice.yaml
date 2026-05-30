@@ -1,0 +1,58 @@
+chapter: "5.4"
+questions:
+  - id: "ccaf-d3-3.4-practice-001"
+    stem: >-
+      You need to add Google OAuth login: it touches session handling, callbacks,
+      and env config across several files, in auth code you don't know well. What's
+      the right approach?
+    options:
+      A: "Use plan mode: explore the auth code, get a reviewable plan, then implement."
+      B: "Execute directly — planning only slows things down."
+      C: "Use plan mode only after the implementation, to document what changed."
+      D: "Skip Claude Code; this is too large for it."
+    correct: "A"
+    explanation: >-
+      The change is multi-file, the approach is uncertain, and the code is
+      unfamiliar — all three documented triggers for plan mode, which separates
+      exploration from execution and gives you a plan to review first. B ignores that
+      jumping straight in risks solving the wrong problem on exactly this kind of
+      task. C misuses plan mode, which is for before editing, not after. D is
+      unfounded.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.4 Determine when to use plan mode vs direct execution"
+  - id: "ccaf-d3-3.4-practice-002"
+    stem: >-
+      The task is to fix a typo in a header string — one file, an obvious
+      one-sentence diff. Should you use plan mode?
+    options:
+      A: "No — the scope is clear and the fix is tiny; plan mode is overhead here, act directly."
+      B: "Yes — always use plan mode before any edit."
+      C: "Yes — plan mode is required whenever Claude edits a file."
+      D: "No — but only because typos aren't code changes."
+    correct: "A"
+    explanation: >-
+      For a clear-scope, one-sentence diff the docs say to act directly; plan mode
+      adds overhead with no benefit. B and C overgeneralize — plan mode is a judgment
+      call, not mandatory before edits. D gives the right answer for the wrong reason:
+      it's about scope and size, not about whether a typo "counts" as a code change.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.4 Determine when to use plan mode vs direct execution"
+  - id: "ccaf-d3-3.4-practice-003"
+    stem: >-
+      What does plan mode actually do?
+    options:
+      A: "Claude reads and explores and proposes a plan but makes no edits until you approve."
+      B: "Claude edits files but asks for confirmation before each one."
+      C: "Claude applies all edits automatically without prompts."
+      D: "Claude disables all tools, including reading files."
+    correct: "A"
+    explanation: >-
+      Plan mode is read/analyze-only: Claude researches and writes a plan but does
+      not edit your source until you approve. B describes default mode's per-action
+      prompting; C describes acceptEdits/auto behavior; D is wrong because plan mode
+      specifically allows reading and exploration — that's how it builds the plan.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.4 Determine when to use plan mode vs direct execution"

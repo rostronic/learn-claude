@@ -1,0 +1,74 @@
+# Per-lesson practice questions for chapter 4.1 (Multi-step workflows with enforcement & handoff).
+# Topic-only drills (no exam scenario) that test this chapter's material.
+chapter: "4.1"
+questions:
+  - id: "ccaf-d1-1.4-practice-001"
+    stem: >-
+      A refund agent must never issue a refund before the customer's identity is
+      verified. The rule has to hold every time, even under adversarial user
+      messages. Which design enforces it?
+    options:
+      A: "A PreToolUse gate on issue_refund that returns permissionDecision 'deny' unless verification is recorded in workflow state."
+      B: "A line in the system prompt: \"Always verify identity before issuing a refund.\""
+      C: "A few-shot example in the prompt showing the verify-then-refund order so the model imitates it."
+      D: "A post-refund audit log that flags refunds where identity was never verified."
+    correct: "A"
+    explanation: >-
+      A programmatic PreToolUse gate is the only option the runtime enforces: a
+      deny blocks the call regardless of how the model was prompted, so the rule
+      is provable. B is a prompt instruction — a probabilistic request the model
+      can be talked out of in a long or adversarial conversation; it can't
+      guarantee compliance. C has the same weakness as B plus the exam's standing
+      point that examples shape behavior, not hard rules. D detects violations
+      after the money has already moved, which is exactly what the rule exists to
+      prevent.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.4 Implement multi-step workflows with enforcement and handoff patterns"
+
+  - id: "ccaf-d1-1.4-practice-002"
+    stem: >-
+      A multi-step workflow delegates the "check policy" step to a subagent, then
+      a later step in the main agent must know whether the policy came back
+      eligible. What must you do to make that fact available to the later step's
+      gate?
+    options:
+      A: "Record the subagent's returned result into shared workflow state (and pass any needed facts in via the subagent's prompt), because a subagent shares no conversation history with the parent."
+      B: "Nothing — the subagent and parent share one conversation, so the eligibility result is automatically in context."
+      C: "Re-run the policy check inline in the main agent and ignore the subagent's result."
+      D: "Instruct the model in the prompt to remember the eligibility result for later."
+    correct: "A"
+    explanation: >-
+      A subagent runs in a fresh context and returns only its final message; the
+      only channel from parent to subagent is the prompt string, so required
+      state must be passed in explicitly and the result recorded into shared
+      state for downstream steps. B is false — the parent does not inherit the
+      subagent's conversation, so nothing is "automatically" there. C throws away
+      the delegated work and defeats the point of the handoff. D relies on the
+      model remembering across turns, which is the implicit-handoff anti-pattern;
+      state must be recorded, not remembered.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.4 Implement multi-step workflows with enforcement and handoff patterns"
+
+  - id: "ccaf-d1-1.4-practice-003"
+    stem: >-
+      A PreToolUse gate denies a guarded tool call. Besides setting
+      permissionDecision to 'deny', why does returning a permissionDecisionReason
+      matter?
+    options:
+      A: "The reason is fed back to the model so it understands why it was blocked and goes to perform the missing step instead of blindly retrying the same call."
+      B: "The reason is required syntax; without it the call is allowed through."
+      C: "The reason downgrades the deny to an 'ask', prompting the user to approve."
+      D: "The reason is only for human log readers and has no effect on the model."
+    correct: "A"
+    explanation: >-
+      permissionDecisionReason is surfaced to the model, so a good reason steers
+      it toward completing the prerequisite rather than retrying the blocked
+      action. B is wrong: a deny blocks the call regardless of whether a reason is
+      present. C is wrong: the decision stays 'deny' — the reason does not change
+      the verdict to 'ask'. D understates it: the reason informs the model's next
+      move, not just human logs.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.4 Implement multi-step workflows with enforcement and handoff patterns"

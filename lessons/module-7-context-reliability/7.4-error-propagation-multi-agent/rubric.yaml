@@ -1,0 +1,27 @@
+chapter: "7.4"
+criteria:
+  - id: structured_errors_provenance
+    description: "On a stage failure, appends a structured error to 'errors' that names the failing stage (provenance) via a 'stage' field plus the stage's 'error' message"
+    weight: 22
+    check: code_review
+  - id: no_silent_corruption
+    description: "A failed stage's (missing) value is never threaded forward; downstream stages do not run after a hard failure (the loop returns instead of continuing with a stale or absent value)"
+    weight: 18
+    check: code_review
+  - id: retry_transient
+    description: "Retries a stage only when its failure is transient (transient is True), up to max_retries extra attempts; non-transient failures are not retried"
+    weight: 15
+    check: code_review
+  - id: no_crash
+    description: "run_pipeline returns a structured aggregate ({status, results, errors}) on any stage failure and does not raise"
+    weight: 15
+    check: code_review
+  - id: anti_swallow
+    description: "Does NOT swallow or ignore a failed stage's error — must not return None/{}/an empty or success-shaped result as if the stage succeeded; the failure must appear in a non-empty 'errors' list"
+    weight: 15
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_pipeline.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_pipeline.py -v"

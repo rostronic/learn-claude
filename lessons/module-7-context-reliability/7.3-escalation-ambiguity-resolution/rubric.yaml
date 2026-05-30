@@ -1,0 +1,27 @@
+chapter: "7.3"
+criteria:
+  - id: missing_clarify
+    description: "route returns 'clarify' when signal['missing_required'] is non-empty, before any confidence/stakes check"
+    weight: 18
+    check: code_review
+  - id: ambiguous_clarify
+    description: "route returns 'clarify' when signal['ambiguous'] is True and no required field is missing"
+    weight: 15
+    check: code_review
+  - id: highstakes_escalate
+    description: "route returns 'escalate' when stakes == 'high' and confidence < policy['high_stakes_threshold']"
+    weight: 20
+    check: code_review
+  - id: targeted_question
+    description: "clarifying_question names each field in missing_required by name (e.g. 'To proceed I need: order_id, email.'), not a vague 'can you clarify?'"
+    weight: 17
+    check: code_review
+  - id: no_guess_or_prompt_escalation
+    description: "Does NOT answer/guess when a required field is missing, and the escalation decision is made by the programmatic gate in route() — NOT deferred to a prompt instruction alone"
+    weight: 15
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_escalation.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_escalation.py -v"

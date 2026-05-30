@@ -1,0 +1,27 @@
+chapter: "7.1"
+criteria:
+  - id: preserve_system
+    description: "The first 'system' message is always preserved verbatim as the first message of the result"
+    weight: 18
+    check: code_review
+  - id: keep_recent_verbatim
+    description: "The most recent keep_recent non-system turns are kept verbatim at the tail of the result"
+    weight: 17
+    check: code_review
+  - id: summarize_when_over
+    description: "When total tokens exceed token_budget, the older middle messages are collapsed into a SINGLE summary via summarizer(middle), placed immediately after the system message (not at the end, not buried in the middle)"
+    weight: 20
+    check: code_review
+  - id: within_budget
+    description: "Under-budget input is returned unchanged; over budget, returns messages whose total tokens are <= token_budget when the system + recent-window floor permits, and otherwise are minimized toward it (the system message and recent turns are never dropped)"
+    weight: 15
+    check: code_review
+  - id: anti_no_silent_drop
+    description: "Does NOT naively truncate or drop messages without summarizing (no sliding-window messages[-N:] that discards old context), and NEVER drops the system message"
+    weight: 15
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_context_manager.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_context_manager.py -v"

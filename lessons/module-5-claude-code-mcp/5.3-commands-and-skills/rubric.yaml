@@ -1,0 +1,26 @@
+chapter: "5.3"
+criteria:
+  - id: argument-expansion
+    description: >
+      expand_arguments replaces $ARGUMENTS with all args space-joined and $1..$9
+      with the matching positional arg (empty string when out of range).
+    weight: 30
+    check: code_review
+  - id: invocation-control
+    description: >
+      can_invoke implements the documented matrix: default both actors;
+      disable_model_invocation True blocks "model" only; user_invocable False
+      blocks "user" only.
+    weight: 30
+    check: code_review
+  - id: tests-pass
+    description: The provided pytest suite passes.
+    weight: 25
+    check: bash_execution
+    command: pytest -q
+  - id: no-spurious-substitution
+    description: >
+      expand_arguments must NOT substitute "$0" or a bare "$" — only $ARGUMENTS
+      and $1..$9 are placeholders.
+    weight: 15
+    check: anti_pattern

@@ -1,0 +1,26 @@
+chapter: "7.10"
+criteria:
+  - id: structured_output_design
+    description: "design.md defines an extraction schema (field names + types, required vs. nullable) and specifies structured outputs (output_config.format / json_schema) or strict tool use to GUARANTEE the record shape — not free-text JSON parsing"
+    weight: 20
+    check: code_review
+  - id: explicit_criteria
+    description: "design.md states explicit criteria to reduce false positives: return null when a field is not explicitly present, restrict the model to the provided document (no outside knowledge), and/or ground each field in a direct quote — with at least one concrete over-extraction risk named"
+    weight: 14
+    check: code_review
+  - id: validation_retry
+    description: "design.md describes a two-layer validation (schema + at least two named business rules the schema cannot express) and a retry/feedback loop that feeds the SPECIFIC failure back to the model, is bounded by a max attempt count, and escalates rather than silently accepting or dropping"
+    weight: 20
+    check: code_review
+  - id: confidence_review
+    description: "design.md attaches PER-FIELD confidence and routes individual low-confidence fields to a human review queue against a threshold while high-confidence fields auto-accept — explicitly per field, not a single document-level score"
+    weight: 16
+    check: code_review
+  - id: provenance
+    description: "design.md maps each field to its supporting source span using the Citations feature (cited_text / document_index / location), notes the pointers are guaranteed valid, and addresses the structured-outputs/Citations incompatibility (e.g. a two-pass design)"
+    weight: 15
+    check: code_review
+  - id: anti_freetext_or_no_validation
+    description: "Design does NOT parse free-text model output (regex, json.loads on prose, markdown-fence stripping) instead of using structured outputs / strict tool use, AND does NOT skip the validation + retry loop (no relying on the schema alone or silently accepting invalid records)"
+    weight: 15
+    check: anti_pattern

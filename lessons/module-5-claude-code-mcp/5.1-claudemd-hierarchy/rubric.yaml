@@ -1,0 +1,35 @@
+chapter: "5.1"
+criteria:
+  - id: composes-root-down
+    description: >
+      resolve_memory emits the project directory tree ROOT-DOWN to cwd (root-most
+      first, cwd last), and root + subdirectory memory both appear — they compose,
+      they do not override each other.
+    weight: 30
+    check: code_review
+  - id: load-order
+    description: >
+      The returned order is managed policy first, then user memory, then project
+      memory (root-down), with CLAUDE.local.md appended right after CLAUDE.md
+      within the same directory — matching the documented load order.
+    weight: 20
+    check: code_review
+  - id: lazy-subtree-discovery
+    description: >
+      discover_subtree_memory returns subtree CLAUDE.md only for the path from cwd
+      down to the file being read (lazy), and [] when nothing in that subtree is
+      touched.
+    weight: 20
+    check: code_review
+  - id: tests-pass
+    description: The provided pytest suite passes.
+    weight: 20
+    check: bash_execution
+    command: pytest -q
+  - id: no-override-collapse
+    description: >
+      The resolver must NOT treat a nearer CLAUDE.md as overriding/replacing
+      ancestor files (dropping the root when a subdir file exists). All present
+      files on the path must be included.
+    weight: 10
+    check: anti_pattern

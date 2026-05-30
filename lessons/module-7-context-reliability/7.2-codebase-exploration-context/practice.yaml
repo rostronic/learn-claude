@@ -1,0 +1,72 @@
+# Per-lesson practice questions for chapter 7.2 (Context in large codebase exploration).
+# Topic-only drills (no exam scenario) that test this chapter's material.
+chapter: "7.2"
+questions:
+  - id: "ccaf-d5-5.4-practice-001"
+    stem: >-
+      An agent is asked to fix a bug in the authentication flow of a 4,000-file
+      service. The repo is far larger than the context window. What is the
+      context-efficient first move?
+    options:
+      A: "Use Grep/Glob to locate the few files that handle authentication, then read only those (search-first)."
+      B: "Read every file in the repository into context so nothing relevant is missed before reasoning about the bug."
+      C: "Read the entire src/ directory recursively into context, since that is where most code lives."
+      D: "Read files in alphabetical order until the context window is full, then start reasoning."
+    correct: "A"
+    explanation: >-
+      Search-first is the prescribed move: locate the relevant files with grep/glob,
+      then read only those, spending a little context to decide what is worth reading.
+      B reads the whole repo, which both overflows the window and buries the relevant
+      files under irrelevant ones (context rot) — more context is not safer here. C is
+      the same read-everything mistake scoped to one directory; it still floods the
+      window with code unrelated to auth. D fills the window with arbitrary files and
+      will likely exhaust it before reaching the auth code at all.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.4 Manage context effectively in large codebase exploration"
+
+  - id: "ccaf-d5-5.4-practice-002"
+    stem: >-
+      A coordinator agent needs to understand how rate limiting works across a large
+      monorepo before making a change. Exploring it directly would require reading
+      dozens of files. What keeps the coordinator's context small?
+    options:
+      A: "Delegate the exploration to a subagent and have only its findings (a short summary plus the key file paths) return to the coordinator."
+      B: "Have the coordinator read all the candidate files itself so it retains full detail for the change."
+      C: "Increase the coordinator's max_tokens so the dozens of file reads fit in one context window."
+      D: "Disable trimming so every tool result is preserved verbatim in the coordinator's context for completeness."
+    correct: "A"
+    explanation: >-
+      A subagent runs in its own fresh context window; intermediate tool calls and
+      reads stay inside it and only its final message returns to the parent — context
+      isolation, the prescribed pattern for open-ended exploration. B reads everything
+      inline, exactly the bloat delegation exists to avoid. C confuses window size with
+      window quality: a fuller window degrades focus (context rot), so making it bigger
+      does not fix the problem. D preserves verbose results that should be trimmed or
+      cleared, accelerating the bloat rather than preventing it.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.4 Manage context effectively in large codebase exploration"
+
+  - id: "ccaf-d5-5.4-practice-003"
+    stem: >-
+      A directory-listing tool returns 1,200 lines and your retrieval has already scored
+      the candidate files for relevance. How should that output and those files enter the
+      agent's context?
+    options:
+      A: "Cap the listing to a fixed number of lines with an explicit truncation marker, and present the scored files most-relevant-first."
+      B: "Insert the full 1,200-line listing verbatim and present files in the order the filesystem returned them."
+      C: "Insert the full listing but place the lowest-scored files first so the important ones are read last and freshest."
+      D: "Drop the truncation marker after capping, so the model treats the trimmed view as the complete listing."
+    correct: "A"
+    explanation: >-
+      Cap the verbose output and mark the truncation so the model knows the view is
+      partial, and order the scored files most-relevant-first so the key file is not
+      buried (context rot worsens as the window fills). B dumps the whole listing
+      untrimmed and ignores relevance ordering — both anti-patterns. C orders by
+      ascending relevance, burying the important files under noise. D caps but hides the
+      truncation, so the model reasons as if it saw the whole listing — a silent and
+      dangerous trim.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.4 Manage context effectively in large codebase exploration"

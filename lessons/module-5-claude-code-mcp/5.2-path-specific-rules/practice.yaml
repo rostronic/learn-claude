@@ -1,0 +1,59 @@
+chapter: "5.2"
+questions:
+  - id: "ccaf-d3-3.3-practice-001"
+    stem: >-
+      You want code-style guidance for your TypeScript API to load only when Claude
+      edits files under src/api/, without bloating every session. What is the native
+      Claude Code mechanism?
+    options:
+      A: "A rule file in .claude/rules/ with a `paths: [\"src/api/**/*.ts\"]` frontmatter field."
+      B: "A long section in the root CLAUDE.md that starts with 'When editing the API...'."
+      C: "A PreToolUse hook that injects the guidance before every Edit."
+      D: "A skill that Claude must be told to invoke each time it edits the API."
+    correct: "A"
+    explanation: >-
+      Path-scoped rules in .claude/rules/ with a `paths` glob are exactly this:
+      conditional rules load only when Claude works with matching files. B loads
+      every session regardless of what's being edited (the bloat you're avoiding). C
+      misuses hooks — they enforce/deterministically act, they aren't the idiomatic
+      way to deliver advisory context. D requires manual invocation and isn't
+      path-conditional.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.3 Apply path-specific rules for conditional convention loading"
+  - id: "ccaf-d3-3.3-practice-002"
+    stem: >-
+      A rule must hold absolutely: Claude must never edit files under migrations/.
+      What is the correct way to implement it?
+    options:
+      A: "Add 'never edit files under migrations/' to a .claude/rules/ file scoped to migrations/**."
+      B: "A PreToolUse hook matched to Edit|Write that checks the path and exits 2 (or returns a \"deny\" decision) for migrations/ paths."
+      C: "A few-shot example in CLAUDE.md showing Claude refusing to edit a migration."
+      D: "Set the migrations/ files read-only on disk and hope Claude notices."
+    correct: "B"
+    explanation: >-
+      Rules and CLAUDE.md are context, not enforcement; an absolute, mechanically-
+      checkable rule needs a PreToolUse hook for deterministic control. A and C are
+      advisory — the model can still violate them. D is a filesystem side effect, not
+      a Claude Code enforcement mechanism, and gives Claude no actionable feedback.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.3 Apply path-specific rules for conditional convention loading"
+  - id: "ccaf-d3-3.3-practice-003"
+    stem: >-
+      In a PreToolUse hook configured to enforce a path rule, what does the
+      \"matcher\" field select?
+    options:
+      A: "The file-path glob the hook applies to."
+      B: "The tool name (e.g. Edit, Write, Bash) the hook fires for; the path is checked inside the hook from the stdin tool_input."
+      C: "The permission mode the hook runs in."
+      D: "A regex over the user's prompt text."
+    correct: "B"
+    explanation: >-
+      The hook matcher selects the TOOL the hook fires for, such as Edit or Write.
+      The path condition is checked INSIDE the hook, which reads the tool_input
+      (including the path) from stdin. Putting a path glob in matcher (A) matches no
+      tool, so the hook never runs. C and D are not what matcher does.
+    exam: "CCAF"
+    domain: 3
+    task_statement: "3.3 Apply path-specific rules for conditional convention loading"

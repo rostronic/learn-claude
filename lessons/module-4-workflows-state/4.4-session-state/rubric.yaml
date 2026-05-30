@@ -1,0 +1,31 @@
+chapter: "4.4"
+criteria:
+  - id: deterministic_ids
+    description: "create returns stable, incrementing ids ('sess-1', 'sess-2', ...) from a counter — no uuid/randomness"
+    weight: 12
+    check: code_review
+  - id: create_seeds_with_copy
+    description: "create seeds the session with a copy of the provided messages (later mutation of the caller's list does not affect the session); empty when no messages given"
+    weight: 14
+    check: code_review
+  - id: append_and_resume
+    description: "append adds to the session transcript; resume returns the existing session's full transcript so post-resume appends continue the same session"
+    weight: 16
+    check: code_review
+  - id: unknown_id_raises
+    description: "resume and append raise KeyError for an unknown session id"
+    weight: 14
+    check: code_review
+  - id: fork_is_independent_copy
+    description: "fork returns a new distinct id with a deep copy of the source; original stays unchanged and appends to one session never affect the other (including nested objects)"
+    weight: 20
+    check: code_review
+  - id: fork_not_aliased_resume_not_silent_fresh
+    description: "fork does NOT alias/shallow-share the source transcript, and resume does NOT silently start a fresh/empty session for an unknown id"
+    weight: 14
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_sessions.py pass"
+    weight: 10
+    check: bash_execution
+    command: "pytest test_sessions.py -v"

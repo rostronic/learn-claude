@@ -1,0 +1,26 @@
+chapter: "7.7"
+criteria:
+  - id: loop_termination_design
+    description: "design.md specifies the investigation loop terminates by dispatching on stop_reason (end_turn), and treats any turn cap only as a runaway guard rather than the termination signal"
+    weight: 20
+    check: code_review
+  - id: context_strategy
+    description: "design.md gives a long-thread context strategy covering a token budget, summarization of older turns, AND a durable scratchpad/memory file for load-bearing facts, and explains the division of labor between summarization and the scratchpad"
+    weight: 18
+    check: code_review
+  - id: programmatic_escalation
+    description: "design.md defines concrete escalation rules (at least the >$200 refund rule and one always-escalate action) enforced in code the action passes through, not via a prompt instruction"
+    weight: 20
+    check: code_review
+  - id: confidence_handoff
+    description: "design.md specifies confidence-based human handoff distinct from the action gate: where the confidence signal comes from, a threshold tied to the cost of being wrong per field, and that a low-confidence field is reviewed by a human"
+    weight: 17
+    check: code_review
+  - id: structured_output
+    description: "design.md specifies the resolution emitted as schema-constrained structured output, listing the key fields (disposition, action, confidence, handoff flag+reason, evidence/grounding) and naming Structured Outputs as the always-valid mechanism"
+    weight: 10
+    check: code_review
+  - id: anti_text_termination
+    description: "design.md does NOT use text-parsing of the model's reply or an iteration/turn cap as the loop's termination signal, AND does NOT rely on a prompt-only instruction to enforce the refund limit or other deterministic business rule"
+    weight: 15
+    check: anti_pattern

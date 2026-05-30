@@ -1,0 +1,27 @@
+chapter: "7.2"
+criteria:
+  - id: search_first_subset
+    description: "select_files ranks index entries by keyword overlap and returns at most max_files paths (a subset), not the whole index"
+    weight: 20
+    check: code_review
+  - id: relevance_ranking
+    description: "select_files orders its returned paths by descending overlap so the most relevant file is first"
+    weight: 15
+    check: code_review
+  - id: trim_caps
+    description: "trim_output returns text unchanged when it has <= max_lines lines, and otherwise keeps the first max_lines lines and appends a marker reporting the number of truncated lines"
+    weight: 18
+    check: code_review
+  - id: position_aware
+    description: "order_by_relevance returns the chunks sorted by 'score' descending (highest-relevance chunk first)"
+    weight: 17
+    check: code_review
+  - id: anti_read_everything
+    description: "Does NOT return all index entries unconditionally from select_files (when the index has more than max_files entries), and does NOT return verbose tool output untrimmed from trim_output"
+    weight: 15
+    check: anti_pattern
+  - id: tests_pass
+    description: "All tests in test_exploration.py pass"
+    weight: 15
+    check: bash_execution
+    command: "pytest test_exploration.py -v"

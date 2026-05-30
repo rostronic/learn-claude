@@ -1,0 +1,73 @@
+# Per-lesson practice questions for chapter 7.6
+# (Information provenance and uncertainty in multi-source synthesis).
+# Topic-only drills that test this chapter's material.
+chapter: "7.6"
+questions:
+  - id: "ccaf-d5-5.6-practice-001"
+    stem: >-
+      A coordinator synthesizes findings from three source documents into one report
+      for a customer. The product owner wants readers to be able to verify any sentence
+      against its source. Which approach does Anthropic prescribe?
+    options:
+      A: "Use the Citations feature so each generated sentence carries a citation mapping it to its source (document_index + cited_text); attach a non-empty source reference to every claim."
+      B: "Blend the three documents into one fluent paragraph that reads cleanly, and append a single 'Sources' list at the bottom of the report."
+      C: "Ask Claude to write the summary from memory and only consult the documents if a reader later disputes a specific sentence."
+      D: "Lower the temperature so the model is more deterministic, which makes the unattributed summary trustworthy enough to skip per-claim sourcing."
+    correct: "A"
+    explanation: >-
+      The Citations feature attaches a claim → source pointer (document_index, cited_text,
+      location) to each sentence, and those pointers are guaranteed valid, so a reader can
+      verify any claim — the prescribed shape for trustworthy synthesis. B is the
+      blended-unsourced anti-pattern: a bottom-of-report source list does not tell the reader
+      which sentence came from which document, so a fabricated claim is indistinguishable from
+      a real one. C uses the model's parametric knowledge instead of the provided sources,
+      violating the external-knowledge restriction. D confuses determinism with traceability —
+      a low temperature does not attach any claim to a source.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.6 Preserve information provenance and handle uncertainty in multi-source synthesis"
+
+  - id: "ccaf-d5-5.6-practice-002"
+    stem: >-
+      Two sources disagree about a market-size figure: a 2023 report says $1.0B and a 2025
+      report says $1.4B. Your synthesis step must produce one resolved value. What is the
+      correct handling?
+    options:
+      A: "Resolve to the $1.4B figure from the newer (2025) source, but keep the $1.0B claim on the record annotated as superseded by the newer source."
+      B: "Average the two figures to $1.2B so neither source is favored, and present that as the resolved value."
+      C: "Pick the $1.4B figure and drop the $1.0B claim entirely so the report shows a single clean number."
+      D: "Report neither figure and mark the topic unanswerable, since the sources conflict."
+    correct: "A"
+    explanation: >-
+      When sources conflict, prefer the newer source for the resolved value but never silently
+      resolve: keep the losing claim with its source and an annotation so the reader sees both
+      what you concluded and what you set aside. B invents a $1.2B figure that no source states,
+      which is a fabricated claim with no provenance. C silently drops the conflicting source, so
+      the reader never learns a disagreement existed. D over-corrects — a clear newer source does
+      resolve the value; declaring it unanswerable discards usable, sourced information.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.6 Preserve information provenance and handle uncertainty in multi-source synthesis"
+
+  - id: "ccaf-d5-5.6-practice-003"
+    stem: >-
+      You were asked to synthesize coverage of three topics — market_size, growth_rate, and
+      churn — but none of the provided sources mention churn. How should the synthesis report
+      handle the churn topic?
+    options:
+      A: "List churn explicitly under a coverage-gaps section as a required topic with no supporting source."
+      B: "Omit churn from the report entirely so the output stays focused on what the sources covered."
+      C: "Fill in a churn figure from the model's general knowledge of the industry so all three topics appear answered."
+      D: "Add a churn section that says 'data consistent with industry norms' to avoid an obvious blank."
+    correct: "A"
+    explanation: >-
+      Reporting the uncovered required topic as an explicit coverage gap mirrors 'allow Claude to
+      say I do not know' and prevents implying completeness the sources do not support. B stays
+      silent on the missing topic, which makes the report read as if all three were answered — a
+      hallucination of completeness. C reaches into parametric knowledge, violating the
+      external-knowledge restriction (only synthesize from provided sources). D is the same
+      fabrication dressed as a hedge: 'consistent with industry norms' is an unsourced claim, not
+      a gap report.
+    exam: "CCAF"
+    domain: 5
+    task_statement: "5.6 Preserve information provenance and handle uncertainty in multi-source synthesis"

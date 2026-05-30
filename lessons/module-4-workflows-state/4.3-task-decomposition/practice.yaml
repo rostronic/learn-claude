@@ -1,0 +1,68 @@
+# Per-lesson practice questions for chapter 4.3 (Task decomposition strategies).
+chapter: "4.3"
+questions:
+  - id: "ccaf-d1-1.6-practice-001"
+    stem: >-
+      You decompose a research task and want each investigator subagent to be
+      able to spin up its own helper subagents for sub-topics. How should you
+      configure the investigators?
+    options:
+      A: "You can't — subagents cannot spawn subagents; the coordinator must do all the splitting, so don't put 'Agent' in an investigator's tools."
+      B: "Add 'Agent' to each investigator's tools so it can invoke the Agent tool itself."
+      C: "Set a high maxTurns on each investigator so it has room to delegate."
+      D: "Give each investigator a description mentioning sub-delegation so Claude knows to nest them."
+    correct: "A"
+    explanation: >-
+      Decomposition is one level: subagents cannot spawn their own subagents, and
+      the docs say not to include 'Agent' in a subagent's tools — the coordinator
+      does the splitting. B tries exactly the forbidden thing; granting 'Agent'
+      to a subagent does not enable nested delegation. C confuses turn budget with
+      delegation depth — more turns doesn't lift the one-level rule. D is wishful
+      prompting; a description can't grant a capability the platform withholds.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.6 Design task decomposition strategies for complex workflows"
+
+  - id: "ccaf-d1-1.6-practice-002"
+    stem: >-
+      A PR-review decomposition has a style-checker, a security-scanner, and a
+      test-runner (all independent), plus a synthesis step that reads all three
+      reports. How should the batches be ordered?
+    options:
+      A: "Run the three finders concurrently in one batch, then run synthesis in a later batch after they finish."
+      B: "Run all four concurrently in a single batch to minimize wall-clock time."
+      C: "Run the four strictly one after another in a fixed order."
+      D: "Run synthesis first so it can coordinate the three finders as they go."
+    correct: "A"
+    explanation: >-
+      The finders are independent, so they parallelize; synthesis consumes their
+      results, so it must run after them — concurrent batch, then a dependent
+      batch. B is a dependency inversion: synthesis would run before the reports
+      it reads exist. C throws away the parallelization win by serializing
+      independent work. D is impossible — synthesis can't coordinate finders it
+      depends on, and a subagent can't orchestrate peers anyway.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.6 Design task decomposition strategies for complex workflows"
+
+  - id: "ccaf-d1-1.6-practice-003"
+    stem: >-
+      When you split a task into subagents, which benefit explains why a
+      file-reading investigator doesn't bloat the coordinator's context?
+    options:
+      A: "Context isolation — each subagent runs in a fresh conversation and only its final message returns to the parent."
+      B: "The coordinator automatically compacts the subagent's reads into its own context."
+      C: "Subagents stream every file they read back into the parent conversation for transparency."
+      D: "Tool restriction prevents the subagent from reading more than one file."
+    correct: "A"
+    explanation: >-
+      Context isolation is the named benefit: a subagent's intermediate reads stay
+      in its own fresh context and only the final message returns, so the parent
+      isn't polluted. B misattributes it to compaction — the isolation comes from
+      separate contexts, not summarization of the parent's. C is the opposite of
+      what happens; streaming every read back would defeat isolation. D confuses
+      least-privilege tool scoping with context size — restricting tools doesn't
+      limit how much a permitted tool reads.
+    exam: "CCAF"
+    domain: 1
+    task_statement: "1.6 Design task decomposition strategies for complex workflows"

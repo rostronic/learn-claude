@@ -6,7 +6,7 @@ Lessons are **exam-agnostic**. Which chapter covers which exam's task statements
 
 To study the path **in an exam's order** instead of course order, run `/exam <CODE>` (e.g. `/exam CCAF`): it reads the mapping, lists that exam's task statements in exam order, and walks you through the built chapters one at a time.
 
-**Status:** 11 of 37 chapters built (0.1, 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4). The rest are planned.
+**Status:** 37 of 37 chapters built (0.1, 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 7.10). The rest are planned.
 
 ## Module 0 — Foundations
 
@@ -43,48 +43,48 @@ To study the path **in an exam's order** instead of course order, run `/exam <CO
 
 | Chapter | Title | Status |
 |---|---|---|
-| 4.1 | Multi-step workflows with enforcement & handoff | planned |
-| 4.2 | Agent SDK hooks for tool interception & normalization | planned |
-| 4.3 | Task decomposition strategies | planned |
-| 4.4 | Session state, resumption, and forking | planned |
+| 4.1 | Multi-step workflows with enforcement & handoff | **built** |
+| 4.2 | Agent SDK hooks for tool interception & normalization | **built** |
+| 4.3 | Task decomposition strategies | **built** |
+| 4.4 | Session state, resumption, and forking | **built** |
 
 ## Module 5 — Claude Code & MCP integration
 
 | Chapter | Title | Status |
 |---|---|---|
-| 5.1 | CLAUDE.md hierarchy, scoping & modular organization | planned |
-| 5.2 | Path-specific rules for conditional conventions | planned |
-| 5.3 | Custom slash commands and skills | planned |
-| 5.4 | Plan mode vs direct execution | planned |
-| 5.5 | Integrating MCP servers | planned |
-| 5.6 | Iterative refinement techniques | planned |
-| 5.7 | Claude Code in CI/CD pipelines | planned |
-| 5.8 | Capstone — Developer Productivity with Claude | planned |
+| 5.1 | CLAUDE.md hierarchy, scoping & modular organization | **built** |
+| 5.2 | Path-specific rules for conditional conventions | **built** |
+| 5.3 | Custom slash commands and skills | **built** |
+| 5.4 | Plan mode vs direct execution | **built** |
+| 5.5 | Integrating MCP servers | **built** |
+| 5.6 | Iterative refinement techniques | **built** |
+| 5.7 | Claude Code in CI/CD pipelines | **built** |
+| 5.8 | Capstone — Developer Productivity with Claude | **built** |
 
 ## Module 6 — Extraction & quality loops
 
 | Chapter | Title | Status |
 |---|---|---|
-| 6.1 | Validation, retry & feedback loops for extraction | planned |
-| 6.2 | Batch processing strategies | planned |
-| 6.3 | Multi-instance & multi-pass review architectures | planned |
-| 6.4 | Capstone — Claude Code for Continuous Integration | planned |
+| 6.1 | Validation, retry & feedback loops for extraction | **built** |
+| 6.2 | Batch processing strategies | **built** |
+| 6.3 | Multi-instance & multi-pass review architectures | **built** |
+| 6.4 | Capstone — Claude Code for Continuous Integration | **built** |
 
 ## Module 7 — Context & reliability
 
 | Chapter | Title | Status |
 |---|---|---|
-| 7.1 | Managing conversation context across long interactions | planned |
-| 7.2 | Context in large codebase exploration | planned |
-| 7.3 | Escalation & ambiguity resolution | planned |
-| 7.4 | Error propagation across multi-agent systems | planned |
-| 7.5 | Human review workflows & confidence calibration | planned |
-| 7.6 | Information provenance & uncertainty in synthesis | planned |
-| 7.7 | Capstone — Customer Support Resolution Agent | planned |
-| 7.8 | Capstone — Multi-Agent Research System | planned |
-| 7.9 | Capstone — Code Generation with Claude Code | planned |
-| 7.10 | Capstone — Structured Data Extraction | planned |
+| 7.1 | Managing conversation context across long interactions | **built** |
+| 7.2 | Context in large codebase exploration | **built** |
+| 7.3 | Escalation & ambiguity resolution | **built** |
+| 7.4 | Error propagation across multi-agent systems | **built** |
+| 7.5 | Human review workflows & confidence calibration | **built** |
+| 7.6 | Information provenance & uncertainty in synthesis | **built** |
+| 7.7 | Capstone — Customer Support Resolution Agent | **built** |
+| 7.8 | Capstone — Multi-Agent Research System | **built** |
+| 7.9 | Capstone — Code Generation with Claude Code | **built** |
+| 7.10 | Capstone — Structured Data Extraction | **built** |
 
 ---
 
-**Totals:** 37 chapters across 8 modules. The 4 capstones (5.8, 6.4, 7.7–7.10) are the CCAF exam scenarios, placed after their prerequisite material. For the exam-order view of all this, see [`exam-mapping.md`](exam-mapping.md).
+**Totals:** 37 chapters across 8 modules. The 6 capstones (5.8, 6.4, 7.7–7.10) are the CCAF exam scenarios, placed after their prerequisite material. For the exam-order view of all this, see [`exam-mapping.md`](exam-mapping.md).
