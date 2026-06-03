@@ -13,10 +13,6 @@ references:
     url: "https://code.claude.com/docs/en/security"
     type: official_docs
     covers: "Trust and prompt-injection risk from servers that fetch external content"
-  - title: "Model Context Protocol — Introduction"
-    url: "https://modelcontextprotocol.io/introduction"
-    type: official_docs
-    covers: "What MCP is (open standard for AI-tool integration)"
 ---
 
 # Integrating MCP servers
@@ -207,8 +203,6 @@ auto-connect.
   env expansion, OAuth, resources, and prompts.
 - [Security — protect against prompt injection](https://code.claude.com/docs/en/security)
   — why a server that fetches external content is a risk surface.
-- [Model Context Protocol — Introduction](https://modelcontextprotocol.io/introduction)
-  — the open standard MCP implements.
 
 ## Exam coverage
 
