@@ -6,7 +6,7 @@ Lessons are **exam-agnostic**. Which chapter covers which exam's task statements
 
 To study the path **in an exam's order** instead of course order, run `/exam <CODE>` (e.g. `/exam CCAF`): it reads the mapping, lists that exam's task statements in exam order, and walks you through the built chapters one at a time.
 
-**Status:** 37 of 37 chapters built (0.1, 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 7.10). The rest are planned.
+**Status:** 37 of 37 chapters built (0.1, 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 7.10).
 
 ## Module 0 — Foundations
 

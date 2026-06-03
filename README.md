@@ -51,13 +51,13 @@ Not sure what to do next? Let the coach read your history and build a plan:
 
 ## Status
 
-**Phases 1–3 done; Phase 4 in progress.** The platform (slash commands, automated grading via the verifier + grading MCP server, and assessment via the examiner + `/practice`/`/mock-exam`) is built. **Seven of 37 chapters** are authored — Module 1 (1.1 Prompting with explicit criteria, 1.2 Few-shot prompting, 1.3 Structured output) and Module 3 (3.1 Agentic loops, 3.2 Coordinator and subagent orchestration, 3.3 Subagent invocation and context passing, 3.4 Distributing tools across agents & tool choice). The full 37-chapter learning path is mapped in [docs/curriculum-map.md](docs/curriculum-map.md) (with exam coverage in [docs/exam-mapping.md](docs/exam-mapping.md)); the rest are built out in Phase 5.
+**All five phases complete. All 37 of 37 chapters built.** The full platform is live: slash commands, automated grading (verifier + grading MCP server), assessment (examiner + `/practice`/`/mock-exam`), coaching (`/coach` hub-and-spoke coordinator + progress-tracking MCP server), and authoring commands (`/new-lesson`, `/new-question`). The complete 37-chapter learning path is in [docs/curriculum-map.md](docs/curriculum-map.md) with exam coverage in [docs/exam-mapping.md](docs/exam-mapping.md).
 
 - **Phase 1** ✅ — Skeleton repo, slash commands, first lessons end-to-end
 - **Phase 2** ✅ — Verifier subagent + grading MCP server (automated rubric checks)
 - **Phase 3** ✅ — Examiner subagent, question bank, `/practice` and `/mock-exam`
-- **Phase 4** (current) — Coach subagent + `/coach` hub-and-spoke coordinator built; progress-tracking MCP server in progress
-- **Phase 5** (in progress) — Authoring commands `/new-lesson` + `/new-question` built; full content build-out remaining
+- **Phase 4** ✅ — Coach subagent + `/coach` hub-and-spoke coordinator + progress-tracking MCP server
+- **Phase 5** ✅ — Authoring commands `/new-lesson` + `/new-question` + full 37-chapter content build-out
 
 ## Disclaimer
 
