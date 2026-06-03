@@ -79,7 +79,7 @@ Unofficial. Not affiliated with, endorsed by, or sponsored by Anthropic. Built a
 
 ## License
 
-MIT. See [LICENSE](LICENSE) (to be added).
+MIT © Aksarben Engineering. See [LICENSE](LICENSE).
 
 ## Contributing
 
