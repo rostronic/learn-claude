@@ -69,8 +69,8 @@ When the plan is ready, *"Claude presents it and asks how to proceed."* Your opt
 *"Approving a plan exits plan mode and switches the session to the permission mode
 each approve option describes, so Claude starts editing."* You can also press
 `Ctrl+G` to open the proposed plan in your editor and refine it before Claude
-proceeds. To make planning the default for a project, set `defaultMode: "plan"` in
-`.claude/settings.json`.
+proceeds. To make planning the default for a project, set `defaultMode: "plan"` under
+the `permissions` key in `.claude/settings.json` — i.e., `{"permissions": {"defaultMode": "plan"}}`.
 
 The mental model: **plan mode separates *deciding what to do* from *doing it*,** with
 an explicit human approval gate between them.
