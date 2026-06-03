@@ -65,7 +65,7 @@ The repo ships its own test suite (platform infrastructure, not coursework). One
 
 ```bash
 make install   # one-time: pip install -r requirements-dev.txt (needs Python 3.10+)
-make test      # 307 tests: structural validation + the MCP server unit tests
+make test      # full suite: structural/content/integrity validation + MCP server tests
 ```
 
 - **`make test-structure`** (`tests/`) — every lesson's frontmatter/references/rubric, the curriculum-map ↔ exam-mapping ↔ disk consistency, the question-bank schema (and that all 6 scenarios stay populated), and that every starter file compiles.
