@@ -4,7 +4,7 @@
 # custom slash commands, CLAUDE.md configuration, and a sense of when to use plan mode vs
 # direct execution.
 
-- id: "ccaf-d3-3.4-001"
+- id: "ccaf-d3-3.4-002"
   stem: >-
     A teammate uses plan mode for every Claude Code task, including a one-line fix to
     correct a typo in a single log string in one file. The change is small, fully

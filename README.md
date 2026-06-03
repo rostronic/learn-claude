@@ -59,6 +59,20 @@ Not sure what to do next? Let the coach read your history and build a plan:
 - **Phase 4** ✅ — Coach subagent + `/coach` hub-and-spoke coordinator + progress-tracking MCP server
 - **Phase 5** ✅ — Authoring commands `/new-lesson` + `/new-question` + full 37-chapter content build-out
 
+## Development & tests
+
+The repo ships its own test suite (platform infrastructure, not coursework). One command validates the whole project:
+
+```bash
+make install   # one-time: pip install -r requirements-dev.txt (needs Python 3.10+)
+make test      # 307 tests: structural validation + the MCP server unit tests
+```
+
+- **`make test-structure`** (`tests/`) — every lesson's frontmatter/references/rubric, the curriculum-map ↔ exam-mapping ↔ disk consistency, the question-bank schema (and that all 6 scenarios stay populated), and that every starter file compiles.
+- **`make test-infra`** — the grading + progress MCP server unit tests.
+
+CI runs the same suite on every push and PR via [`.github/workflows/ci.yml`](.github/workflows/ci.yml) — the platform dogfooding the "Claude Code in CI/CD" material it teaches in chapter 5.7.
+
 ## Disclaimer
 
 Unofficial. Not affiliated with, endorsed by, or sponsored by Anthropic. Built as exam-prep using the public [Claude Certified Architect — Foundations Certification Exam Guide](https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F8lsy243ftffjjy1cx9lm3o2bw%2Fpublic%2F1773274827%2FClaude+Certified+Architect+%E2%80%93+Foundations+Certification+Exam+Guide.pdf) as the source of truth.

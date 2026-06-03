@@ -30,7 +30,7 @@
   task_statement: "4.3 Enforce structured output using tool use and JSON schemas"
   scenario: 6
 
-- id: "ccaf-d4-4.1-001"
+- id: "ccaf-d4-4.1-002"
   stem: >-
     Reviewers complain the extractor over-reports: when a contract doesn't mention a
     governing-law clause, the model frequently fabricates a plausible-looking value rather
