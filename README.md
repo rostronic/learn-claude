@@ -73,6 +73,10 @@ make test      # full suite: structural/content/integrity validation + MCP serve
 
 CI runs the same suite on every push and PR via [`.github/workflows/ci.yml`](.github/workflows/ci.yml) — the platform dogfooding the "Claude Code in CI/CD" material it teaches in chapter 5.7.
 
+## Feedback
+
+Testing this as a beta tester? Start with the **[beta-testing guide](docs/BETA-TESTING.md)** — setup, the happy path to try, and what feedback helps most. Report anything via the GitHub issue forms (**New Issue → Choose a template**): **Lesson feedback** for a chapter's content (confusing, inaccurate, broken exercise, wrong answer key) and **Bug report** for a command or platform problem. Thanks for kicking the tires.
+
 ## Disclaimer
 
 Unofficial. Not affiliated with, endorsed by, or sponsored by Anthropic. Built as exam-prep using the public [Claude Certified Architect — Foundations Certification Exam Guide](https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F8lsy243ftffjjy1cx9lm3o2bw%2Fpublic%2F1773274827%2FClaude+Certified+Architect+%E2%80%93+Foundations+Certification+Exam+Guide.pdf) as the source of truth.

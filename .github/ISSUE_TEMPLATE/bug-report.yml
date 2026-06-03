@@ -1,0 +1,65 @@
+name: Bug report
+description: Report a command or platform problem — something errored, didn't run, or behaved unexpectedly.
+title: "[Bug] <short summary>"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing Learn Claude! Use this form for tooling problems (a command, an MCP server, setup, tests).
+        If the issue is about a specific chapter's content, use the **Lesson feedback** form instead.
+  - type: input
+    id: area
+    attributes:
+      label: What command or area?
+      description: The slash command, MCP server, or step where it happened.
+      placeholder: "/verify 3.1, grading MCP server, pip install, ..."
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: What you did, in order, leading up to the problem.
+      placeholder: |
+        1. Ran `/exercise 3.1`
+        2. Implemented the loop
+        3. Ran `/verify 3.1`
+        4. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead. Paste any error output or stack traces.
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: "macOS 15.5, Ubuntu 24.04, Windows 11 + WSL, ..."
+    validations:
+      required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      description: Output of `python3 --version`.
+      placeholder: "3.11.9"
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else?
+      description: Optional — Claude Code version, whether the MCP servers were approved, screenshots, etc.
+    validations:
+      required: false

@@ -1,0 +1,62 @@
+name: Lesson feedback
+description: Report a problem with a specific chapter's content — confusing, inaccurate, broken exercise, or wrong answer key.
+title: "[Lesson] <chapter>: <short summary>"
+labels: ["lesson-feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing Learn Claude! This form is for feedback tied to a specific chapter.
+        For a command or platform bug that isn't about lesson content, use the **Bug report** form instead.
+  - type: input
+    id: chapter
+    attributes:
+      label: Chapter
+      description: The chapter number in `module.lesson` form (course order, not exam numbering).
+      placeholder: "3.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of issue is this?
+      options:
+        - Confusing explanation
+        - Inaccurate / wrong claim
+        - Broken exercise (starter or tests won't run / don't match instructions)
+        - Wrong or ambiguous answer key (practice / mock-exam question)
+        - Citation doesn't support the claim
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      description: What you thought the lesson, exercise, or answer should say or do.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What you actually saw
+      description: What the lesson, exercise, or answer actually said or did. Quote the relevant text or paste output where it helps.
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Low — nitpick / polish
+        - Medium — confusing or misleading, but I worked around it
+        - High — wrong content or broken exercise that blocks learning
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else?
+      description: Optional — screenshots, links, or extra context.
+    validations:
+      required: false
