@@ -56,7 +56,7 @@ count = client.messages.count_tokens(
 print(count.input_tokens)   # e.g. 48213
 ```
 
-Two caveats the docs are explicit about. The count is an **estimate** — "the token count is approximate and may differ slightly from the actual usage" ([Token counting](https://platform.claude.com/docs/en/build-with-claude/token-counting)) — so budget with headroom, never to the byte. And the prescribed pattern is to use this measurement to *decide*: if the projected input is near your budget, compact before sending rather than discovering the problem when the API rejects an over-window request with `stop_reason: "model_context_window_exceeded"` ([Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows)). Measuring beats hoping the model "remembers" or that you'll happen to stay under the limit.
+Two caveats the docs are explicit about. The count is an **estimate** — "The token count should be considered an estimate. In some cases, the actual number of input tokens used when creating a message may differ by a small amount." ([Token counting](https://platform.claude.com/docs/en/build-with-claude/token-counting)) — so budget with headroom, never to the byte. And the prescribed pattern is to use this measurement to *decide*: if the projected input is near your budget, compact before sending rather than discovering the problem when the API rejects an over-window request with `stop_reason: "model_context_window_exceeded"` ([Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows)). Measuring beats hoping the model "remembers" or that you'll happen to stay under the limit.
 
 ### Why accumulation hurts: context rot
 
