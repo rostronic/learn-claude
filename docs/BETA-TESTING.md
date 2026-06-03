@@ -58,8 +58,8 @@ I care less about typos (though flag them if you like) and more about anything t
 
 Open a GitHub issue — there are two forms that make this quick:
 
-- **[Lesson feedback](../../issues/new?template=lesson-feedback.yml)** — for anything about a specific chapter's content: confusing, inaccurate, broken exercise, or a wrong answer key.
-- **[Bug report](../../issues/new?template=bug-report.yml)** — for a command or platform problem: something errored, didn't run, or behaved unexpectedly.
+- **[Lesson feedback](https://github.com/rostronic/learn-claude/issues/new?template=lesson-feedback.yml)** — for anything about a specific chapter's content: confusing, inaccurate, broken exercise, or a wrong answer key.
+- **[Bug report](https://github.com/rostronic/learn-claude/issues/new?template=bug-report.yml)** — for a command or platform problem: something errored, didn't run, or behaved unexpectedly.
 
 (Both links also live under **New Issue → Choose a template** in the GitHub UI.)
 
